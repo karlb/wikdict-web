@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block main %}
+	<h3>What is WikDict?</h3>
+	<p>
+		WikDict makes it easy to look up translations. It is a set of bilingual dictionaries with a simple web based search interface. One very important aspect of WikDict is that all data is freely available under a Creative Commons license, which is not the case for most of the competition.
+	</p>
+
+	<h3>Which data is available and where does if come from?</h3>
+	<p>
+	All data is extracted from <a href="http://www.wiktionary.org">Wiktionary</a> by the <a href="http://kaiko.getalp.org/about-dbnary/">DBnary</a> project. So for data to be available, it has to be in one the the Wiktionaries support by DBnary. Since WikDict is still very young, not all DBnary data is uploaded to WikDict, yet, but that will change over time.
+	</p>
+
+	<h3>How do I search WikDict?</h3>
+	<p>
+		<ul>
+			<li>Don't worry about writing in upper/lower case. Both "haus" and "Haus" will match the dictionary entry "Haus".
+			<li>Skip accents and other diacritics if you want to. Typing "Tur" will find "Tür".
+		</ul>
+	</p>
+
+	<h3>Data download</h3>
+	<p>
+		Exports of the WikDict data as <a href="http://www.tei-c.org/Guidelines/P5/">TEI P5</a> can be found in <a href="https://2535bb29a61a8fc07fc2e529a469f6a2c3284fc1.googledrive.com/host/0B6i4XeZGYTyzc1dvamdKTDFEdlE/tei2/">this directory</a>. I'm generating those files in the hope that they will be included in <a href="http://www.freedict.org/">FreeDict</a>, so that the FreeDict project takes care of generating different formats for other dictionary viewers.
+	</p>
+
+	<!--h3>Dictionary downloads and offline use</h3>
+
+	<p>
+		Some downloadable dictionaries for <a href="https://play.google.com/store/apps/details?id=com.hughes.android.dictionary&hl=en">QuickDic</a> can be found <a href="https://2535bb29a61a8fc07fc2e529a469f6a2c3284fc1.googledrive.com/host/0B6i4XeZGYTyzc1dvamdKTDFEdlE/quickdict/">here</a>. Downloadable dictionaries are still very much work-in-progress.
+	</p><p>
+		If you are using a different offline dictionary, let me know.
+	</p-->
+
+{% endblock %}

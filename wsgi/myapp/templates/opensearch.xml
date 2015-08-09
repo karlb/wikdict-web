@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+	<ShortName>WikDict: {{from_lang}}-{{to_lang}}</ShortName>
+	<LongName>WikDict: {{ language_names[from_lang] | capitalize }} - {{ language_names[to_lang] | capitalize }}</LongName>
+	<Description>Bilingual dictionary {{ language_names[from_lang] | capitalize }} ↔ {{ language_names[to_lang] | capitalize }}</Description>
+	<Tags>bilingual dictionary WikDict Wiktionary free creativecommons</Tags>
+	<Contact>karl42@gmail.com</Contact>
+	<Url type="text/html"
+		template="http://www.wikdict.com/{{from_lang}}-{{to_lang}}/{searchTerms}"/>
+	<Attribution>WikDict.com data from Wiktionary via DBnary. Licensed under the CC BY-SA 3.0.</Attribution>
+	<SyndicationRight>open</SyndicationRight>
+	<Image height="16" width="16" type="image/png">http://www.wikdict.com/img/icons/favicon-16x16.png</Image>
+	<Image height="32" width="32" type="image/png">http://www.wikdict.com/img/icons/favicon-32x32.png</Image>
+	<Image height="96" width="96" type="image/png">http://www.wikdict.com/img/icons/favicon-96x96.png</Image>
+	<Image height="194" width="194" type="image/png">http://www.wikdict.com/img/icons/favicon-194x194.png</Image>
+	<Image height="16" width="16" type="image/vnd.microsoft.icon">http://www.wikdict.com/img/icons/favicon.ico</Image>
+</OpenSearchDescription>

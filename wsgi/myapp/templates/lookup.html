@@ -1,0 +1,270 @@
+{% extends 'base.html' %}
+
+{% block title -%}
+	WikDict{% if query %} &mdash; {{ query }}{% endif %}
+{%- endblock %}
+
+{% block css %}
+	#results, #results table {
+		margin: 2em 0
+	}
+
+	@media (min-height: 500px) {
+		.main-page .search-block {
+			margin: 85px 10px 95px 10px;
+		}
+	}
+	.main-page .search-form {
+		text-align: center;
+		margin: 30px 0;
+	}
+	.main-page .search-block h2 {
+		text-align: center;
+	}
+	.main-page {
+		margin: 30px 0;
+	}
+	.translation a {
+		color: black;
+	}
+
+	/* keep form inline on small viewports */
+	.form-inline .form-control {
+		display: inline-block;
+		width: auto;
+		vertical-align: middle;
+	}
+
+	.main-page > .row {
+		margin-top: 15px;
+	}
+	.lang-pair {
+		color: black;
+		text-decoration: none;
+		text-align: center;
+		padding: 20px 5px;
+		white-space: nowrap;
+		overflow: none;
+	}
+	.lang-pair:hover {
+		cursor: pointer;
+		border-color: black;
+	}
+	.lang-pair .name {
+		font-weight: bold;
+	}
+	#add-search-provider-block {
+		display: none;
+	}
+	.use-notice {
+		font-family: 'Dancing Script', cursive;
+		font-size: 35px;
+		margin-top: 15px;
+	}
+
+	.gloss {
+		font-size: 12px;
+		padding-left: 25px;
+		padding-top: 5px;
+	}
+
+	#results table th {
+		width: 50%
+	}
+{% endblock %}
+
+
+{% block script %}
+	$(function() {
+		if (window.external && ("AddSearchProvider" in window.external)) {
+			$('#add-search-provider-block').show();
+			$('#add-search-provider').click(function () {
+				window.external.AddSearchProvider('http://www.wikdict.com/opensearch/{{from_lang}}-{{to_lang}}');
+			});
+		}
+	})
+{% endblock %}
+
+
+{% block css_links %}
+	<link href='http://fonts.googleapis.com/css?family=Dancing+Script' rel='stylesheet' type='text/css'>
+{% endblock %}
+
+{% block head %}
+	<link rel="search"
+		type="application/opensearchdescription+xml" 
+		href="/opensearch/{{from_lang}}-{{to_lang}}"
+		title="WikDict {{from_lang}}-{{to_lang}} Search" />
+{% endblock %}
+
+{% macro translation(h, lang) %}
+	<span class="translation">
+		{% if false %}
+			<a href="{{ vocable_link(h, lang) }}">
+				{{- h.written_rep -}}
+			</a>
+		{% else %}
+			{{ h.written_rep }}
+		{% endif %}
+	</span>
+	<span class="text-muted">
+		{% if h.gender %}
+			<span class="gender">{{ '{' + h.gender[0] + '}' }}</span>
+		{% endif %}
+		{% if h.pronuns %}
+			<span class="pronun">{{ h.pronuns | join(', ') }}</span>
+		{% endif %}
+		<br>
+		{% if h.sense_list %}
+			<ul class="gloss">
+			{% for gloss in h.sense_list.split(' | ') %}
+				<li>{{ gloss }}</li>
+			{% endfor %}
+			</ul>
+		{% endif %}
+	</span>
+{% endmacro %}
+
+
+{% macro word_in_target_lang(word, lang, part_of_speech) %}
+	{% set voc = vocable_details(word, lang, part_of_speech) %}
+	<span class="translation">
+		{% if word.sense %}
+			<a href="{{ vocable_link(word, lang) }}">
+				{{- word.written -}}
+			</a>
+		{% else %}
+			{{ word }}
+		{% endif %}
+	</span>
+	<span class="text-muted">
+		{% if voc.gender %}
+			<span class="gender">{{ '{' + voc.gender[0] + '}' }}</span>
+		{% endif %}
+		{% if voc.pronuns %}
+			<span class="pronun">{{ voc.pronuns | join(', ') }}</span>
+		{% endif %}
+	</span>
+{% endmacro %}
+
+
+{% macro search_form() %}
+	<form action="/lookup" role="form "class="form-inline search-form">
+		{% if not query %}
+			<img src="{{ url_for('static', filename='img/arrow.png') }}" style="height:60px; margin: 7px 5px -28px">
+		{% endif %}
+		<input type="search" name="query" class="form-control" value="{{ query }}"
+			autofocus onFocus="this.select()" id="search-input"
+		>
+		<input type="hidden" name="index_name" value="{{from_lang}}-{{to_lang}}">
+		<button class="btn btn-primary">Translate</button>
+		{% if not query %}
+			<div class="use-notice">
+				Enter a word in {{ language_names[from_lang] }} or {{ language_names[to_lang] }}
+			</div>
+		{% endif %}
+	</form>
+{% endmacro %}
+
+
+{% macro definition(lex_entry, lang) %}
+	{% if lex_entry %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{ lex_entry.written }} ({{ language_names[lang] }})</h3>
+			</div>
+			<div class="panel-body">
+				<ol>
+					{% for s in lex_entry.senses if s.sense %}
+					<li>{{ s.sense }}</li>
+					{% endfor %}
+				</ol>
+			</div>
+		</div>
+	{% endif %}
+{% endmacro %}
+
+
+{% block main %}
+
+	{% if query %}
+		{{ search_form() }}
+
+		<div id="results">
+			{% for results_one_dir in results %}
+				{% if not results_one_dir %}
+					{% continue %}
+				{% endif %}
+				{% with %}
+				{% if loop.index == 1 %}
+					{% set (left_lang, right_lang) = (from_lang, to_lang) %}
+				{% elif loop.index == 2 %}
+					{% set (left_lang, right_lang) = (to_lang, from_lang) %}
+				{% endif %}
+				<table class="table table-striped">
+					<thead>
+						<th>{{ language_names[left_lang] | capitalize }}</th>
+						<th>{{ language_names[right_lang] | capitalize }}</th>
+					</thead>
+					{% for result in results_one_dir %}
+						<tr>
+							<td>{{ translation(result, left_lang) }}</td>
+							<td>
+								{% for t in result.trans_list.split(' | ') %}
+									{{ word_in_target_lang(t, right_lang, result.part_of_speech) }}
+									{#{ t.written }}: {{ t.sense.pronuns[0] }} {{t.sense}#}
+									<br/>
+								{% endfor %}
+							</td>
+						</tr>
+					{% endfor %}
+				</table>
+				{% endwith %}
+			{% else %}
+				<div class="jumbotron">
+					<p>Sorry, no translations for "{{ query }}" have been found.</p>
+				</div>
+			{% endfor %}
+
+			{{ definition(results[2], from_lang) }}
+			{{ definition(results[3], to_lang) }}
+		</div>
+
+	{% else %}
+
+		<div class="main-page">
+			<div class="search-block">
+				<h2>Look up translations — free, libre and simple</h2>
+				{{ search_form() }}
+			</div>
+
+			<h3>Other available Language Pairs</h3>
+			<div class="lang-pair-block row">
+			{% for lp in lang_pairs if (lp.lang1, lp.lang2) != (from_lang, to_lang) %}
+				<div class="col-xs-6 col-sm-4 col-md-3">
+					<a href="{{ lp.lang1 + '-' + lp.lang2 }}">
+						<div class="lang-pair well well-sm">
+							<div class="name">{{ language_names[lp.lang1] | capitalize }} ↔ {{ language_names[lp.lang2] | capitalize }}</div>
+							<div class="stats">{{ lp.entry_count }} translations</div>
+						</div>
+					</a>
+				</div>
+			{% endfor %}
+			</div>
+
+			<div id="add-search-provider-block">
+				<h3>Tools</h3>
+				<div class="row clearfix">
+					<div class="col-md-6">
+						<ul class="list-group">
+							<a id="add-search-provider" class="list-group-item">Add "WikDict: {{from_lang}} ↔ {{to_lang}}" search to your browser</a>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	{% endif %}
+
+{% endblock %}
+

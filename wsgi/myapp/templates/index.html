@@ -1,8 +1,8 @@
-{% extends "shared/base.html" %}
-
+{% extends 'base.html' %}
 
 {% block main %}
-    <div class="row">
-		Placeholder
-    </div>
+	<form method="POST" enctype="multipart/form-data">
+		<input name="dict-file" type="file" accept="text/tab-separated-values">
+		<button type="submit">Upload</button>
+	</form>
 {% endblock %}

@@ -1,10 +1,14 @@
 import os
 
 from flask import Flask, render_template, redirect, request, url_for, flash
+from .languages import language_names
+
+app = Flask(__name__.split('.')[0], static_folder='../static')
+
+import myapp.lookup
 
 ADMINS = ['karl42@gmail.com']
 
-app = Flask(__name__.split('.')[0])
 app.debug = os.environ.get('FLASK_DEBUG', 'false').lower() == 'true'
 if not app.debug:
     import logging
@@ -27,12 +31,18 @@ if not app.debug:
     app.logger.addHandler(mail_handler)
 
 app.secret_key = os.environ['OPENSHIFT_SECRET_TOKEN']
+app.jinja_env.add_extension('jinja2.ext.loopcontrols')
+    #'jinja2.ext.autoescape',
+    #'jinja2.ext.with_',
 
 
-@app.route("/")
+@app.route('/')
 def index():
-    return render_template('index.html')
-
+    return render_template('lookup.html',
+        language_names=language_names,
+        from_lang='de',
+        to_lang='fr',
+    )
 
 if __name__ == "__main__":
     app.run()
