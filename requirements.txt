@@ -1,2 +1,2 @@
 flask
-sqlite3
+pysqlite==2.6.3
