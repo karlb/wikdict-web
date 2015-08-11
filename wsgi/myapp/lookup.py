@@ -1,5 +1,6 @@
 import os
-import sqlite3
+#import sqlite3
+import apsw
 
 from flask import Flask, render_template, redirect, request, url_for, flash
 
@@ -24,9 +25,8 @@ def loopup(from_lang, to_lang, query=None):
 
 
 def search_query(from_lang, to_lang, search_term, **kwargs):
-    conn = sqlite3.connect(DATA_DIR + '/{}-{}.sqlite3'.format(from_lang, to_lang))
-    conn.row_factory = sqlite3.Row
-    cur = conn.execute("""
+    cur = apsw.Connection(DATA_DIR + '/{}-{}.sqlite3'.format(from_lang, to_lang)).cursor()
+    cur.execute("""
                 SELECT lexentry, written_rep, part_of_speech, sense_list, trans_list
                 FROM (
                         SELECT DISTINCT lexentry
@@ -39,23 +39,22 @@ def search_query(from_lang, to_lang, search_term, **kwargs):
                 FROM search_reverse_trans
                 WHERE written_rep MATCH ?
             """, [search_term, search_term])
-    results = list(cur)
+    results = [dict(zip((d[0] for d in cur.getdescription()), row)) for row in cur]
     for r in results:
-        print(dict(r))
+        print(r)
     return results
 
 
 def vocable_details(vocable, lang, part_of_speech):
-    conn = sqlite3.connect(DATA_DIR + '/{}.sqlite3'.format(lang))
-    conn.row_factory = sqlite3.Row
-    cur = conn.execute("""
+    cur = apsw.Connection(DATA_DIR + '/{}.sqlite3'.format(lang)).cursor()
+    cur.execute("""
                 SELECT CASE WHEN count(*) = 1 THEN gender END AS gender,
                        group_concat(pronun_list, ' | ') AS pronun_list
                 FROM entry
                 WHERE written_rep = ?
                   AND (? IS NULL OR part_of_speech = ?);
             """, [vocable, part_of_speech, part_of_speech])
-    r = list(cur)[0]
+    r = dict(zip((d[0] for d in cur.getdescription()), cur.fetchone()))
     print(dict(r))
     return {
         'gender': r['gender'],
