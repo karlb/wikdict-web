@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, Response, redirect, request, url_for
+from flask import Flask, Response, redirect, request, url_for, session
 
 app = Flask(__name__.split('.')[0], static_folder='../static')
 
@@ -38,10 +38,9 @@ app.jinja_env.add_extension('jinja2.ext.loopcontrols')
 
 @app.route('/')
 def index():
-    return base.render_template('lookup.html',
-        from_lang='de',
-        to_lang='fr',
-    )
+    last_dict = session.get('last_dicts', ['de-en'])[0]
+    from_lang, to_lang = last_dict.split('-')
+    return redirect(url_for('lookup', from_lang=from_lang, to_lang=to_lang))
 
 
 @app.route('/page/<page_name>')

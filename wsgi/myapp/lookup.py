@@ -24,7 +24,7 @@ def timing(f):
 
 @app.route('/<from_lang>-<to_lang>/')
 @app.route('/<from_lang>-<to_lang>/<query>')
-def lookpup(from_lang, to_lang, query=None):
+def lookup(from_lang, to_lang, query=None):
     results = [
         search_query(from_lang, to_lang, query),
         search_query(to_lang, from_lang, query),
