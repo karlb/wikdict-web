@@ -1,11 +1,11 @@
 import os
 
-from flask import Flask, render_template, redirect, request, url_for, flash
-from .languages import language_names
+from flask import Flask, Response, redirect, request, url_for
 
 app = Flask(__name__.split('.')[0], static_folder='../static')
 
 import myapp.lookup
+from . import base
 
 ADMINS = ['karl42@gmail.com']
 
@@ -38,11 +38,29 @@ app.jinja_env.add_extension('jinja2.ext.loopcontrols')
 
 @app.route('/')
 def index():
-    return render_template('lookup.html',
-        language_names=language_names,
+    return base.render_template('lookup.html',
         from_lang='de',
         to_lang='fr',
     )
+
+
+@app.route('/page/<page_name>')
+def page(page_name):
+    return base.render_template(page_name + '.html',
+        page_name=page_name,
+    )
+
+
+@app.route('/opensearch/<from_lang>-<to_lang>')
+def opensearch(from_lang, to_lang):
+    return Response(
+        base.render_template('opensearch.xml',
+            from_lang=from_lang,
+            to_lang=to_lang,
+        ),
+        mimetype='application/opensearchdescription+xml',
+    )
+
 
 if __name__ == "__main__":
     app.run()

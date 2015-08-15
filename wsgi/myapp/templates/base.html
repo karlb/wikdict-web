@@ -154,7 +154,7 @@
 								<li role="presentation" class="dropdown-header">All Languages</li>
 							{% endif %}
 							{% for lp in lang_pairs %}
-								{{ langli(lp.lang1, lp.lang2) }}
+								{{ langli(lp.from_lang, lp.to_lang) }}
 							{% endfor %}
 						</ul>
 					</li>
@@ -169,6 +169,8 @@
 
 			{% block main %}
 			{% endblock %}
+
+			{#{ g.timing }#}
 
 		</div>
 

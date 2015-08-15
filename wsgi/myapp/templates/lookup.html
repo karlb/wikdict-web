@@ -98,9 +98,10 @@
 {% endblock %}
 
 {% macro translation(h, lang) %}
+	{% set voc = vocable_details(h.written_rep, lang, h.part_of_speech) %}
 	<span class="translation">
-		{% if false %}
-			<a href="{{ vocable_link(h, lang) }}">
+		{% if voc.wiktionary_url %}
+			<a href="{{ voc.wiktionary_url }}">
 				{{- h.written_rep -}}
 			</a>
 		{% else %}
@@ -129,9 +130,9 @@
 {% macro word_in_target_lang(word, lang, part_of_speech) %}
 	{% set voc = vocable_details(word, lang, part_of_speech) %}
 	<span class="translation">
-		{% if word.sense %}
-			<a href="{{ vocable_link(word, lang) }}">
-				{{- word.written -}}
+		{% if voc.wiktionary_url %}
+			<a href="{{ voc.wiktionary_url }}">
+				{{- word -}}
 			</a>
 		{% else %}
 			{{ word }}
@@ -153,7 +154,7 @@
 		{% if not query %}
 			<img src="{{ url_for('static', filename='img/arrow.png') }}" style="height:60px; margin: 7px 5px -28px">
 		{% endif %}
-		<input type="search" name="query" class="form-control" value="{{ query }}"
+		<input type="search" name="query" class="form-control" value="{{ query or '' }}"
 			autofocus onFocus="this.select()" id="search-input"
 		>
 		<input type="hidden" name="index_name" value="{{from_lang}}-{{to_lang}}">
@@ -240,12 +241,12 @@
 
 			<h3>Other available Language Pairs</h3>
 			<div class="lang-pair-block row">
-			{% for lp in lang_pairs if (lp.lang1, lp.lang2) != (from_lang, to_lang) %}
+			{% for lp in lang_pairs if (lp.from_lang, lp.to_lang) != (from_lang, to_lang) %}
 				<div class="col-xs-6 col-sm-4 col-md-3">
-					<a href="{{ lp.lang1 + '-' + lp.lang2 }}">
+					<a href="{{ lp.from_lang + '-' + lp.to_lang }}">
 						<div class="lang-pair well well-sm">
-							<div class="name">{{ language_names[lp.lang1] | capitalize }} ↔ {{ language_names[lp.lang2] | capitalize }}</div>
-							<div class="stats">{{ lp.entry_count }} translations</div>
+							<div class="name">{{ language_names[lp.from_lang] | capitalize }} ↔ {{ language_names[lp.to_lang] | capitalize }}</div>
+							<div class="stats">{{ lp.total_trans }} translations</div>
 						</div>
 					</a>
 				</div>
