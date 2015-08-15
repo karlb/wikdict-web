@@ -25,6 +25,9 @@ def timing(f):
 @app.route('/<from_lang>-<to_lang>/')
 @app.route('/<from_lang>-<to_lang>/<query>')
 def lookup(from_lang, to_lang, query=None):
+    if [from_lang, to_lang] != sorted((from_lang, to_lang)):
+        return redirect(url_for('lookup', from_lang=to_lang, to_lang=from_lang,
+                                          query=query))
     results = [
         search_query(from_lang, to_lang, query),
         search_query(to_lang, from_lang, query),

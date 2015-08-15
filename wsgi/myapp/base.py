@@ -1,5 +1,5 @@
 import os
-from collections import OrderedDict
+from collections import OrderedDict, namedtuple
 
 import flask
 from flask import session
@@ -29,6 +29,15 @@ def get_lang_pairs():
     return results
 
 
+def db_query(db_name, stmt):
+    cur = apsw.Connection(DATA_DIR + '/' + db_name + '.sqlite3').cursor()
+    cur.execute(stmt)
+    Row = namedtuple('Row', (d[0] for d in cur.getdescription()))
+    results = [Row(*r) for r in cur]
+    print(results)
+    return results
+
+
 def render_template(filename, **kwargs):
     if 'from_lang' in kwargs:
         session.setdefault('last_dicts', []).insert(0, kwargs['from_lang'] + '-' + kwargs['to_lang'])
@@ -37,6 +46,10 @@ def render_template(filename, **kwargs):
 
     return flask.render_template(filename,
         language_names=language_names,
+        available_langs=[
+            row.from_lang for row in db_query('wikdict',
+                                              "SELECT from_lang FROM lang_pair GROUP BY from_lang ORDER BY sum(translations) DESC")
+        ],
         lang_pairs=get_lang_pairs(),
         last_dicts=[d for d in session.get('last_dicts', []) if d != kwargs['from_lang'] + '-' + kwargs['to_lang']],
         **kwargs)

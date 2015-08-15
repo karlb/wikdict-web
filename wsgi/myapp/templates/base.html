@@ -151,11 +151,17 @@
 									{{ langli(*d.split('-')) if loop.index <= 3}}
 								{% endfor %}
 								<li class="divider"></li>
-								<li role="presentation" class="dropdown-header">All Languages</li>
 							{% endif %}
-							{% for lp in lang_pairs %}
-								{{ langli(lp.from_lang, lp.to_lang) }}
+
+							{% for lang1 in [from_lang, to_lang]%}
+								<li role="presentation" class="dropdown-header">{{ language_names[lang1] }}</li>
+								{% for lang2 in available_langs %}
+									{{ langli(lang1, lang2) }}
+								{% endfor %}
+								<li class="divider"></li>
 							{% endfor %}
+
+							<li><a href="/">More&hellip;</a></li>
 						</ul>
 					</li>
 					<li {% if page_name == 'about' %} class="active"{% endif%}><a href="/page/about">About</a></li>

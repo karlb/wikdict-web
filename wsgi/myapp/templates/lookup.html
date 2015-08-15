@@ -53,6 +53,9 @@
 	.lang-pair .name {
 		font-weight: bold;
 	}
+	.lang-select {
+		margin: 6px 0;
+	}
 	#add-search-provider-block {
 		display: none;
 	}
@@ -82,6 +85,10 @@
 				window.external.AddSearchProvider('http://www.wikdict.com/opensearch/{{from_lang}}-{{to_lang}}');
 			});
 		}
+
+		$('.lang-select').change(function () {
+			window.location = '/' + this.value + '/';
+		})
 	})
 {% endblock %}
 
@@ -240,17 +247,17 @@
 			</div>
 
 			<h3>Other available Language Pairs</h3>
-			<div class="lang-pair-block row">
-			{% for lp in lang_pairs if (lp.from_lang, lp.to_lang) != (from_lang, to_lang) %}
-				<div class="col-xs-6 col-sm-4 col-md-3">
-					<a href="/{{ lp.from_lang + '-' + lp.to_lang }}">
-						<div class="lang-pair well well-sm">
-							<div class="name">{{ language_names[lp.from_lang] | capitalize }} ↔ {{ language_names[lp.to_lang] | capitalize }}</div>
-							<div class="stats">{{ lp.total_trans }} translations</div>
-						</div>
-					</a>
-				</div>
-			{% endfor %}
+			<div class="row">
+				{% for lang in available_langs %}
+					<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+						<select class="form-control lang-select">
+							<option> &nbsp; {{ language_names[lang] | capitalize }} ↔ &hellip;</option>
+							{% for to_lang in available_langs if lang != to_lang %}
+								<option value="{{ lang }}-{{ to_lang }}">{{ language_names[lang] | capitalize }} ↔ {{ language_names[to_lang] | capitalize }}</option>
+							{% endfor %}
+						</select>
+					</div>
+				{% endfor %}
 			</div>
 
 			<div id="add-search-provider-block">
