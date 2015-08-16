@@ -34,7 +34,6 @@ def db_query(db_name, stmt):
     cur.execute(stmt)
     Row = namedtuple('Row', (d[0] for d in cur.getdescription()))
     results = [Row(*r) for r in cur]
-    print(results)
     return results
 
 

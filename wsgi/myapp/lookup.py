@@ -2,6 +2,7 @@
 import apsw
 import time
 import urllib.parse
+import functools
 
 from flask import Flask, render_template, redirect, request, url_for, flash, g
 
@@ -12,6 +13,7 @@ from .base import DATA_DIR
 
 
 def timing(f):
+    @functools.wraps(f)
     def f_with_timing(*args, **kwargs):
         start = time.time()
         result = f(*args, **kwargs)
