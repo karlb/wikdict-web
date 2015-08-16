@@ -119,8 +119,8 @@
 		{% if h.gender %}
 			<span class="gender">{{ '{' + h.gender[0] + '}' }}</span>
 		{% endif %}
-		{% if h.pronuns %}
-			<span class="pronun">{{ h.pronuns | join(', ') }}</span>
+		{% if voc.pronuns %}
+			<span class="pronun">{{ voc.pronuns | join(', ') }}</span>
 		{% endif %}
 		<br>
 		{% if h.sense_list %}

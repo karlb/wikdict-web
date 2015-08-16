@@ -74,13 +74,23 @@ def search_query(from_lang, to_lang, search_term, **kwargs):
 def vocable_details(vocable, lang, part_of_speech):
     cur = apsw.Connection(DATA_DIR + '/{}.sqlite3'.format(lang)).cursor()
     cur.execute("""
-                SELECT CASE WHEN count(*) = 1 THEN gender END AS gender,
-                       group_concat(pronun_list, ' | ') AS pronun_list,
-                       count(*) AS count
+            WITH matches AS (
+                SELECT *
                 FROM entry
                 WHERE written_rep = ?
-                  AND (? IS NULL OR part_of_speech = ?);
-            """, [vocable, part_of_speech, part_of_speech])
+                    AND (? IS NULL OR part_of_speech = ?)
+            )
+            SELECT
+                (
+                    SELECT CASE WHEN count(*) = 1 THEN gender END AS gender
+                    FROM (SELECT DISTINCT gender FROM matches)
+                ) AS gender,
+                (
+                    SELECT pronun_list
+                    FROM (SELECT * FROM matches ORDER BY lexentry LIMIT 1)
+                ) AS pronun_list,
+                (SELECT count(*) FROM matches) AS count
+        """, [vocable, part_of_speech, part_of_speech])
     r = dict(zip((d[0] for d in cur.getdescription()), cur.fetchone()))
     return {
         'gender': r['gender'],

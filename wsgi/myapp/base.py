@@ -43,6 +43,9 @@ def render_template(filename, **kwargs):
         session.setdefault('last_dicts', []).insert(0, kwargs['from_lang'] + '-' + kwargs['to_lang'])
         # remove duplicates
         session['last_dicts'] = list(OrderedDict.fromkeys(session['last_dicts']))
+    else:
+        last_dict = session.get('last_dicts', ['de-en'])[0]
+        kwargs['from_lang'], kwargs['to_lang'] = last_dict.split('-')
 
     return flask.render_template(filename,
         language_names=language_names,
