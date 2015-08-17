@@ -1,8 +1,10 @@
 import os
+import time
+import functools
 from collections import OrderedDict, namedtuple
 
 import flask
-from flask import session
+from flask import session, g
 import apsw
 
 from .languages import language_names
@@ -10,9 +12,21 @@ from .languages import language_names
 DATA_DIR = os.environ['OPENSHIFT_DATA_DIR']
 
 
+def timing(f):
+    @functools.wraps(f)
+    def f_with_timing(*args, **kwargs):
+        start = time.time()
+        result = f(*args, **kwargs)
+        duration = time.time() - start
+        g.timing = getattr(g, 'timing', {})
+        g.timing[f.__name__] = g.timing.get(f.__name__, 0) + duration
+        return result
+    return f_with_timing
+
+
+@timing
 def get_lang_pairs():
-    cur = apsw.Connection(DATA_DIR + '/wikdict.sqlite3').cursor()
-    cur.execute("""
+    return db_query('wikdict', """
         SELECT from_lang, to_lang, sum(total_trans) AS total_trans
         FROM (
             SELECT from_lang, to_lang, translations + reverse_translations AS total_trans
@@ -25,8 +39,6 @@ def get_lang_pairs():
         GROUP BY from_lang, to_lang
         ORDER BY sum(total_trans) DESC
     """)
-    results = [dict(zip((d[0] for d in cur.getdescription()), row)) for row in cur]
-    return results
 
 
 def db_query(db_name, stmt):

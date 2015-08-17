@@ -1,27 +1,13 @@
 #import sqlite3
 import apsw
-import time
 import urllib.parse
-import functools
 
 from flask import Flask, render_template, redirect, request, url_for, flash, g
 
 from .languages import language_names
 from . import app
 from . import base
-from .base import DATA_DIR
-
-
-def timing(f):
-    @functools.wraps(f)
-    def f_with_timing(*args, **kwargs):
-        start = time.time()
-        result = f(*args, **kwargs)
-        duration = time.time() - start
-        g.timing = getattr(g, 'timing', {})
-        g.timing[f.__name__] = g.timing.get(f.__name__, 0) + duration
-        return result
-    return f_with_timing
+from .base import DATA_DIR, timing
 
 
 @app.route('/<from_lang>-<to_lang>/')
@@ -30,10 +16,13 @@ def lookup(from_lang, to_lang, query=None):
     if [from_lang, to_lang] != sorted((from_lang, to_lang)):
         return redirect(url_for('lookup', from_lang=to_lang, to_lang=from_lang,
                                           query=query))
-    results = [
-        search_query(from_lang, to_lang, query),
-        search_query(to_lang, from_lang, query),
-    ]
+    if query:
+        results = [
+            search_query(from_lang, to_lang, query),
+            search_query(to_lang, from_lang, query),
+        ]
+    else:
+        results = None
     return base.render_template('lookup.html',
         from_lang=from_lang,
         to_lang=to_lang,
