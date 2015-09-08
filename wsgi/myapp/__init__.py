@@ -24,8 +24,8 @@ if not app.debug:
     credentials = (os.environ.get('SENDGRID_USER'),
                    os.environ.get('SENDGRID_PASSWORD'))
     mail_handler = SMTPHandler('smtp.sendgrid.net',
-                               'server-error@trackmyowe.com',
-                               ADMINS, 'TrackMyOwe.com Error',
+                               'server-error@wikdict.com',
+                               ADMINS, 'WikDict Error',
                                credentials)
     mail_handler.setLevel(logging.ERROR)
     app.logger.addHandler(mail_handler)
