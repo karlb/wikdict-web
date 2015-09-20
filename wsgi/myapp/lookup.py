@@ -73,20 +73,37 @@ def vocable_details(vocable, lang, part_of_speech):
             )
             SELECT
                 (
-                    SELECT CASE WHEN count(*) = 1 THEN gender END AS gender
-                    FROM (SELECT DISTINCT gender FROM matches)
+                    SELECT gender
+                    FROM matches
+                    GROUP BY 1
+                    HAVING count(DISTINCT gender) = 1
                 ) AS gender,
                 (
                     SELECT pronun_list
                     FROM (SELECT * FROM matches ORDER BY lexentry LIMIT 1)
                 ) AS pronun_list,
+                (
+                    SELECT display
+                    FROM matches
+                    GROUP BY 1
+                    HAVING count(DISTINCT display) = 1
+                ) AS display,
+                (
+                    SELECT display_addition
+                    FROM matches
+                    GROUP BY 1
+                    HAVING count(DISTINCT display_addition) = 1
+                ) AS display_addition,
                 (SELECT count(*) FROM matches) AS count
         """, [vocable, part_of_speech, part_of_speech])
     r = dict(zip((d[0] for d in cur.getdescription()), cur.fetchone()))
+    print(repr(r))
     return {
         'gender': r['gender'],
         'pronuns': set(r['pronun_list'].split(' | ')) if r['pronun_list'] else None,
         'wiktionary_url': None if r['count'] == 0 else vocable_link(vocable, lang),
+        'display': r['display'] or vocable,
+        'display_addition': r['display_addition'],
     }
 
 
