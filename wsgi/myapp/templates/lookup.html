@@ -104,54 +104,39 @@
 		title="WikDict {{from_lang}}-{{to_lang}} Search" />
 {% endblock %}
 
-{% macro translation(h, lang) %}
-	{% set voc = vocable_details(h.written_rep, lang, h.part_of_speech) %}
-	<span class="translation">
-		{% if voc.wiktionary_url %}
-			<a href="{{ voc.wiktionary_url }}">
-				{{- h.written_rep -}}
-			</a>
-		{% else %}
-			{{ h.written_rep }}
-		{% endif %}
-	</span>
-	<span class="text-muted">
-		{% if h.gender %}
-			<span class="gender">{{ '{' + h.gender[0] + '}' }}</span>
-		{% endif %}
-		{% if voc.pronuns %}
-			<span class="pronun">{{ voc.pronuns | join(', ') }}</span>
-		{% endif %}
-		<br>
-		{% if h.sense_list %}
-			<ul class="gloss">
-			{% for gloss in h.sense_list.split(' | ') %}
-				<li>{{ gloss }}</li>
-			{% endfor %}
-			</ul>
-		{% endif %}
-	</span>
+{% macro optional_link(url) %}
+	{% if url %}
+		<a href="{{url}}">{{ caller() }}</a>
+	{% else %}
+        {{ caller() }}
+	{% endif %}
 {% endmacro %}
 
-
-{% macro word_in_target_lang(word, lang, part_of_speech) %}
-	{% set voc = vocable_details(word, lang, part_of_speech) %}
-	<span class="translation">
-		{% if voc.wiktionary_url %}
-			<a href="{{ voc.wiktionary_url }}">
-				{{- word -}}
-			</a>
-		{% else %}
-			{{ word }}
-		{% endif %}
+{% macro show_word(vocable, lang, part_of_speech, sense_list=None) %}
+    {% set voc = vocable_details(vocable, lang, part_of_speech or None) %}
+    <span class="translation">
+		{% call optional_link(voc.wiktionary_url) %}
+			{{ voc.display }}
+			{% if voc.display_addition %}
+				({{ voc.display_addition }})
+			{% endif %}
+		{% endcall %}
 	</span>
-	<span class="text-muted">
+    <span class="text-muted">
 		{% if voc.gender %}
 			<span class="gender">{{ '{' + voc.gender[0] + '}' }}</span>
 		{% endif %}
 		{% if voc.pronuns %}
 			<span class="pronun">{{ voc.pronuns | join(', ') }}</span>
 		{% endif %}
+        <br>
+        {% if sense_list %}
+        <ul class="gloss">
+            {% for gloss in sense_list.split(' | ') %}
+            <li>{{ gloss }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
 	</span>
 {% endmacro %}
 
@@ -216,12 +201,10 @@
 					</thead>
 					{% for result in results_one_dir %}
 						<tr>
-							<td>{{ translation(result, left_lang) }}</td>
+							<td>{{ show_word(result.written_rep, left_lang, result.part_of_speech, result.sense_list) }}</td>
 							<td>
 								{% for t in result.trans_list.split(' | ') %}
-									{{ word_in_target_lang(t, right_lang, result.part_of_speech) }}
-									{#{ t.written }}: {{ t.sense.pronuns[0] }} {{t.sense}#}
-									<br/>
+									{{ show_word(t, right_lang, result.part_of_speech) }}
 								{% endfor %}
 							</td>
 						</tr>
