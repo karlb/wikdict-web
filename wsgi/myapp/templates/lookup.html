@@ -126,7 +126,7 @@
 			{% endif %}
 		{% endcall %}
 	</span>
-    <span class="text-muted">
+    <div class="text-muted">
 		{% if voc.gender %}
 			<span class="gender">{{ '{' + voc.gender[0] + '}' }}</span>
 		{% endif %}
@@ -141,12 +141,12 @@
             {% endfor %}
         </ul>
         {% endif %}
-	</span>
+	</div>
 {% endmacro %}
 
 
 {% macro search_form() %}
-	<form action="/lookup" role="form "class="form-inline search-form">
+	<form action="/lookup" role="form" class="form-inline search-form">
 		{% if not query %}
 			<img src="{{ url_for('static', filename='img/arrow.png') }}" style="height:60px; margin: 7px 5px -28px">
 		{% endif %}
@@ -200,8 +200,10 @@
 				{% endif %}
 				<table class="table table-striped">
 					<thead>
-						<th>{{ language_names[left_lang] | capitalize }}</th>
-						<th>{{ language_names[right_lang] | capitalize }}</th>
+                        <tr>
+                            <th>{{ language_names[left_lang] | capitalize }}</th>
+                            <th>{{ language_names[right_lang] | capitalize }}</th>
+                        <tr>
 					</thead>
 					{% for result in results_one_dir %}
 						<tr>
@@ -252,9 +254,9 @@
 				<h3>Tools</h3>
 				<div class="row clearfix">
 					<div class="col-md-6">
-						<ul class="list-group">
+						<div class="list-group">
 							<a id="add-search-provider" class="list-group-item">Add "WikDict: {{from_lang}} ↔ {{to_lang}}" search to your browser</a>
-						</ul>
+						</div>
 					</div>
 				</div>
 			</div>
