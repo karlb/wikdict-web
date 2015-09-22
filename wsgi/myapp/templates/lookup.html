@@ -112,8 +112,12 @@
 	{% endif %}
 {% endmacro %}
 
-{% macro show_word(vocable, lang, part_of_speech, sense_list=None) %}
-    {% set voc = vocable_details(vocable, lang, part_of_speech or None) %}
+{% macro show_word(vocable, lang, part_of_speech, sense_list=None, lexentry=None) %}
+    {% if lexentry %}
+        {% set voc = entry_details(lexentry, lang) %}
+    {% else %}
+        {% set voc = vocable_details(vocable, lang, part_of_speech or None) %}
+    {% endif %}
     <span class="translation">
 		{% call optional_link(voc.wiktionary_url) %}
 			{{ voc.display }}
@@ -201,7 +205,8 @@
 					</thead>
 					{% for result in results_one_dir %}
 						<tr>
-							<td>{{ show_word(result.written_rep, left_lang, result.part_of_speech, result.sense_list) }}</td>
+							<td>{{ show_word(result.written_rep, left_lang, result.part_of_speech, result.sense_list,
+                                             lexentry=result.lexentry) }}</td>
 							<td>
 								{% for t in result.trans_list.split(' | ') %}
 									{{ show_word(t, right_lang, result.part_of_speech) }}

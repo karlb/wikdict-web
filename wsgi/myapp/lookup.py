@@ -37,34 +37,37 @@ def lookup_redirect():
     return redirect(url)
 
 
-@timing
-def search_query(from_lang, to_lang, search_term, **kwargs):
-    cur = apsw.Connection(DATA_DIR + '/{}-{}.sqlite3'.format(from_lang, to_lang)).cursor()
-    cur.execute("""
-                SELECT *
-                FROM (
-                    SELECT lexentry, written_rep, part_of_speech, sense_list, min_sense_num, trans_list
-                    FROM (
-                            SELECT DISTINCT lexentry
-                            FROM search_trans
-                            WHERE form MATCH ?
-                        )
-                        JOIN translation USING (lexentry)
-                    UNION ALL
-                    SELECT NULL, written_rep, NULL, NULL, NULL, trans_list
-                    FROM search_reverse_trans
-                    WHERE written_rep MATCH ?
-                )
-                ORDER BY length(written_rep), coalesce(min_sense_num, '99')
-            """, [search_term, search_term])
+def query(db_name, stmt, bind_params):
+    cur = apsw.Connection(DATA_DIR + '/' + db_name + '.sqlite3').cursor()
+    cur.execute(stmt, bind_params)
     results = [dict(zip((d[0] for d in cur.getdescription()), row)) for row in cur]
     return results
 
 
 @timing
+def search_query(from_lang, to_lang, search_term, **kwargs):
+    return query(from_lang + '-' + to_lang, """
+            SELECT *
+            FROM (
+                SELECT lexentry, written_rep, part_of_speech, sense_list, min_sense_num, trans_list
+                FROM (
+                        SELECT DISTINCT lexentry
+                        FROM search_trans
+                        WHERE form MATCH ?
+                    )
+                    JOIN translation USING (lexentry)
+                UNION ALL
+                SELECT NULL, written_rep, NULL, NULL, NULL, trans_list
+                FROM search_reverse_trans
+                WHERE written_rep MATCH ?
+            )
+            ORDER BY length(written_rep), coalesce(min_sense_num, '99')
+        """, [search_term, search_term])
+
+
+@timing
 def vocable_details(vocable, lang, part_of_speech):
-    cur = apsw.Connection(DATA_DIR + '/{}.sqlite3'.format(lang)).cursor()
-    cur.execute("""
+    r = query(lang, """
             WITH matches AS (
                 SELECT *
                 FROM entry
@@ -95,9 +98,7 @@ def vocable_details(vocable, lang, part_of_speech):
                     HAVING count(DISTINCT display_addition) = 1
                 ) AS display_addition,
                 (SELECT count(*) FROM matches) AS count
-        """, [vocable, part_of_speech, part_of_speech])
-    r = dict(zip((d[0] for d in cur.getdescription()), cur.fetchone()))
-    print(repr(r))
+        """, [vocable, part_of_speech, part_of_speech])[0]
     return {
         'gender': r['gender'],
         'pronuns': set(r['pronun_list'].split(' | ')) if r['pronun_list'] else None,
@@ -105,6 +106,19 @@ def vocable_details(vocable, lang, part_of_speech):
         'display': r['display'] or vocable,
         'display_addition': r['display_addition'],
     }
+
+
+def entry_details(lexentry, lang):
+    r = query(lang, """
+        SELECT *
+        FROM entry
+        WHERE lexentry = ?
+    """, [lexentry])[0]
+    r.update({
+        'display': r['display'] or r['written_rep'],
+        'wiktionary_url': vocable_link(r['written_rep'], lang),
+    })
+    return r
 
 
 def vocable_link(word, lang):
@@ -116,4 +130,7 @@ def vocable_link(word, lang):
 
 @app.context_processor
 def add_fucntions():
-    return dict(vocable_details=vocable_details)
+    return dict(
+        vocable_details=vocable_details,
+        entry_details=entry_details,
+    )
