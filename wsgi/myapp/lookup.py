@@ -1,5 +1,4 @@
 #import sqlite3
-import apsw
 import urllib.parse
 
 from flask import Flask, render_template, redirect, request, url_for, flash, g
@@ -7,7 +6,7 @@ from flask import Flask, render_template, redirect, request, url_for, flash, g
 from .languages import language_names
 from . import app
 from . import base
-from .base import DATA_DIR, timing
+from .base import DATA_DIR, timing, db_query
 
 
 @app.route('/<from_lang>-<to_lang>/')
@@ -37,16 +36,9 @@ def lookup_redirect():
     return redirect(url)
 
 
-def query(db_name, stmt, bind_params):
-    cur = apsw.Connection(DATA_DIR + '/' + db_name + '.sqlite3').cursor()
-    cur.execute(stmt, bind_params)
-    results = [dict(zip((d[0] for d in cur.getdescription()), row)) for row in cur]
-    return results
-
-
 @timing
 def search_query(from_lang, to_lang, search_term, **kwargs):
-    return query(from_lang + '-' + to_lang, """
+    return db_query(from_lang + '-' + to_lang, """
             SELECT *
             FROM (
                 SELECT lexentry, written_rep, part_of_speech, sense_list, min_sense_num, trans_list
@@ -67,7 +59,7 @@ def search_query(from_lang, to_lang, search_term, **kwargs):
 
 @timing
 def vocable_details(vocable, lang, part_of_speech):
-    r = query(lang, """
+    r = db_query(lang, """
             WITH matches AS (
                 SELECT *
                 FROM entry
@@ -100,20 +92,21 @@ def vocable_details(vocable, lang, part_of_speech):
                 (SELECT count(*) FROM matches) AS count
         """, [vocable, part_of_speech, part_of_speech])[0]
     return {
-        'gender': r['gender'],
-        'pronuns': set(r['pronun_list'].split(' | ')) if r['pronun_list'] else None,
-        'wiktionary_url': None if r['count'] == 0 else vocable_link(vocable, lang),
-        'display': r['display'] or vocable,
-        'display_addition': r['display_addition'],
+        'gender': r.gender,
+        'pronuns': set(r.pronun_list.split(' | ')) if r.pronun_list else None,
+        'wiktionary_url': None if r.count == 0 else vocable_link(vocable, lang),
+        'display': r.display or vocable,
+        'display_addition': r.display_addition,
     }
 
 
 def entry_details(lexentry, lang):
-    r = query(lang, """
+    r = db_query(lang, """
         SELECT *
         FROM entry
         WHERE lexentry = ?
     """, [lexentry])[0]
+    r = r._asdict()
     r.update({
         'display': r['display'] or r['written_rep'],
         'wiktionary_url': vocable_link(r['written_rep'], lang),
@@ -129,7 +122,7 @@ def vocable_link(word, lang):
 
 
 @app.context_processor
-def add_fucntions():
+def add_functions():
     return dict(
         vocable_details=vocable_details,
         entry_details=entry_details,

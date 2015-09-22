@@ -3,9 +3,9 @@ import time
 import functools
 from collections import OrderedDict, namedtuple
 
+import apsw
 import flask
 from flask import session, g
-import apsw
 
 from .languages import language_names
 
@@ -41,12 +41,15 @@ def get_lang_pairs():
     """)
 
 
-def db_query(db_name, stmt):
-    cur = apsw.Connection(DATA_DIR + '/' + db_name + '.sqlite3').cursor()
-    cur.execute(stmt)
-    Row = namedtuple('Row', (d[0] for d in cur.getdescription()))
-    results = [Row(*r) for r in cur]
-    return results
+def db_query(db_name, stmt, bind_params=None):
+    conn = apsw.Connection(DATA_DIR + '/' + db_name + '.sqlite3')
+    cur = conn.cursor()
+    cur.execute(stmt, bind_params)
+    try:
+        Row = namedtuple('Row', (d[0] for d in cur.getdescription()))
+    except apsw.ExecutionCompleteError:
+        return []
+    return [Row(*r) for r in cur]
 
 
 def render_template(filename, **kwargs):
