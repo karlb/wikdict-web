@@ -105,11 +105,11 @@
 {% endblock %}
 
 {% macro optional_link(url) %}
-	{% if url %}
+	{%- if url -%}
 		<a href="{{url}}">{{ caller() }}</a>
-	{% else %}
+	{%- else -%}
         {{ caller() }}
-	{% endif %}
+	{%- endif -%}
 {% endmacro %}
 
 {% macro show_word(vocable, lang, part_of_speech, sense_list=None, lexentry=None) %}
@@ -119,29 +119,30 @@
         {% set voc = vocable_details(vocable, lang, part_of_speech or None) %}
     {% endif %}
     <span class="translation">
-		{% call optional_link(voc.wiktionary_url) %}
+		{% call optional_link(voc.wiktionary_url) -%}
 			{{ voc.display }}
-			{% if voc.display_addition %}
+			{%- if voc.display_addition %}
 				({{ voc.display_addition }})
-			{% endif %}
-		{% endcall %}
+			{%- endif -%}
+		{%- endcall -%}
+        <span class="text-muted">
+            {% if voc.gender %}
+                <span class="gender">{{ '{' + voc.gender[0] + '}' }}</span>
+            {% endif %}
+            {% if voc.pronuns %}
+                <span class="pronun">{{ voc.pronuns | join(', ') }}</span>
+            {% endif %}
+        </span>
 	</span>
-    <div class="text-muted">
-		{% if voc.gender %}
-			<span class="gender">{{ '{' + voc.gender[0] + '}' }}</span>
-		{% endif %}
-		{% if voc.pronuns %}
-			<span class="pronun">{{ voc.pronuns | join(', ') }}</span>
-		{% endif %}
-        <br>
-        {% if sense_list %}
-        <ul class="gloss">
-            {% for gloss in sense_list.split(' | ') %}
-            <li>{{ gloss }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-	</div>
+    {% if sense_list %}
+        <div class="text-muted">
+            <ul class="gloss">
+                {% for gloss in sense_list.split(' | ') %}
+                <li>{{ gloss }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
 {% endmacro %}
 
 
@@ -212,6 +213,7 @@
 							<td>
 								{% for t in result.trans_list.split(' | ') %}
 									{{ show_word(t, right_lang, result.part_of_speech) }}
+                                    <br>
 								{% endfor %}
 							</td>
 						</tr>

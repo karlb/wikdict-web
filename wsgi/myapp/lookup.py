@@ -109,6 +109,7 @@ def entry_details(lexentry, lang):
     r = r._asdict()
     r.update({
         'display': r['display'] or r['written_rep'],
+        'display_addition': r['display_addition'],
         'wiktionary_url': vocable_link(r['written_rep'], lang),
     })
     return r
