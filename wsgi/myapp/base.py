@@ -41,8 +41,8 @@ def get_lang_pairs():
     """)
 
 
-def db_query(db_name, stmt, bind_params=None):
-    conn = apsw.Connection(DATA_DIR + '/' + db_name + '.sqlite3')
+def db_query(db_name, stmt, bind_params=None, path='dict'):
+    conn = apsw.Connection(DATA_DIR + '/' + path + '/' + db_name + '.sqlite3')
     cur = conn.cursor()
     cur.execute(stmt, bind_params)
     try:

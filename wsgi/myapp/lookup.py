@@ -20,6 +20,16 @@ def lookup(from_lang, to_lang, query=None):
             search_query(from_lang, to_lang, query),
             search_query(to_lang, from_lang, query),
         ]
+
+        # log results for later analysis
+        # CREATE TABLE search_log (
+        #   ts timestamp DEFAULT current_timestamp, lang1 text, lang2 text, query text, results1, results2);
+        db_query('logging', """
+                INSERT INTO search_log (lang1, lang2, query, results1, results2)
+                VALUES (?, ?, ?, ?, ?)
+            """,
+            [from_lang, to_lang, query, len(results[0]), len(results[1])],
+            path='')
     else:
         results = None
     return base.render_template('lookup.html',
