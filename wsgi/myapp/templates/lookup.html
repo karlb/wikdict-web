@@ -75,11 +75,57 @@
 	#results table th {
 		width: 50%
 	}
+
+
+.tt-query {
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075) !important;
+     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075) !important;
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075) !important;
+}
+
+.tt-hint {
+    color: #999 !important;
+}
+
+.tt-menu {    /* used to be tt-dropdown-menu in older versions */
+  width: 100% !important;
+  margin-top: 4px !important;
+  padding: 4px 0 !important;
+  background-color: #fff !important;
+  border: 1px solid #ccc !important;
+  border: 1px solid rgba(0, 0, 0, 0.2) !important;
+  -webkit-border-radius: 4px !important;
+     -moz-border-radius: 4px !important;
+          border-radius: 4px !important;
+  -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2) !important;
+     -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2) !important;
+          box-shadow: 0 5px 10px rgba(0,0,0,.2) !important;
+}
+
+.tt-suggestion {
+  padding: 3px 20px !important;
+  line-height: 24px !important;
+}
+
+.tt-suggestion.tt-cursor,.tt-suggestion:hover {
+  color: #fff !important;
+  background-color: #0097cf !important;
+
+}
+
+.dropdown-menu {
+    width: 100% !important;
+}
+
+.tt-suggestion p {
+  margin: 0 !important;
+}
 {% endblock %}
 
 
 {% block script %}
 	$(function() {
+		// search provider
 		if (window.external && ("AddSearchProvider" in window.external)) {
 			$('#add-search-provider-block').show();
 			$('#add-search-provider').click(function () {
@@ -87,9 +133,54 @@
 			});
 		}
 
+		// language selection
 		$('.lang-select').change(function () {
 			window.location = '/' + this.value + '/';
 		})
+
+		// typeahead
+        var substringMatcher = function(strs) {
+          return function findMatches(q, cb) {
+            var matches, substringRegex;
+
+            // an array that will be populated with substring matches
+            matches = [];
+
+            // regex used to determine if a string contains the substring `q`
+            substrRegex = new RegExp(q, 'i');
+
+            // iterate through the pool of strings and for any string that
+            // contains the substring `q`, add it to the `matches` array
+            $.each(strs, function(i, str) {
+              if (substrRegex.test(str)) {
+                matches.push(str);
+              }
+            });
+
+            cb(matches);
+          };
+        };
+
+        var states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
+          'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
+          'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
+          'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
+          'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
+          'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
+          'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
+          'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
+          'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
+        ];
+
+        $('.typeahead').typeahead({
+          hint: true,
+          highlight: true,
+          minLength: 1
+        },
+        {
+          name: 'states',
+          source: substringMatcher(states)
+        });
 	})
 {% endblock %}
 
@@ -103,6 +194,7 @@
 		type="application/opensearchdescription+xml" 
 		href="/opensearch/{{from_lang}}-{{to_lang}}"
 		title="WikDict {{from_lang}}-{{to_lang}} Search" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
 {% endblock %}
 
 {% macro optional_link(url) %}
@@ -152,10 +244,15 @@
 		{% if not query %}
 			<img src="{{ url_for('static', filename='img/arrow.png') }}" style="height:60px; margin: 7px 5px -28px">
 		{% endif %}
-		<input type="search" name="query" class="form-control" value="{{ query or '' }}"
-			autofocus onFocus="this.select()" id="search-input"
-		>
-		<input type="hidden" name="index_name" value="{{from_lang}}-{{to_lang}}">
+		<div class="form-group">
+            <div class="form-group">
+				<label class="sr-only" for="search-input">Search for term</label>
+                <input type="search" name="query" class="typeahead form-control" value="{{ query or '' }}"
+                    autofocus onFocus="this.select()" id="search-input"
+                >
+                <input type="hidden" name="index_name" value="{{from_lang}}-{{to_lang}}">
+            </div>
+        </div>
 		<button class="btn btn-primary">Translate</button>
 		{% if not query %}
 			<div class="use-notice">
