@@ -140,46 +140,41 @@
 
 		// typeahead
         var substringMatcher = function(strs) {
-          return function findMatches(q, cb) {
-            var matches, substringRegex;
+            var loaded_prefix;
 
-            // an array that will be populated with substring matches
-            matches = [];
+            function matches(q) {
+                return $.grep(strs, function(x) {
+                    return x.toLowerCase().startsWith(q.toLowerCase());
+                });
+            }
 
-            // regex used to determine if a string contains the substring `q`
-            substrRegex = new RegExp(q, 'i');
+            return function findMatches(q, cb, cb_async) {
+                var prefix = q.slice(0, 3);
+                if (loaded_prefix != prefix) {
+                    strs = [];
+                    $.ajax('http://localhost:8000/de/' + encodeURI(encodeURI(q.toLowerCase())) + '.txt', {
+                        dataType: 'text',
+                        success: function (data) {
+                            strs = data.split('\n');
+                            var m = matches(q);
+                            cb_async(m);
+                            loaded_prefix = prefix;
+                        }
+                    });
+                }
 
-            // iterate through the pool of strings and for any string that
-            // contains the substring `q`, add it to the `matches` array
-            $.each(strs, function(i, str) {
-              if (substrRegex.test(str)) {
-                matches.push(str);
-              }
-            });
-
-            cb(matches);
-          };
+                cb(matches(q));
+            };
         };
-
-        var states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
-          'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
-          'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
-          'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
-          'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
-          'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
-          'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
-          'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
-          'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
-        ];
 
         $('.typeahead').typeahead({
           hint: true,
           highlight: true,
-          minLength: 1
+          minLength: 3
         },
         {
-          name: 'states',
-          source: substringMatcher(states)
+          source: substringMatcher([]),
+		  limit: 5
         });
 	})
 {% endblock %}
@@ -194,7 +189,8 @@
 		type="application/opensearchdescription+xml" 
 		href="/opensearch/{{from_lang}}-{{to_lang}}"
 		title="WikDict {{from_lang}}-{{to_lang}} Search" />
-    <script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
+    <!--script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.jquery.min.js"></script-->
+    <script src="{{ url_for('static', filename='js/typeahead.jquery.min.js') }}"></script>
 {% endblock %}
 
 {% macro optional_link(url) %}
