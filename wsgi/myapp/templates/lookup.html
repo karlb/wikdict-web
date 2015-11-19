@@ -152,7 +152,7 @@
                 var prefix = q.slice(0, 3);
                 if (loaded_prefix != prefix) {
                     strs = [];
-                    $.ajax('http://localhost:8000/de/' + encodeURI(encodeURI(q.toLowerCase())) + '.txt', {
+                    $.ajax('/static/typeahead/{{from_lang}}/' + encodeURI(encodeURI(q.toLowerCase())) + '.txt', {
                         dataType: 'text',
                         success: function (data) {
                             strs = data.split('\n');
@@ -167,6 +167,7 @@
             };
         };
 
+		/*
         $('.typeahead').typeahead({
           hint: true,
           highlight: true,
@@ -176,6 +177,7 @@
           source: substringMatcher([]),
 		  limit: 5
         });
+        */
 	})
 {% endblock %}
 
@@ -191,6 +193,18 @@
 		title="WikDict {{from_lang}}-{{to_lang}} Search" />
     <!--script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.jquery.min.js"></script-->
     <script src="{{ url_for('static', filename='js/typeahead.jquery.min.js') }}"></script>
+
+    {% if query %}
+        <!-- hellotraffic conversion tracking -->
+        <script src="https://inter.rtb-cdn.net/ct.js"></script>
+	{% endif %}
+    <!-- hellotraffic view tracking -->
+    <script src="https://inter.rtb-cdn.net/vt.js"></script>
+
+	<!-- robotdetect tracking-->
+    <script type="text/javascript">
+    try{!function(t,e){var a=1*new Date,n=e.createElement("script");n.type="text/javascript",n.async=!0,n.src=("https:"==e.location.protocol?"https://":"http://")+"robotdetect-com.appspot.com/a/WyJhZHNwZXJ0IiwidGVzdDIiXQ.ileEueZ5mzT7CeBl7At2jLSvwtE/c.js?dt="+a;var r=e.getElementsByTagName("script")[0];r.parentNode.insertBefore(n,r)}(window,document)}finally{}
+    </script>
 {% endblock %}
 
 {% macro optional_link(url) %}
