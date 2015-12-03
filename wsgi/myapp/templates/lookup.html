@@ -200,6 +200,10 @@
 	{% endif %}
     <!-- hellotraffic view tracking -->
     <script src="https://inter.rtb-cdn.net/vt.js"></script>
+	{% if query and (results[0] or results[1]) %}
+        <!-- hellotraffic conversion tracking -->
+        <script src="https://inter.rtb-cdn.net/ct.js"></script>
+	{% endif %}
 
 	<!-- robotdetect tracking-->
     <script type="text/javascript">
