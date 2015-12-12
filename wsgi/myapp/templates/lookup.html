@@ -194,10 +194,6 @@
     <!--script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.jquery.min.js"></script-->
     <script src="{{ url_for('static', filename='js/typeahead.jquery.min.js') }}"></script>
 
-    {% if query %}
-        <!-- hellotraffic conversion tracking -->
-        <script src="https://inter.rtb-cdn.net/ct.js"></script>
-	{% endif %}
     <!-- hellotraffic view tracking -->
     <script src="https://inter.rtb-cdn.net/vt.js"></script>
 	{% if query and (results[0] or results[1]) %}

@@ -25,10 +25,11 @@ def lookup(from_lang, to_lang, query=None):
         # CREATE TABLE search_log (
         #   ts timestamp DEFAULT current_timestamp, lang1 text, lang2 text, query text, results1, results2);
         db_query('logging', """
-                INSERT INTO search_log (lang1, lang2, query, results1, results2)
-                VALUES (?, ?, ?, ?, ?)
+                INSERT INTO search_log (lang1, lang2, query, results1, results2, ip, referrer, user_agent)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """,
-            [from_lang, to_lang, query, len(results[0]), len(results[1])],
+            [from_lang, to_lang, query, len(results[0]), len(results[1]),
+             request.remote_addr, request.referrer, request.user_agent.string],
             path='')
     else:
         results = None
