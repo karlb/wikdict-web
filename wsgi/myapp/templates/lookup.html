@@ -122,74 +122,6 @@
 }
 {% endblock %}
 
-
-{% block script %}
-	$(function() {
-		// search provider
-		if (window.external && ("AddSearchProvider" in window.external)) {
-			$('#add-search-provider-block').show();
-			$('#add-search-provider').click(function () {
-				window.external.AddSearchProvider('http://www.wikdict.com/opensearch/{{from_lang}}-{{to_lang}}');
-			});
-		}
-
-		// language selection
-		$('.lang-select').change(function () {
-			window.location = '/' + this.value + '/';
-		})
-
-		// typeahead
-        var substringMatcher = function(strs) {
-            var loaded_prefix;
-
-            function matches(q) {
-                return $.grep(strs, function(x) {
-                    return x[0].toLowerCase().startsWith(q.toLowerCase());
-                });
-            }
-
-            return function findMatches(q, cb, cb_async) {
-                var prefix = q.slice(0, 3);
-                if (loaded_prefix != prefix) {
-                    strs = [];
-                    $.ajax('http://127.0.0.1:8080/{{from_lang}}/' + encodeURI(encodeURI(prefix.toLowerCase())) + '.json', {
-                    //$.ajax('http://storage.googleapis.com/wikdict-cdn/typeahead/{{from_lang}}/' + encodeURI(encodeURI(prefix.toLowerCase())) + '.txt', {
-                        success: function (data) {
-                            strs = data;
-                            var m = matches(q);
-                            cb_async(m);
-                            loaded_prefix = prefix;
-                        }
-                    });
-                }
-
-                cb(matches(q));
-            };
-        };
-
-        $('.typeahead').typeahead({
-          hint: true,
-          highlight: true,
-          minLength: 3
-        },
-        {
-          source: substringMatcher([]),
-		  limit: 5,
-          display: function (x) {
-              return x[0];
-          },
-          templates: {
-              suggestion: function (x) {
-                  return '<div>' + x[0] + ' &mdash; de</div>';
-              }
-          }
-        });
-        // hide suggestions until user types
-        setTimeout(function () {$('.typeahead').typeahead('close')}, 0);
-	})
-{% endblock %}
-
-
 {% block css_links %}
     <link href='https://fonts.googleapis.com/css?family=Parisienne&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 {% endblock %}
@@ -201,6 +133,7 @@
 		title="WikDict {{from_lang}}-{{to_lang}} Search" />
     <!--script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.jquery.min.js"></script-->
     <script src="{{ url_for('static', filename='js/typeahead.jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lookup.js') }}"></script>
 
     <!-- hellotraffic view tracking -->
     <script src="https://inter.rtb-cdn.net/vt.js"></script>
@@ -213,6 +146,11 @@
     <script type="text/javascript">
         try{!function(t,e,r){var n=1*new Date,o=e.createElement("script");o.type="text/javascript",o.async=!0,o.src=("https:"==e.location.protocol?"https://":"http://")+"rd.rtb-cdn.net/a/WyJhZHNwZXJ0IiwidGVzdDIiXQ.ileEueZ5mzT7CeBl7At2jLSvwtE/c.js?dt="+n+"&ref="+r(e.referrer)+"&loc="+r(e.location);var c=e.getElementsByTagName("script")[0];c.parentNode.insertBefore(o,c)}(window,document,encodeURIComponent)}finally{}
     </script>
+
+	<script>
+        var from_lang = '{{ from_lang }}';
+        var to_lang = '{{ to_lang }}';
+	</script>
 {% endblock %}
 
 {% macro optional_link(url) %}
