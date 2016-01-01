@@ -42,22 +42,22 @@ $(function() {
     };
 
     $('.typeahead').typeahead({
-      hint: true,
-      highlight: true,
-      minLength: 3
-    },
-    {
-      source: substringMatcher([]),
-      limit: 5,
-      display: function (x) {
-          return x[0];
-      },
-      templates: {
-          suggestion: function (x) {
-              return '<div>' + x[0] + ' &mdash; de</div>';
-          }
-      }
-    });
+            hint: true,
+            highlight: true,
+            minLength: 3
+        },
+        {
+            source: substringMatcher([]),
+            limit: 5,
+            display: function (x) {
+                return x[0];
+            },
+            templates: {
+                suggestion: function (x) {
+                      return '<div>' + x[0] + ' &mdash; de</div>';
+                }
+            }
+        });
     // hide suggestions until user types
     setTimeout(function () {$('.typeahead').typeahead('close')}, 0);
 })
