@@ -152,7 +152,7 @@
                 var prefix = q.slice(0, 3);
                 if (loaded_prefix != prefix) {
                     strs = [];
-                    $.ajax('/static/typeahead/{{from_lang}}/' + encodeURI(encodeURI(q.toLowerCase())) + '.txt', {
+                    $.ajax('http://storage.googleapis.com/wikdict-cdn/typeahead/{{from_lang}}/' + encodeURI(encodeURI(prefix.toLowerCase())) + '.txt', {
                         dataType: 'text',
                         success: function (data) {
                             strs = data.split('\n');
@@ -167,7 +167,6 @@
             };
         };
 
-		/*
         $('.typeahead').typeahead({
           hint: true,
           highlight: true,
@@ -177,7 +176,8 @@
           source: substringMatcher([]),
 		  limit: 5
         });
-        */
+        // hide suggestions until user types
+        setTimeout(function () {$('.typeahead').typeahead('close')}, 0);
 	})
 {% endblock %}
 
