@@ -144,7 +144,7 @@
 
             function matches(q) {
                 return $.grep(strs, function(x) {
-                    return x.toLowerCase().startsWith(q.toLowerCase());
+                    return x[0].toLowerCase().startsWith(q.toLowerCase());
                 });
             }
 
@@ -152,10 +152,10 @@
                 var prefix = q.slice(0, 3);
                 if (loaded_prefix != prefix) {
                     strs = [];
-                    $.ajax('http://storage.googleapis.com/wikdict-cdn/typeahead/{{from_lang}}/' + encodeURI(encodeURI(prefix.toLowerCase())) + '.txt', {
-                        dataType: 'text',
+                    $.ajax('http://127.0.0.1:8080/{{from_lang}}/' + encodeURI(encodeURI(prefix.toLowerCase())) + '.json', {
+                    //$.ajax('http://storage.googleapis.com/wikdict-cdn/typeahead/{{from_lang}}/' + encodeURI(encodeURI(prefix.toLowerCase())) + '.txt', {
                         success: function (data) {
-                            strs = data.split('\n');
+                            strs = data;
                             var m = matches(q);
                             cb_async(m);
                             loaded_prefix = prefix;
@@ -174,7 +174,15 @@
         },
         {
           source: substringMatcher([]),
-		  limit: 5
+		  limit: 5,
+          display: function (x) {
+              return x[0];
+          },
+          templates: {
+              suggestion: function (x) {
+                  return '<div>' + x[0] + ' &mdash; de</div>';
+              }
+          }
         });
         // hide suggestions until user types
         setTimeout(function () {$('.typeahead').typeahead('close')}, 0);
