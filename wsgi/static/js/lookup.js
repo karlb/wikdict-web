@@ -82,4 +82,8 @@ $(function() {
         });
     // hide suggestions until user types
     setTimeout(function () {$('.typeahead').typeahead('close')}, 0);
+    // submit form when selecting a suggestion
+    $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
+        $('.search-form').submit();
+    });
 })
