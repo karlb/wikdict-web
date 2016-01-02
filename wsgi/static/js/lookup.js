@@ -16,7 +16,7 @@ $(function() {
     var substringMatcher = function() {
         var loaded_prefix;
         var loaded_langs;
-        //var merged_and_sorted;
+        var merged_and_sorted;
 
         function match(q) {
             return $.grep(merged_and_sorted, function(x) {
