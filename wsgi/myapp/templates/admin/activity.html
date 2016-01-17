@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import table %}
+
+{% block main %}
+	<h3>Weekly activity</h3>
+    {{ table(rows, links=dict(week='/admin/week/{week}')) }}
+{% endblock %}

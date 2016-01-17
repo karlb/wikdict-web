@@ -6,7 +6,7 @@ from flask import Flask, render_template, redirect, request, url_for, flash, g
 from .languages import language_names
 from . import app
 from . import base
-from .base import DATA_DIR, timing, db_query
+from .base import timing, db_query
 
 
 @app.route('/<from_lang>-<to_lang>/')
