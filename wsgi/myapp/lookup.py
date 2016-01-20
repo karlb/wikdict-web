@@ -63,6 +63,7 @@ def search_query(from_lang, to_lang, search_term, **kwargs):
                 SELECT NULL, written_rep, NULL, NULL, NULL, trans_list
                 FROM search_reverse_trans
                 WHERE written_rep MATCH ?
+                LIMIT 100
             )
             ORDER BY length(written_rep), coalesce(min_sense_num, '99')
         """, [search_term, search_term])
