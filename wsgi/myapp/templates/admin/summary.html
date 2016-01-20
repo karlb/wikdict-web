@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import table %}
+
+{% block main %}
+	<h3>Top Languages</h3>
+    {{ table(langs) }}
+
+    <h3>Recent Hits</h3>
+    {{ table(recent_hits) }}
+
+    <h3>Recent Misses</h3>
+    {{ table(recent_misses) }}
+{% endblock %}
