@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import table %}
+
+{% block main %}
+	<h3>Admin Pages</h3>
+    {% for url in urls if url_for(url).startswith('/admin') %}
+        <li><a href="{{ url_for(url) }}">{{ url }}</a></li>
+    {% endfor %}
+{% endblock %}

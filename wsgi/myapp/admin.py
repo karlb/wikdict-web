@@ -2,6 +2,15 @@ from . import app
 from . import base
 
 
+@app.route('/admin/')
+def admin_index():
+    return base.render_template('admin/index.html', urls=[
+        rule.endpoint
+        for rule in app.url_map.iter_rules()
+        if not rule.arguments and rule.endpoint != 'admin_index'
+    ])
+
+
 @app.route('/admin/activity')
 def show_activity():
     rows = base.db_query("logging", """
