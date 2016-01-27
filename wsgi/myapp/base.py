@@ -41,10 +41,21 @@ def get_lang_pairs():
     """)
 
 
-def db_query(db_name, stmt, bind_params=None, path='dict'):
-    conn = apsw.Connection(DATA_DIR + '/' + path + '/' + db_name + '.sqlite3')
+def db_query(db_name, stmt, bind_params=None, path='dict', attach_dbs=None, explain=False):
+    path_for_db = lambda db: DATA_DIR + '/' + path + '/' + db + '.sqlite3'
+    conn = apsw.Connection(path_for_db(db_name))
+    conn.enableloadextension(True)
+    conn.loadextension('/Users/karl/gdrive/code/gen_dict/download-sqlite/lib/spellfix1')
     cur = conn.cursor()
+    for name, db in (attach_dbs or {}).items():
+        cur.execute("ATTACH DATABASE '{}' AS {}".format(path_for_db(db), name))
+    if explain:
+        print('\nPlan for {}'.format(repr(stmt[:80])))
+        cur.execute("EXPLAIN QUERY PLAN " + stmt, bind_params)
+        for r in cur:
+            print('\t' * r[1], r[3])
     cur.execute(stmt, bind_params)
+    #print(stmt, bind_params)
     try:
         Row = namedtuple('Row', (d[0] for d in cur.getdescription()))
     except apsw.ExecutionCompleteError:

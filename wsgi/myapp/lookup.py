@@ -15,11 +15,16 @@ def lookup(from_lang, to_lang, query=None):
     if [from_lang, to_lang] != sorted((from_lang, to_lang)):
         return redirect(url_for('lookup', from_lang=to_lang, to_lang=from_lang,
                                           query=query))
+
+    templ_vals = {}
+
     if query:
         results = [
             search_query(from_lang, to_lang, query),
             search_query(to_lang, from_lang, query),
         ]
+        if not results[0] and not results[1]:
+            templ_vals['did_you_mean'] = spellfix(from_lang, to_lang, query)
 
         # log results for later analysis
         # CREATE TABLE search_log (
@@ -43,6 +48,7 @@ def lookup(from_lang, to_lang, query=None):
         query=query,
         results=results,
         page_name='lookup',
+        **templ_vals
     )
 
 @app.route('/lookup')
@@ -71,6 +77,40 @@ def search_query(from_lang, to_lang, search_term, **kwargs):
             )
             ORDER BY length(written_rep), coalesce(min_sense_num, '99')
         """, [search_term, search_term])
+
+
+@timing
+def spellfix(from_lang, to_lang, search_term):
+    translated_fixes = db_query(from_lang + '-' + to_lang, """
+            SELECT word
+            FROM (
+                SELECT DISTINCT word, score
+                FROM spellfix_entry
+                    JOIN translation ON (written_rep = word)
+                WHERE word MATCH ?
+                  AND scope=1
+                  AND distance <= 100
+                  AND top=50
+                UNION ALL
+                SELECT DISTINCT word, score
+                FROM other_lang.spellfix_entry
+                    JOIN other_pair.translation ON (written_rep = word)
+                WHERE word MATCH ?
+                  AND scope=1
+                  AND distance <= 100
+                  AND top=50
+            )
+            WHERE lower(word) != lower(?)
+            ORDER BY score LIMIT 3;
+        """,
+        [search_term, search_term, search_term],
+        attach_dbs=dict(
+            lang=from_lang,
+            other_lang=to_lang,
+            other_pair=to_lang + '-' + from_lang
+        )
+    )
+    return [r.word for r in translated_fixes]
 
 
 @timing

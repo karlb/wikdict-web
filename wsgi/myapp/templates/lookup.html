@@ -124,6 +124,16 @@
 	{% if query %}
 		{{ search_form() }}
 
+		{% if did_you_mean %}
+			<p class="did-you-mean">
+                Did you mean:
+                {% for word in did_you_mean %}
+                    <a href="{{ url_for('lookup', from_lang=from_lang, to_lang=to_lang, query=word) }}">{{ word }}</a>
+                    {%- if not loop.last %}, {% endif %}
+                {% endfor%}
+			</p>
+		{% endif %}
+
 		<div id="results">
 			{% for results_one_dir in results %}
 				{% if not results_one_dir %}
@@ -200,6 +210,14 @@
 			</div>
 		</div>
 
+	{% endif %}
+
+	{% if 'localtest' in request.url %}
+		<ul>
+		{% for key, val in g.timing|dictsort(false, 'value')|reverse %}
+			<li>{{ key }}: {{ '%.2f' | format(val) }}</li>
+		{% endfor %}
+        </ul>
 	{% endif %}
 
 {% endblock %}

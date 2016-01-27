@@ -62,6 +62,10 @@
 	float: right;
 }
 
+.did-you-mean {
+	margin: 20px 5px;
+}
+
 /***************** results table ********************/
 .gloss {
 	font-size: 12px;
