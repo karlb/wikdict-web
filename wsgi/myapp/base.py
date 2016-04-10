@@ -3,7 +3,7 @@ import time
 import functools
 from collections import OrderedDict, namedtuple
 
-import apsw
+import sqlite3
 import flask
 from flask import session, g
 
@@ -41,11 +41,12 @@ def get_lang_pairs():
     """)
 
 
-def db_query(db_name, stmt, bind_params=None, path='dict', attach_dbs=None, explain=False):
+def db_query(db_name, stmt, bind_params=(), path='dict', attach_dbs=None, explain=False):
     path_for_db = lambda db: DATA_DIR + '/' + path + '/' + db + '.sqlite3'
-    conn = apsw.Connection(path_for_db(db_name))
-    conn.enableloadextension(True)
-    conn.loadextension('/Users/karl/gdrive/code/gen_dict/download-sqlite/lib/spellfix1')
+    conn = sqlite3.connect(path_for_db(db_name))
+    conn.row_factory = sqlite3.Row
+    conn.enable_load_extension(True)
+    #conn.load_extension('/Users/karl/gdrive/code/gen_dict/download-sqlite/lib/spellfix1')
     cur = conn.cursor()
     for name, db in (attach_dbs or {}).items():
         cur.execute("ATTACH DATABASE '{}' AS {}".format(path_for_db(db), name))
@@ -55,12 +56,7 @@ def db_query(db_name, stmt, bind_params=None, path='dict', attach_dbs=None, expl
         for r in cur:
             print('\t' * r[1], r[3])
     cur.execute(stmt, bind_params)
-    #print(stmt, bind_params)
-    try:
-        Row = namedtuple('Row', (d[0] for d in cur.getdescription()))
-    except apsw.ExecutionCompleteError:
-        return []
-    return [Row(*r) for r in cur]
+    return list(cur)
 
 
 def render_template(filename, **kwargs):
@@ -75,7 +71,7 @@ def render_template(filename, **kwargs):
     return flask.render_template(filename,
         language_names=language_names,
         available_langs=[
-            row.from_lang for row in db_query('wikdict',
+            row['from_lang'] for row in db_query('wikdict',
                                               "SELECT from_lang FROM lang_pair GROUP BY from_lang ORDER BY sum(translations) DESC")
         ],
         lang_pairs=get_lang_pairs(),
