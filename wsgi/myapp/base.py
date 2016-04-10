@@ -41,10 +41,20 @@ def get_lang_pairs():
     """)
 
 
+def namedtuple_factory(cursor, row):
+    """
+    Usage:
+    con.row_factory = namedtuple_factory
+    """
+    fields = [col[0] for col in cursor.description]
+    Row = namedtuple("Row", fields)
+    return Row(*row)
+
+
 def db_query(db_name, stmt, bind_params=(), path='dict', attach_dbs=None, explain=False):
     path_for_db = lambda db: DATA_DIR + '/' + path + '/' + db + '.sqlite3'
     conn = sqlite3.connect(path_for_db(db_name))
-    conn.row_factory = sqlite3.Row
+    conn.row_factory = namedtuple_factory
     conn.enable_load_extension(True)
     #conn.load_extension('/Users/karl/gdrive/code/gen_dict/download-sqlite/lib/spellfix1')
     cur = conn.cursor()
@@ -71,7 +81,7 @@ def render_template(filename, **kwargs):
     return flask.render_template(filename,
         language_names=language_names,
         available_langs=[
-            row['from_lang'] for row in db_query('wikdict',
+            row.from_lang for row in db_query('wikdict',
                                               "SELECT from_lang FROM lang_pair GROUP BY from_lang ORDER BY sum(translations) DESC")
         ],
         lang_pairs=get_lang_pairs(),

@@ -27,14 +27,19 @@ def lookup(from_lang, to_lang, query=None):
             templ_vals['did_you_mean'] = spellfix(from_lang, to_lang, query)
 
         # log results for later analysis
-        # CREATE TABLE search_log (
-        #   ts timestamp DEFAULT current_timestamp, lang1 text, lang2 text, query text, results1, results2);
-        if request.headers.getlist("X-Forwarded-For"):
-           ip = request.headers.getlist("X-Forwarded-For")[0]
-        else:
-           ip = request.remote_addr
         db_query('logging', """
-                INSERT INTO search_log (lang1, lang2, query, results1, results2, ip, referrer, user_agent)
+            CREATE TABLE IF NOT EXISTS search_log (
+                ts timestamp DEFAULT current_timestamp, lang1 text, lang2 text,
+                query text, results1, results2, ip, referrer, user_agent);
+        """, path='')
+        if request.headers.getlist("X-Forwarded-For"):
+            ip = request.headers.getlist("X-Forwarded-For")[0]
+        else:
+            ip = request.remote_addr
+        db_query('logging', """
+                INSERT INTO search_log (lang1, lang2, query,
+                                        results1, results2,
+                                        ip, referrer, user_agent)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """,
             [from_lang, to_lang, query, len(results[0]), len(results[1]),
