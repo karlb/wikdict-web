@@ -10,6 +10,7 @@ from flask import session, g
 from .languages import language_names
 
 DATA_DIR = os.environ['OPENSHIFT_DATA_DIR']
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 
 def timing(f):
@@ -56,7 +57,7 @@ def db_query(db_name, stmt, bind_params=(), path='dict', attach_dbs=None, explai
     conn = sqlite3.connect(path_for_db(db_name))
     conn.row_factory = namedtuple_factory
     conn.enable_load_extension(True)
-    #conn.load_extension('/Users/karl/gdrive/code/gen_dict/download-sqlite/lib/spellfix1')
+    conn.load_extension(APP_ROOT + '/../lib/spellfix1')
     cur = conn.cursor()
     for name, db in (attach_dbs or {}).items():
         cur.execute("ATTACH DATABASE '{}' AS {}".format(path_for_db(db), name))
