@@ -6,7 +6,8 @@ app = Flask(__name__.split('.')[0], static_folder='../static')
 
 import myapp.lookup
 import myapp.admin
-from . import base
+import myapp.base as base
+import myapp.lookup
 
 ADMINS = ['karl42@gmail.com']
 
