@@ -212,13 +212,6 @@
 
 	{% endif %}
 
-	{% if 'localtest' in request.url %}
-		<ul>
-		{% for key, val in g.timing|dictsort(false, 'value')|reverse %}
-			<li>{{ key }}: {{ '%.2f' | format(val) }}</li>
-		{% endfor %}
-        </ul>
-	{% endif %}
 
 {% endblock %}
 

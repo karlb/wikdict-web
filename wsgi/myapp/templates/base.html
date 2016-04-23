@@ -173,7 +173,24 @@
 			{% block main %}
 			{% endblock %}
 
-			{#{ g.timing }#}
+			{% if 'timing' in request.args %}
+				<table class="table">
+					<tr>
+						<th></th>
+						<th>Total Time</th>
+						<th>Num Calls</th>
+						<th>Longest Call</th>
+					</tr>
+                {% for key, t in g.timing.items() %}
+					<tr>
+						<td>{{ key }}</td>
+						<td>{{ t.total_time }}</td>
+						<td>{{ t.num_calls }}</td>
+                        <td>{{ t.max_time }}</td>
+                    </tr>
+                {% endfor %}
+                </table>
+			{% endif %}
 
 		</div>
 

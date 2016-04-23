@@ -20,7 +20,15 @@ def timing(f):
         result = f(*args, **kwargs)
         duration = time.time() - start
         g.timing = getattr(g, 'timing', {})
-        g.timing[f.__name__] = g.timing.get(f.__name__, 0) + duration
+        timing_dict = g.timing.setdefault(f.__name__, {
+            'total_time': 0,
+            'max_time': 0,
+            'num_calls': 0,
+        })
+        timing_dict['total_time'] += duration
+        timing_dict['num_calls'] += 1
+        if duration > timing_dict['max_time']:
+            timing_dict['max_time'] = duration
         return result
     return f_with_timing
 
@@ -47,7 +55,8 @@ def namedtuple_factory(cursor, row):
     Usage:
     con.row_factory = namedtuple_factory
     """
-    fields = [col[0] for col in cursor.description]
+    fields = [col[0] + '_' if col[0] in ('from', ) else col[0]
+              for col in cursor.description]
     Row = namedtuple("Row", fields)
     return Row(*row)
 
@@ -62,7 +71,8 @@ def db_query(db_name, stmt, bind_params=(), path='dict', attach_dbs=None, explai
     for name, db in (attach_dbs or {}).items():
         cur.execute("ATTACH DATABASE '{}' AS {}".format(path_for_db(db), name))
     if explain:
-        print('\nPlan for {}'.format(repr(stmt[:80])))
+        condensed_stmt = ' '.join(stmt.split())
+        print('\nPlan for {}'.format(repr(condensed_stmt[:160])))
         cur.execute("EXPLAIN QUERY PLAN " + stmt, bind_params)
         for r in cur:
             print('\t' * r[1], r[3])

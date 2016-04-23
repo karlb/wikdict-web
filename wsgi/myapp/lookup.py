@@ -161,6 +161,7 @@ def vocable_details(vocable, lang, part_of_speech):
     }
 
 
+@timing
 def entry_details(lexentry, lang):
     rows = db_query(lang, """
         SELECT *
