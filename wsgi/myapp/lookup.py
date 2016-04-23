@@ -162,12 +162,15 @@ def vocable_details(vocable, lang, part_of_speech):
 
 
 @timing
-def entry_details(lexentry, lang):
+def entry_details(vocable, lexentry, lang):
     rows = db_query(lang, """
         SELECT *
         FROM entry
-        WHERE lexentry = ?
-    """, [lexentry])
+        -- Filtering by written_rep allows using the index. Without concerns about performance,
+        -- filtering by lexentry only would be sufficient
+        WHERE written_rep = ?
+          AND lexentry = ?
+    """, [vocable, lexentry])
     if not rows:
         # this should not happen, but for unknown reasons, it did happen for eng/do_you_speak_something__Phrase__1
         # when searching for 'do'

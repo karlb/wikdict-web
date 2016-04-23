@@ -45,7 +45,7 @@
 
 {% macro show_word(vocable, lang, part_of_speech, sense_list=None, lexentry=None) %}
     {% if lexentry %}
-        {% set voc = entry_details(lexentry, lang) %}
+        {% set voc = entry_details(vocable, lexentry, lang) %}
     {% else %}
         {% set voc = vocable_details(vocable, lang, part_of_speech or None) %}
     {% endif %}
