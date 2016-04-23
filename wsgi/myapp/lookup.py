@@ -162,12 +162,16 @@ def vocable_details(vocable, lang, part_of_speech):
 
 
 def entry_details(lexentry, lang):
-    r = db_query(lang, """
+    rows = db_query(lang, """
         SELECT *
         FROM entry
         WHERE lexentry = ?
-    """, [lexentry])[0]
-    r = r._asdict()
+    """, [lexentry])
+    if not rows:
+        # this should not happen, but for unknown reasons, it did happen for eng/do_you_speak_something__Phrase__1
+        # when searching for 'do'
+        return {}
+    r = rows[0]._asdict()
     r.update({
         'display': r['display'] or r['written_rep'],
         'display_addition': r['display_addition'],
