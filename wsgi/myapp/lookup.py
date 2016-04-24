@@ -71,17 +71,18 @@ def search_query(from_lang, to_lang, search_term, **kwargs):
                 FROM (
                         SELECT DISTINCT lexentry
                         FROM search_trans
-                        WHERE form MATCH ?
+                        WHERE form MATCH :term
                     )
                     JOIN translation USING (lexentry)
                 UNION ALL
                 SELECT NULL, written_rep, NULL, NULL, NULL, trans_list
                 FROM search_reverse_trans
-                WHERE written_rep MATCH ?
+                WHERE written_rep MATCH :term
                 LIMIT 100
             )
-            ORDER BY length(written_rep), coalesce(min_sense_num, '99')
-        """, [search_term, search_term])
+            ORDER BY lower(written_rep) LIKE '%'|| lower(:term) ||'%' DESC,
+                     length(written_rep), coalesce(min_sense_num, '99')
+        """, dict(term=search_term))
 
 
 @timing
