@@ -8,7 +8,7 @@ This is the web front end for WikDict dictionaries, which is running at [www.wik
 
 Clone the wikdict-web reposity
 
-    git clone git@bitbucket.org:wikdict/wikdict-web.git
+    hg clone ssh://hg@bitbucket.org/wikdict/wikdict-web
     cd wikdict-web
 
 and setup a virtualenv to your process to run in
