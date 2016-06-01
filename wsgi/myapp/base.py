@@ -64,6 +64,7 @@ def namedtuple_factory(cursor, row):
 def db_query(db_name, stmt, bind_params=(), path='dict', attach_dbs=None, explain=False):
     path_for_db = lambda db: DATA_DIR + '/' + path + '/' + db + '.sqlite3'
     conn = sqlite3.connect(path_for_db(db_name))
+    conn.isolation_level = None  # autocommit
     conn.row_factory = namedtuple_factory
     conn.enable_load_extension(True)
     conn.load_extension(APP_ROOT + '/../lib/spellfix1')
