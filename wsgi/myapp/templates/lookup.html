@@ -45,12 +45,12 @@
 
 {% macro show_word(vocable, lang, part_of_speech, sense_list=None, lexentry=None) %}
     {% if lexentry %}
-        {% set voc = entry_details(vocable, lexentry, lang) %}
+        {% set voc = entry_details(vocable, lexentry, lang, from_lang, to_lang) %}
     {% else %}
-        {% set voc = vocable_details(vocable, lang, part_of_speech or None) %}
+        {% set voc = vocable_details(vocable, lang, part_of_speech or None, from_lang, to_lang) %}
     {% endif %}
     <span class="translation">
-		{% call optional_link(voc.wiktionary_url) -%}
+		{% call optional_link(voc.url) -%}
 			{{ voc.display }}
 			{%- if voc.display_addition %}
 				({{ voc.display_addition }})
@@ -124,57 +124,76 @@
 	{% if query %}
 		{{ search_form() }}
 
-		{% if did_you_mean %}
-			<p class="did-you-mean">
+        {% if did_you_mean %}
+            <p class="did-you-mean">
                 Did you mean:
                 {% for word in did_you_mean %}
                     <a href="{{ url_for('lookup', from_lang=from_lang, to_lang=to_lang, query=word) }}">{{ word }}</a>
                     {%- if not loop.last %}, {% endif %}
                 {% endfor%}
-			</p>
-		{% endif %}
+            </p>
+        {% endif %}
 
-		<div id="results">
-			{% for results_one_dir in results %}
-				{% if not results_one_dir %}
-					{% continue %}
-				{% endif %}
-				{% with %}
-				{% if loop.index == 1 %}
-					{% set (left_lang, right_lang) = (from_lang, to_lang) %}
-				{% elif loop.index == 2 %}
-					{% set (left_lang, right_lang) = (to_lang, from_lang) %}
-				{% endif %}
-				<table class="table table-striped">
-					<thead>
-                        <tr>
-                            <th>{{ language_names[left_lang] | capitalize }}</th>
-                            <th>{{ language_names[right_lang] | capitalize }}</th>
-                        <tr>
-					</thead>
-					{% for result in results_one_dir %}
-						<tr>
-							<td>{{ show_word(result.written_rep, left_lang, result.part_of_speech, result.sense_list,
-                                             lexentry=result.lexentry) }}</td>
-							<td>
-								{% for t in result.trans_list.split(' | ') %}
-									{{ show_word(t, right_lang, result.part_of_speech) }}
-                                    <br>
-								{% endfor %}
-							</td>
-						</tr>
-					{% endfor %}
-				</table>
-				{% endwith %}
-			{% else %}
-				<div class="jumbotron">
-					<p>Sorry, no translations for "{{ query }}" have been found.</p>
-				</div>
-			{% endfor %}
+        <div id="result-row" class="row">
 
-			{{ definition(results[2], from_lang) }}
-			{{ definition(results[3], to_lang) }}
-		</div>
+            <div id="results" class="col-md-9">
+                {% for results_one_dir in results %}
+                    {% if not results_one_dir %}
+                        {% continue %}
+                    {% endif %}
+                    {% with %}
+                    {% if loop.index == 1 %}
+                        {% set (left_lang, right_lang) = (from_lang, to_lang) %}
+                    {% elif loop.index == 2 %}
+                        {% set (left_lang, right_lang) = (to_lang, from_lang) %}
+                    {% endif %}
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>{{ language_names[left_lang] | capitalize }}</th>
+                                <th>{{ language_names[right_lang] | capitalize }}</th>
+                            <tr>
+                        </thead>
+                        {% for result in results_one_dir %}
+                            <tr>
+                                <td>{{ show_word(result.written_rep, left_lang, result.part_of_speech, result.sense_list,
+                                                 lexentry=result.lexentry) }}</td>
+                                <td>
+                                    {% for t in result.trans_list.split(' | ') %}
+                                        {{ show_word(t, right_lang, result.part_of_speech) }}
+                                        <br>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    {% endwith %}
+                {% else %}
+                    <div class="jumbotron">
+                        <p>Sorry, no translations for "{{ query }}" have been found.</p>
+                    </div>
+                {% endfor %}
+
+                {{ definition(results[2], from_lang) }}
+                {{ definition(results[3], to_lang) }}
+            </div>
+
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">"{{ query }}" in Wiktionary</div>
+                    <div class="panel-body">
+                        {% if wiktionary_links %}
+                        <ul>
+                            {% for lang, link in wiktionary_links.items() if link %}
+                            <li><a href="{{ link }}">{{ language_names[lang] }} Wiktionary</a></li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
 
 	{% else %}
 

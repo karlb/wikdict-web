@@ -1,6 +1,7 @@
 #import sqlite3
 import urllib.parse
 
+from collections import OrderedDict
 from flask import Flask, render_template, redirect, request, url_for, flash, g
 
 from .languages import language_names
@@ -45,6 +46,10 @@ def lookup(from_lang, to_lang, query=None):
             [from_lang, to_lang, query, len(results[0]), len(results[1]),
              ip, request.referrer, request.user_agent.string],
             path='')
+        wiktionary_links = OrderedDict(
+            (lang, wiktionary_link(query, lang))
+            for lang in (from_lang, to_lang)
+        )
     else:
         results = None
     return base.render_template('lookup.html',
@@ -53,6 +58,7 @@ def lookup(from_lang, to_lang, query=None):
         query=query,
         results=results,
         page_name='lookup',
+        wiktionary_links=wiktionary_links,
         **templ_vals
     )
 
@@ -120,7 +126,7 @@ def spellfix(from_lang, to_lang, search_term):
 
 
 @timing
-def vocable_details(vocable, lang, part_of_speech):
+def vocable_details(vocable, lang, part_of_speech, from_lang, to_lang):
     r = db_query(lang, """
             WITH matches AS (
                 SELECT *
@@ -156,14 +162,14 @@ def vocable_details(vocable, lang, part_of_speech):
     return {
         'gender': r.gender,
         'pronuns': set(r.pronun_list.split(' | ')) if r.pronun_list else None,
-        'wiktionary_url': None if r.count == 0 else vocable_link(vocable, lang),
         'display': r.display or vocable,
         'display_addition': r.display_addition,
+        'url': url_for('lookup', from_lang=from_lang, to_lang=to_lang, query=vocable),
     }
 
 
 @timing
-def entry_details(vocable, lexentry, lang):
+def entry_details(vocable, lexentry, lang, from_lang, to_lang):
     rows = db_query(lang, """
         SELECT *
         FROM entry
@@ -180,12 +186,15 @@ def entry_details(vocable, lexentry, lang):
     r.update({
         'display': r['display'] or r['written_rep'],
         'display_addition': r['display_addition'],
-        'wiktionary_url': vocable_link(r['written_rep'], lang),
+        'url': url_for('lookup', from_lang=from_lang, to_lang=to_lang, query=vocable),
     })
     return r
 
 
-def vocable_link(word, lang):
+@timing
+def wiktionary_link(word, lang):
+    if not db_query(lang, "SELECT 1 AS test FROM entry WHERE lower(written_rep) = lower(?) LIMIT 1", [word]):
+        return None
     wiki_name = word.replace(' ', '_')
     url = 'http://%s.wiktionary.org/wiki/%s#%s'
     lang_name = urllib.parse.quote_plus(language_names[lang]).replace('%', '.')
