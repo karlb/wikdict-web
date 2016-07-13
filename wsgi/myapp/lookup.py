@@ -1,14 +1,31 @@
-#import sqlite3
 import urllib.parse
 
-from collections import OrderedDict
-from flask import Flask, render_template, redirect, request, url_for, flash, g
+from collections import OrderedDict, deque
+from flask import Flask, render_template, redirect, request, url_for, flash, g, abort
+from datetime import datetime, timedelta
 
 from .languages import language_names
 from . import app
 from . import base
 from .base import timing, db_query
 
+
+latest_requests = deque(maxlen=30)
+
+
+def block_too_many_requests(current_ip):
+    recent_requests_from_ip = len([
+        None for dt, ip in latest_requests
+        if dt > datetime.now() - timedelta(minutes=1) and ip == current_ip
+    ])
+    print(latest_requests)
+    print(recent_requests_from_ip)
+    if recent_requests_from_ip > 20:
+        abort(429, "You made too many requests. Please contact karl42@gmail.com to resolve this. "
+                   "I provide translation data in an easy to use format. "
+                   "If you see this error when normally using the web site, please let me know, too.")
+    else:
+        latest_requests.append((datetime.now(), current_ip))
 
 @app.route('/<from_lang>-<to_lang>/')
 @app.route('/<from_lang>-<to_lang>/<query>')
@@ -37,6 +54,7 @@ def lookup(from_lang, to_lang, query=None):
             ip = request.headers.getlist("X-Forwarded-For")[0]
         else:
             ip = request.remote_addr
+        block_too_many_requests(ip)
         db_query('logging', """
                 INSERT INTO search_log (lang1, lang2, query,
                                         results1, results2,
@@ -52,6 +70,7 @@ def lookup(from_lang, to_lang, query=None):
         )
     else:
         results = None
+        wiktionary_links = None
     return base.render_template('lookup.html',
         from_lang=from_lang,
         to_lang=to_lang,
