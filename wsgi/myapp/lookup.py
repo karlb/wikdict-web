@@ -27,6 +27,7 @@ def block_too_many_requests(current_ip):
     else:
         latest_requests.append((datetime.now(), current_ip))
 
+
 @app.route('/<from_lang>-<to_lang>/')
 @app.route('/<from_lang>-<to_lang>/<query>')
 def lookup(from_lang, to_lang, query=None):
@@ -48,7 +49,7 @@ def lookup(from_lang, to_lang, query=None):
         db_query('logging', """
             CREATE TABLE IF NOT EXISTS search_log (
                 ts timestamp DEFAULT current_timestamp, lang1 text, lang2 text,
-                query text, results1, results2, ip, referrer, user_agent);
+                query text, results1, results2, ip, referrer, user_agent, hidden bool DEFAULT false);
         """, path='')
         if request.headers.getlist("X-Forwarded-For"):
             ip = request.headers.getlist("X-Forwarded-For")[0]
