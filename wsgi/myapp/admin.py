@@ -56,13 +56,13 @@ def show_user_agents():
 def show_summary():
     langs = base.db_query("logging", """
         SELECT lang1, lang2, count(*) AS count
-        FROM search_log
+        FROM search_log_filtered
         GROUP BY 1, 2 ORDER BY 3 DESC
         LIMIT 10
     """, path='')
     recent_searches = base.db_query("logging", """
         SELECT DISTINCT lang1, lang2, query, results1 + results2 AS results
-        FROM search_log
+        FROM search_log_filtered
         ORDER BY ts DESC
         LIMIT 50
     """, path='')
