@@ -18,8 +18,6 @@ def block_too_many_requests(current_ip):
         None for dt, ip in latest_requests
         if dt > datetime.now() - timedelta(minutes=1) and ip == current_ip
     ])
-    print(latest_requests)
-    print(recent_requests_from_ip)
     if recent_requests_from_ip > 20:
         abort(429, "You made too many requests. Please contact karl42@gmail.com to resolve this. "
                    "I provide translation data in an easy to use format. "
@@ -66,7 +64,7 @@ def lookup(from_lang, to_lang, query=None):
              ip, request.referrer, request.user_agent.string],
             path='')
         wiktionary_links = OrderedDict(
-            (lang, wiktionary_link(query, lang))
+            (lang, get_wiktionary_links(lang, query))
             for lang in (from_lang, to_lang)
         )
     else:
@@ -212,13 +210,15 @@ def entry_details(vocable, lexentry, lang, from_lang, to_lang):
 
 
 @timing
-def wiktionary_link(word, lang):
-    if not db_query(lang, "SELECT 1 AS test FROM entry WHERE lower(written_rep) = lower(?) LIMIT 1", [word]):
-        return None
-    wiki_name = word.replace(' ', '_')
+def get_wiktionary_links(lang, word):
     url = 'http://%s.wiktionary.org/wiki/%s#%s'
     lang_name = urllib.parse.quote_plus(language_names[lang]).replace('%', '.')
-    return url % (lang, wiki_name, lang_name)
+    sql = "SELECT DISTINCT written_rep FROM entry WHERE lower(written_rep) = lower(?)"
+    results = []
+    for (w, ) in db_query(lang, sql, [word]):
+        wiki_name = w.replace(' ', '_')
+        results.append((w, url % (lang, wiki_name, lang_name)))
+    return results
 
 
 @app.context_processor

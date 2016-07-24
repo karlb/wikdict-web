@@ -180,12 +180,18 @@
 
             <div class="col-md-3">
                 <div class="panel panel-default">
-                    <div class="panel-heading">"{{ query }}" in Wiktionary</div>
+                    <div class="panel-heading">Wiktionary Links</div>
                     <div class="panel-body">
                         {% if wiktionary_links %}
                         <ul>
-                            {% for lang, link in wiktionary_links.items() if link %}
-                            <li><a href="{{ link }}">{{ language_names[lang] }} Wiktionary</a></li>
+                            {% for lang, items in wiktionary_links.items() if items %}
+                            <li>
+                                {{ language_names[lang] }}:
+                                {% for q, link in items %}
+                                    <a href="{{ link }}">{{ q }}</a>
+                                    {%- if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            </li>
                             {% endfor %}
                         </ul>
                         {% endif %}
