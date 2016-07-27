@@ -29,6 +29,8 @@ def block_too_many_requests(current_ip):
 @app.route('/<from_lang>-<to_lang>/')
 @app.route('/<from_lang>-<to_lang>/<query>')
 def lookup(from_lang, to_lang, query=None):
+    if len(from_lang) != 2 or len(to_lang) != 2:
+        abort(404)
     if [from_lang, to_lang] != sorted((from_lang, to_lang)):
         return redirect(url_for('lookup', from_lang=to_lang, to_lang=from_lang,
                                           query=query))
