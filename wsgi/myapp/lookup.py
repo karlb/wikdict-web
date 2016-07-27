@@ -66,9 +66,13 @@ def lookup(from_lang, to_lang, query=None):
              ip, request.referrer, request.user_agent.string],
             path='')
         wiktionary_links = OrderedDict(
-            (lang, get_wiktionary_links(lang, query))
-            for lang in (from_lang, to_lang)
+            (key, val)
+            for key, val in (
+                (lang, get_wiktionary_links(lang, query))
+                for lang in (from_lang, to_lang)
+            ) if val  # skip langs without results
         )
+        print('>>>', wiktionary_links)
     else:
         results = None
         wiktionary_links = None

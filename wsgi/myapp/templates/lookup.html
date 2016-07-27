@@ -179,10 +179,10 @@
             </div>
 
             <div class="col-md-3">
+                {% if wiktionary_links %}
                 <div class="panel panel-default">
                     <div class="panel-heading">Wiktionary Links</div>
                     <div class="panel-body">
-                        {% if wiktionary_links %}
                         <ul>
                             {% for lang, items in wiktionary_links.items() if items %}
                             <li>
@@ -194,9 +194,9 @@
                             </li>
                             {% endfor %}
                         </ul>
-                        {% endif %}
                     </div>
                 </div>
+                {% endif %}
             </div>
 
         </div>
