@@ -94,6 +94,7 @@ def lookup_redirect():
 
 @timing
 def search_query(from_lang, to_lang, search_term, **kwargs):
+    search_term = '"' + search_term + '"'
     return db_query(from_lang + '-' + to_lang, """
             SELECT *
             FROM (
