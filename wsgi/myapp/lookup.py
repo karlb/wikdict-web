@@ -1,7 +1,7 @@
 import urllib.parse
 
 from collections import OrderedDict, deque
-from flask import Flask, render_template, redirect, request, url_for, flash, g, abort
+from flask import redirect, request, url_for, abort
 from datetime import datetime, timedelta
 
 from .languages import language_names
@@ -72,7 +72,6 @@ def lookup(from_lang, to_lang, query=None):
                 for lang in (from_lang, to_lang)
             ) if val  # skip langs without results
         )
-        print('>>>', wiktionary_links)
     else:
         results = None
         wiktionary_links = None
