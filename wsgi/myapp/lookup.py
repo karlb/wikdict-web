@@ -211,6 +211,7 @@ def entry_details(vocable, lexentry, lang, from_lang, to_lang):
         'display': r['display'] or r['written_rep'],
         'display_addition': r['display_addition'],
         'url': url_for('lookup', from_lang=from_lang, to_lang=to_lang, query=vocable),
+        'pronuns': r['pronun_list'].split(' | ') if r['pronun_list'] else [],
     })
     return r
 
