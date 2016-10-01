@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, Response, redirect, request, url_for, session
+from flask import Flask, Response, redirect, request, url_for, session, send_from_directory
 
 app = Flask(__name__.split('.')[0], static_folder='../static')
 
@@ -61,6 +61,12 @@ def opensearch(from_lang, to_lang):
         ),
         mimetype='application/opensearchdescription+xml',
     )
+
+
+@app.route('/robots.txt')
+#@app.route('/sitemap.xml')  # just add additional routes for more static files in root
+def static_from_root():
+    return send_from_directory(app.static_folder + '/root', request.path[1:])
 
 
 if __name__ == "__main__":
