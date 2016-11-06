@@ -37,7 +37,7 @@ language_names = {u'gv': u'Gaelg', u'gu': u'\u0a97\u0ac1\u0a9c\u0ab0\u0abe\u0aa4
                   u've': u'Tshiven\u1e13a', u'ps': u'\u067e\u069a\u062a\u0648', u'pt': u'portugu\xeas',
                   u'tl': u'Wikang Tagalog', u'pa': u'\u0a2a\u0a70\u0a1c\u0a3e\u0a2c\u0a40',
                   u'vi': u'Ti\u1ebfng Vi\u1ec7t', u'pi': u'\u092a\u093e\u0934\u093f', u'is': u'\xcdslenska',
-                  u'pl': u'j\u0119zyk polski', u'hz': u'Otjiherero',
+                  u'pl': u'polski', u'hz': u'Otjiherero',
                   u'hy': u'\u0540\u0561\u0575\u0565\u0580\u0565\u0576', u'hr': u'hrvatski jezik',
                   u'iu': u'\u1403\u14c4\u1483\u144e\u1450\u1466', u'ht': u'Krey\xf2l ayisyen', u'hu': u'magyar',
                   u'hi': u'\u0939\u093f\u0928\u094d\u0926\u0940', u'ho': u'Hiri Motu',
