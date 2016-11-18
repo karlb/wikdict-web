@@ -81,6 +81,10 @@ def db_query(db_name, stmt, bind_params=(), path='dict', attach_dbs=None, explai
     return list(cur)
 
 
+def sorted_timing():
+    return OrderedDict(sorted(g.timing.items(), key=lambda x: -x[1]['total_time']))
+
+
 def render_template(filename, **kwargs):
     if 'from_lang' in kwargs:
         session.setdefault('last_dicts', []).insert(0, kwargs['from_lang'] + '-' + kwargs['to_lang'])
@@ -98,4 +102,5 @@ def render_template(filename, **kwargs):
         ],
         lang_pairs=get_lang_pairs(),
         last_dicts=[d for d in session.get('last_dicts', []) if d != kwargs['from_lang'] + '-' + kwargs['to_lang']],
+        sorted_timing=sorted_timing,
         **kwargs)

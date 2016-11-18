@@ -181,7 +181,7 @@
 						<th>Num Calls</th>
 						<th>Longest Call</th>
 					</tr>
-                {% for key, t in g.timing.items() %}
+                {% for key, t in sorted_timing().items() %}
 					<tr>
 						<td>{{ key }}</td>
 						<td>{{ t.total_time }}</td>
