@@ -68,6 +68,7 @@ def db_query(db_name, stmt, bind_params=(), path='dict', attach_dbs=None, explai
     conn.row_factory = namedtuple_factory
     conn.enable_load_extension(True)
     conn.load_extension(APP_ROOT + '/../lib/spellfix1')
+    conn.load_extension(APP_ROOT + '/../lib/icu')
     cur = conn.cursor()
     for name, db in (attach_dbs or {}).items():
         cur.execute("ATTACH DATABASE '{}' AS {}".format(path_for_db(db), name))

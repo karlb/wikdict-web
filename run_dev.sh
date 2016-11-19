@@ -3,7 +3,7 @@ if [ ! -d venv ]; then
 	virtualenv -p python3 venv
 fi
 if [ ! -d wsgi/lib ]; then
-	python3 -c "`wget -qO- https://bitbucket.org/!api/2.0/snippets/karlb/j6gxM/8a09f53c78284c89b10658434f4d96528e14f351/files/make_sqlite_ext.py`" wsgi/lib spellfix
+	python3 -c "`wget -qO- https://bitbucket.org/!api/2.0/snippets/karlb/j6gxM/38eff66f830e1c96b99e2ebb1312cae13c772c34/files/make_sqlite_ext.py`" wsgi/lib spellfix icu
 fi
 
 . venv/bin/activate
