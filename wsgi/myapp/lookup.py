@@ -220,7 +220,11 @@ def entry_details(vocable, lexentry, lang, from_lang, to_lang):
 def get_wiktionary_links(lang, word):
     url = 'http://%s.wiktionary.org/wiki/%s#%s'
     lang_name = urllib.parse.quote_plus(language_names[lang]).replace('%', '.')
-    sql = "SELECT DISTINCT written_rep FROM entry WHERE lower(written_rep) = lower(?)"
+    # This is slow because the index is on written_rep is case sensitive
+    sql = """
+        SELECT DISTINCT written_rep FROM entry
+        WHERE written_rep = ? COLLATE NOCASE
+    """
     results = []
     for (w, ) in db_query(lang, sql, [word]):
         wiki_name = w.replace(' ', '_')
