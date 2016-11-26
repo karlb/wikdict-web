@@ -1,0 +1,4 @@
+syntax: glob
+venv
+data
+__pycache__
