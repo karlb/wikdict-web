@@ -1,8 +1,37 @@
+import os
+from functools import wraps
+
+from flask import request, Response
+
 from . import app
 from . import base
 
 
+def check_auth(username, password):
+    return (username == 'admin' and
+            password == os.environ['WIKDICT_ADMIN_PASSWORD'])
+
+
+def authenticate():
+    """Sends a 401 response that enables basic auth"""
+    return Response(
+    'Could not verify your access level for that URL.\n'
+    'You have to login with proper credentials', 401,
+    {'WWW-Authenticate': 'Basic realm="Login Required"'})
+
+
+def requires_auth(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        auth = request.authorization
+        if not auth or not check_auth(auth.username, auth.password):
+            return authenticate()
+        return f(*args, **kwargs)
+    return decorated
+
+
 @app.route('/admin/')
+@requires_auth
 def admin_index():
     base.db_query('logging', """
         CREATE VIEW IF NOT EXISTS search_log_filtered AS
@@ -18,6 +47,7 @@ def admin_index():
 
 
 @app.route('/admin/activity')
+@requires_auth
 def show_activity():
     rows = base.db_query("logging", """
         SELECT strftime('%Y-W%W', ts) as week, count(*) AS queries,
@@ -31,6 +61,7 @@ def show_activity():
 
 
 @app.route('/admin/week/<week>')
+@requires_auth
 def show_week(week):
     rows = base.db_query("logging", """
         SELECT *
@@ -42,6 +73,7 @@ def show_week(week):
 
 
 @app.route('/admin/user_agents')
+@requires_auth
 def show_user_agents():
     rows = base.db_query("logging", """
         SELECT user_agent,  count(*) AS count
@@ -53,6 +85,7 @@ def show_user_agents():
 
 
 @app.route('/admin/summary')
+@requires_auth
 def show_summary():
     langs = base.db_query("logging", """
         SELECT lang1, lang2, count(*) AS count
