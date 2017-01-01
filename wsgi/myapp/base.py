@@ -33,6 +33,7 @@ def timing(f):
     return f_with_timing
 
 
+@functools.lru_cache()
 @timing
 def get_lang_pairs():
     return db_query('wikdict', """
