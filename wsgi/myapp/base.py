@@ -37,17 +37,17 @@ def timing(f):
 @timing
 def get_lang_pairs():
     return db_query('wikdict', """
-        SELECT from_lang, to_lang, sum(total_trans) AS total_trans
+        SELECT from_lang, to_lang, sum(translations) AS total_trans
         FROM (
-            SELECT from_lang, to_lang, translations + reverse_translations AS total_trans
+            SELECT from_lang, to_lang, translations
             FROM lang_pair
             UNION ALL
-            SELECT to_lang, from_lang, translations + reverse_translations AS total_trans
+            SELECT to_lang, from_lang, translations
             FROM lang_pair
         )
         WHERE from_lang < to_lang
         GROUP BY from_lang, to_lang
-        ORDER BY sum(total_trans) DESC
+        ORDER BY sum(translations) DESC
     """)
 
 
