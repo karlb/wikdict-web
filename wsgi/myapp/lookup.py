@@ -97,11 +97,11 @@ def search_query(from_lang, to_lang, search_term, **kwargs):
     return db_query(from_lang + '-' + to_lang, """
             SELECT *
             FROM (
-                    SELECT DISTINCT lexentry
+                    SELECT DISTINCT written_rep
                     FROM search_trans
                     WHERE form MATCH :term
                 )
-                JOIN translation USING (lexentry)
+                JOIN translation USING (written_rep)
             ORDER BY lower(written_rep) LIKE '%'|| lower(:term) ||'%' DESC,
                 length(written_rep), lexentry, coalesce(min_sense_num, '99'),
                 translation_score DESC
