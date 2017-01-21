@@ -37,7 +37,8 @@ def timing(f):
 @timing
 def get_lang_pairs():
     return db_query('wikdict', """
-        SELECT from_lang, to_lang, sum(translations) AS total_trans
+        SELECT from_lang AS lang1, to_lang AS lang2, sum(translations) AS total_trans,
+            sum(translations) > 10000 AS large_enough
         FROM (
             SELECT from_lang, to_lang, translations
             FROM lang_pair
@@ -49,6 +50,14 @@ def get_lang_pairs():
         GROUP BY from_lang, to_lang
         ORDER BY sum(translations) DESC
     """)
+
+
+@functools.lru_cache()
+@timing
+def get_available_langs():
+    return [row.from_lang for row in db_query('wikdict',
+        "SELECT from_lang FROM lang_pair GROUP BY from_lang ORDER BY sum(translations) DESC")
+    ]
 
 
 def namedtuple_factory(cursor, row):
@@ -84,6 +93,8 @@ def db_query(db_name, stmt, bind_params=(), path='dict', attach_dbs=None, explai
 
 
 def sorted_timing():
+    if not hasattr(g, 'timing'):
+        return {}
     return OrderedDict(sorted(g.timing.items(), key=lambda x: -x[1]['total_time']))
 
 
@@ -96,13 +107,12 @@ def render_template(filename, **kwargs):
         last_dict = session.get('last_dicts', ['de-en'])[0]
         kwargs['from_lang'], kwargs['to_lang'] = last_dict.split('-')
 
+    available_langs = get_available_langs()
+    lang_pairs = get_lang_pairs()
     return flask.render_template(filename,
         language_names=language_names,
-        available_langs=[
-            row.from_lang for row in db_query('wikdict',
-                                              "SELECT from_lang FROM lang_pair GROUP BY from_lang ORDER BY sum(translations) DESC")
-        ],
-        lang_pairs=get_lang_pairs(),
+        available_langs=available_langs,
+        lang_pairs=lang_pairs,
         last_dicts=[d for d in session.get('last_dicts', []) if d != kwargs['from_lang'] + '-' + kwargs['to_lang']],
         sorted_timing=sorted_timing,
         **kwargs)

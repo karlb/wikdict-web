@@ -151,8 +151,8 @@
 
 							{% for lang1 in [from_lang, to_lang]%}
 								<li role="presentation" class="dropdown-header">{{ language_names[lang1] }}</li>
-								{% for lang2 in available_langs if lang1 != lang2 %}
-									{{ langli(lang1, lang2) }}
+								{% for lp in lang_pairs if lp.large_enough and lang1 in (lp.lang1, lp.lang2) %}
+									{{ langli(lang1, lp.lang2 if lp.lang2 != lang1 else lp.lang1) }}
 								{% endfor %}
 								<li class="divider"></li>
 							{% endfor %}
