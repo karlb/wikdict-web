@@ -48,7 +48,7 @@ def index():
 
 @app.route('/page/<page_name>')
 def page(page_name):
-    with open(base.APP_ROOT + '/markdown/' + page_name + '.md') as f:
+    with open(base.APP_ROOT + '/markdown/' + page_name + '.md', encoding="utf-8") as f:
         content = f.read()
     content = Markup(markdown.markdown(content))
     return base.render_template('markdown.html',
