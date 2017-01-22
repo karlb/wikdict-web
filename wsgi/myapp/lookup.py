@@ -27,7 +27,7 @@ def block_too_many_requests(current_ip):
 
 
 @app.route('/<from_lang>-<to_lang>/')
-@app.route('/<from_lang>-<to_lang>/<query>')
+@app.route('/<from_lang>-<to_lang>/<path:query>')  # without path, slashes would not be escaped
 def lookup(from_lang, to_lang, query=None):
     if len(from_lang) != 2 or len(to_lang) != 2:
         abort(404)
