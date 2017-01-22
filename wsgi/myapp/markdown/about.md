@@ -1,7 +1,7 @@
 ### What is WikDict?
 
 <img style="float: right; width: 15%" src="/static/img/markdown/by-sa.svg">
-WikDict aims to provide free bilingual dictionary data for all use cases. You are currently looking at the WikDict web interface, which provides a simple way to look for translations in the WikDict data. One very important aspect of WikDict is that all data is freely available under a Creative Commons license, which is not the case for most other dictionaries.
+WikDict aims to provide free bilingual dictionary data for all use cases. You are currently looking at the WikDict web interface, which provides a simple way to look for translations in the WikDict data. One very important aspect of WikDict is that all data is available under a free license ([Creative Commons BY-SA](https://creativecommons.org/licenses/by-sa/3.0/)), which is not the case for most other dictionaries.
 
 ---
 
