@@ -5,10 +5,9 @@ import markdown
 
 app = Flask(__name__.split('.')[0], static_folder='../static')
 
-import myapp.lookup
+import myapp.lookup as lookup
 import myapp.admin
 import myapp.base as base
-import myapp.lookup
 
 ADMINS = ['karl42@gmail.com']
 
@@ -43,7 +42,8 @@ app.jinja_env.add_extension('jinja2.ext.loopcontrols')
 def index():
     last_dict = session.get('last_dicts', ['de-en'])[0]
     from_lang, to_lang = last_dict.split('-')
-    return redirect(url_for('lookup', from_lang=from_lang, to_lang=to_lang))
+    return lookup.lookup(from_lang, to_lang)
+    # return redirect(url_for('lookup', from_lang=from_lang, to_lang=to_lang))
 
 
 @app.route('/page/<page_name>')
