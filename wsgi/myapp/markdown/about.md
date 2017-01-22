@@ -39,7 +39,16 @@ The WikDict data is currently provided in two formats:
 * A [set of sqlite3 databases](http://download.wikdict.com/dictionaries/sqlite/), which is WikDict's native file format
 * XML files according to [TEI P5](http://www.tei-c.org/Guidelines/P5/). This includes only a subset of the available languages and data, currently.
 
-Please don't hesitate to [contact me](mailto:karl42@gmail.com), as I'm interested in this data being used in as many places as possible!
+Please don't hesitate to [contact me][mail], as I'm interested in this data being used in as many places as possible!
+
+#### Contributing
+
+The easiest way for non-programmers to contribute is to provide feedback and bug reports. This can be done by [mail] or by creating [bitbucket issues][issues]. Improving the content of the Wiktionary of your choice (especially the translations section) will also help improving the data quality in the long run.
+
+If you are willing to write code or want to contribute in a different way, please [get in contact][mail] to avoid duplicate work and get you started in the right direction.
+
+[mail]: mailto:karl42@gmail.com
+[issues]: https://bitbucket.org/wikdict/wikdict-gen/issues?status=new&status=open
 
 ---
-<small>MIT logo by [ExcaliburZero](http://excaliburzero.deviantart.com/art/MIT-License-Logo-595847140)</small>
+<small>MIT license logo by [ExcaliburZero](http://excaliburzero.deviantart.com/art/MIT-License-Logo-595847140)</small>
