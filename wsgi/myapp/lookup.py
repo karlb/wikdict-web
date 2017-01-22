@@ -75,6 +75,9 @@ def lookup(from_lang, to_lang, query=None):
     else:
         results = None
         wiktionary_links = None
+        templ_vals['rough_translations'] = '%.1f' % (
+            sum(lp.total_trans for lp in base.get_lang_pairs()) // 100000 / 10
+        )
     return base.render_template('lookup.html',
         from_lang=from_lang,
         to_lang=to_lang,
