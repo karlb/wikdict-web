@@ -1,6 +1,7 @@
 import os
 
-from flask import Flask, Response, redirect, request, url_for, session, send_from_directory
+from flask import Flask, Response, redirect, request, url_for, session, send_from_directory, Markup
+import markdown
 
 app = Flask(__name__.split('.')[0], static_folder='../static')
 
@@ -47,8 +48,12 @@ def index():
 
 @app.route('/page/<page_name>')
 def page(page_name):
-    return base.render_template(page_name + '.html',
+    with open(base.APP_ROOT + '/markdown/' + page_name + '.md') as f:
+        content = f.read()
+    content = Markup(markdown.markdown(content))
+    return base.render_template('markdown.html',
         page_name=page_name,
+        content=content,
     )
 
 

@@ -1,4 +1,9 @@
 syntax: glob
+wsgi/lib
 venv
 data
 __pycache__
+*.pyc
+*.swp
+.DS_Store
+.idea
