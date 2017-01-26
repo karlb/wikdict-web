@@ -108,6 +108,7 @@ def search_query(from_lang, to_lang, search_term, **kwargs):
             ORDER BY lower(written_rep) LIKE '%'|| lower(:term) ||'%' DESC,
                 length(written_rep), lexentry, coalesce(min_sense_num, '99'),
                 translation_score DESC
+            LIMIT 100
         """, dict(term=search_term))
 
 
