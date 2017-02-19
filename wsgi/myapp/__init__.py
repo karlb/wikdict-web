@@ -8,6 +8,7 @@ app = Flask(__name__.split('.')[0], static_folder='../static')
 import myapp.lookup as lookup
 import myapp.admin
 import myapp.base as base
+import myapp.typeahead
 
 ADMINS = ['karl42@gmail.com']
 

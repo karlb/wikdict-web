@@ -24,6 +24,10 @@
 	vertical-align: middle;
 }
 
+#search-input {
+    width: 350px;
+}
+
 .main-page > .row {
 	margin-top: 15px;
 }
@@ -58,7 +62,7 @@
 .suggestion .word {
 	float: left;
 }
-.suggestion .language {
+.suggestion .simple-trans {
 	float: right;
 }
 

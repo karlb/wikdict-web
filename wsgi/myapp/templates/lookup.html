@@ -83,13 +83,11 @@
 			<img src="{{ url_for('static', filename='img/arrow.png') }}" style="height:60px; margin: 7px 5px -28px">
 		{% endif %}
 		<div class="form-group">
-            <div class="form-group">
-				<label class="sr-only" for="search-input">Search for term</label>
-                <input type="search" name="query" class="typeahead form-control" value="{{ query or '' }}"
-                    autofocus onFocus="this.select()" id="search-input"
-                >
-                <input type="hidden" name="index_name" value="{{from_lang}}-{{to_lang}}">
-            </div>
+            <label class="sr-only" for="search-input">Search for term</label>
+            <input type="search" name="query" class="typeahead form-control" value="{{ query or '' }}"
+                autofocus onFocus="this.select()" id="search-input"
+            >
+            <input type="hidden" name="index_name" value="{{from_lang}}-{{to_lang}}">
         </div>
 		<button class="btn btn-primary">Translate</button>
 		{% if not query %}
