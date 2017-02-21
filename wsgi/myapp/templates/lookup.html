@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
 {% block title -%}
-	WikDict{% if query %} &mdash; {{ query }}{% endif %}
+    {% if query %}
+        {{ query }} &ndash; {{ language_names[from_lang] }}-{{ language_names[to_lang] }} Translations in WikDict
+    {% else %}
+        {{ language_names[from_lang] }}-{{ language_names[to_lang] }} WikDict Dictionary
+    {% endif %}
 {%- endblock %}
 
 {% block css_links %}
