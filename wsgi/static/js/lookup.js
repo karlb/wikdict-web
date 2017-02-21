@@ -44,7 +44,7 @@ $(function() {
         };
     };
 
-    $('.typeahead').typeahead({
+    input = $('.typeahead').typeahead({
             hint: true,
             highlight: true,
             minLength: 3
@@ -62,7 +62,9 @@ $(function() {
                                 + '<span class="simple-trans">' + x[1] + '</span></div>';
                 }
             }
-        });
+        })
+    input.focus();
+    setTimeout(function () { input.select(); }, 50);
     // hide suggestions until user types
     setTimeout(function () {$('.typeahead').typeahead('close')}, 0);
     // submit form when selecting a suggestion

@@ -17,23 +17,25 @@
 		type="application/opensearchdescription+xml" 
 		href="/opensearch/{{from_lang}}-{{to_lang}}"
 		title="WikDict {{from_lang}}-{{to_lang}} Search" />
-    <!--script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.jquery.min.js"></script-->
+{% endblock %}
+
+{% block scripts %}
     <script src="{{ url_for('static', filename='js/typeahead.jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/lookup.js') }}"></script>
 
     <!-- hellotraffic view tracking -->
     <script src="https://inter.rtb-cdn.net/vt.js"></script>
-	{% if query and (results[0] or results[1]) %}
+    {% if query and (results[0] or results[1]) %}
         <!-- hellotraffic conversion tracking -->
         <script src="https://inter.rtb-cdn.net/ct.js"></script>
-	{% endif %}
+    {% endif %}
 
-	<!-- robotdetect tracking-->
+    <!-- robotdetect tracking-->
     <script type="text/javascript">
         try{!function(t,e,r){var n=1*new Date,o=e.createElement("script");o.type="text/javascript",o.async=!0,o.src=("https:"==e.location.protocol?"https://":"http://")+"rd.rtb-cdn.net/a/WyJhZHNwZXJ0IiwidGVzdDIiXQ.ileEueZ5mzT7CeBl7At2jLSvwtE/c.js?dt="+n+"&ref="+r(e.referrer)+"&loc="+r(e.location);var c=e.getElementsByTagName("script")[0];c.parentNode.insertBefore(o,c)}(window,document,encodeURIComponent)}finally{}
     </script>
 
-	<script>
+    <script>
         var from_lang = '{{ from_lang }}';
         var to_lang = '{{ to_lang }}';
 	</script>
@@ -89,7 +91,7 @@
 		<div class="form-group">
             <label class="sr-only" for="search-input">Search for term</label>
             <input type="search" name="query" class="typeahead form-control" value="{{ query or '' }}"
-                autofocus onFocus="this.select()" id="search-input"
+                id="search-input"
             >
             <input type="hidden" name="index_name" value="{{from_lang}}-{{to_lang}}">
         </div>
