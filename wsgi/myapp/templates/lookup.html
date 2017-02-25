@@ -39,6 +39,34 @@
         var from_lang = '{{ from_lang }}';
         var to_lang = '{{ to_lang }}';
 	</script>
+
+    {% if request.path != '/' %}
+    <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@id": "https://www.wikdict.com/{{ from_lang }}-{{ to_lang }}/",
+          "name": "{{ language_names[from_lang] }}-{{ language_names[to_lang] }}"
+        }
+      }
+      {% if query %}
+      ,{
+        "@type": "ListItem",
+        "position": 2,
+        "item": {
+          "@id": "https://www.wikdict.com/{{ from_lang }}-{{ to_lang }}/{{ query }}",
+          "name": "{{ query }}"
+        }
+      }
+      {% endif %}
+      ]
+    }
+    </script>
+    {% endif %}
 {% endblock %}
 
 {% macro optional_link(url) %}
