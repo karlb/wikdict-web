@@ -1,2 +1,3 @@
 User-Agent: *
-Crawl-Delay: 20
+Crawl-Delay: 5
+Sitemap: http://www.wikdict.com/static/sitemap/index.xml
