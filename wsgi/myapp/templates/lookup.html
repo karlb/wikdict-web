@@ -84,9 +84,9 @@
 
 
 {% macro search_form() %}
-	<form action="/lookup" role="form" class="form-inline search-form">
+	<form action="/lookup" class="form-inline search-form">
 		{% if not query %}
-			<img src="{{ url_for('static', filename='img/arrow.png') }}" style="height:60px; margin: 7px 5px -28px">
+			<img src="{{ url_for('static', filename='img/arrow.png') }}" style="height:60px; margin: 7px 5px -28px" alt="">
 		{% endif %}
 		<div class="form-group">
             <label class="sr-only" for="search-input">Search for term</label>
@@ -156,7 +156,7 @@
                             <tr>
                                 <th>{{ language_names[left_lang] | capitalize }}</th>
                                 <th>{{ language_names[right_lang] | capitalize }}</th>
-                            <tr>
+                            </tr>
                         </thead>
                         {% for result in results_one_dir %}
                             <tr>
