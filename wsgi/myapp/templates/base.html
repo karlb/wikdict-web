@@ -6,10 +6,9 @@
 <html>
 	<head>
 		<title>{% block title %}WikDict{% endblock %}</title>
-		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
 		{% block css_links %}
 		{% endblock %}
-		{% assets output="gen/packed.css", "css/main.css" %}
+		{% assets output="gen/packed.css", "css/main.css", "bootstrap/css/bootstrap.min.css" %}
 			<link href="{{ ASSET_URL }}" rel="stylesheet" type="text/css">
 		{% endassets %}
 
@@ -39,7 +38,6 @@
 		<style type="text/css">
 			{% block css %}
 			{% endblock %}
-
 			html {
 				position: relative;
 				min-height: 100%;
@@ -203,13 +201,11 @@
 			</div>
 		</footer>
 
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+		{% assets output="gen/packed.js",
+			"js/jquery-3.1.1.min.js", "bootstrap/js/bootstrap.min.js", "js/typeahead.jquery.min.js", "js/lookup.js" %}
+			<script src="{{ ASSET_URL }}" type="text/javascript"></script>
+		{% endassets %}
 		{% block scripts %}
 		{% endblock %}
-
-		{% assets output="gen/packed.js", "js/typeahead.jquery.min.js", "js/lookup.js" %}
-			<script src="{{ ASSET_URL }}"></script>
-		{% endassets %}
 	</body>
 </html>

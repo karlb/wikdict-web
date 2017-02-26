@@ -7,3 +7,5 @@ __pycache__
 *.swp
 .DS_Store
 .idea
+wsgi/static/.webassets-cache
+wsgi/static/gen
