@@ -8,7 +8,7 @@
 		<title>{% block title %}WikDict{% endblock %}</title>
 		{% block css_links %}
 		{% endblock %}
-		{% assets output="gen/packed.css", "css/main.css", "bootstrap/css/bootstrap.min.css" %}
+		{% assets output="gen/packed.css", "bootstrap/css/bootstrap.min.css", "css/main.css" %}
 			<link href="{{ ASSET_URL }}" rel="stylesheet" type="text/css">
 		{% endassets %}
 
@@ -35,56 +35,6 @@
 		<meta name="theme-color" content="#ffffff">
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<style type="text/css">
-			{% block css %}
-			{% endblock %}
-			html {
-				position: relative;
-				min-height: 100%;
-			}
-			body {
-				/* Margin bottom by footer height */
-				margin-bottom: 60px;
-			}
-
-			@media (min-width: 500px) {
-				/* Don't let the content be squasched to the sides */
-				.container-outer {
-					padding: 0 30px;
-				}
-			}
-
-			.navbar-brand {
-				color: black !important;
-				font-size: 25px;
-				font-weight: 500;
-				background-image: url(/static/img/icons/favicon-32x32.png);
-				background-repeat: no-repeat;
-				background-position: 15px 12px;
-				padding-left: 52px;
-			}
-			.footer {
-				display: flex;
-				justify-content:center;
-				align-content:center;
-				flex-direction:column;
-
-				position: absolute;
-				bottom: 0;
-				width: 100%;
-				/* Set the fixed height of the footer here */
-				height: 60px;
-				background-color: #f5f5f5;
-			}
-			.footer > .container {
-				font-size: 12px;
-				padding-right: 15px;
-				padding-left: 15px;
-			}
-			.pronun .gender {
-				margin: 0 0.3em;
-			}
-		</style>
 		{% block head %}
 		{% endblock %}
 		<!-- Translunary -->

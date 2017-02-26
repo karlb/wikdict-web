@@ -1,3 +1,44 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+}
+
+.navbar-brand {
+    color: black !important;
+    font-size: 25px;
+    font-weight: 500;
+    background-image: url(/static/img/icons/favicon-32x32.png);
+    background-repeat: no-repeat;
+    background-position: 15px 12px;
+    padding-left: 52px;
+}
+
+.footer {
+    display: flex;
+    justify-content:center;
+    align-content:center;
+    flex-direction:column;
+
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    background-color: #f5f5f5;
+}
+.footer > .container {
+    font-size: 12px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+.pronun .gender {
+    margin: 0 0.3em;
+}
+
 
 @media (min-height: 500px) {
 	.main-page .search-block {
