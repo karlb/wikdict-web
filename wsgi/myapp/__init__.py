@@ -14,7 +14,7 @@ import myapp.base as base
 import myapp.typeahead
 
 ADMINS = ['karl42@gmail.com']
-ASSET_REVISION = check_output(['hg', 'id', '-i'])
+ASSET_REVISION = check_output(['hg', 'id', '-i'], cwd=base.APP_ROOT)
 
 # simple cache busting for static files, since Flask-Assets is only usable for js, css, etc.
 @app.url_defaults
