@@ -1,4 +1,5 @@
 import os
+from subprocess import check_output
 
 from flask import Flask, Response, redirect, request, url_for, session, send_from_directory, Markup
 import flask_assets
@@ -13,6 +14,13 @@ import myapp.base as base
 import myapp.typeahead
 
 ADMINS = ['karl42@gmail.com']
+ASSET_REVISION = check_output(['hg', 'id', '-i'])
+
+# simple cache busting for static files, since Flask-Assets is only usable for js, css, etc.
+@app.url_defaults
+def static_cache_buster(endpoint, values):
+    if endpoint == 'static':
+        values['_v'] = ASSET_REVISION
 
 app.debug = os.environ.get('FLASK_DEBUG', 'false').lower() == 'true'
 if not app.debug:
