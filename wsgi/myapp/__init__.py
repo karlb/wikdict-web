@@ -1,9 +1,11 @@
 import os
 
 from flask import Flask, Response, redirect, request, url_for, session, send_from_directory, Markup
+import flask_assets
 import markdown
 
 app = Flask(__name__.split('.')[0], static_folder='../static')
+assets = flask_assets.Environment(app)
 
 import myapp.lookup as lookup
 import myapp.admin

@@ -6,10 +6,12 @@
 <html>
 	<head>
 		<title>{% block title %}WikDict{% endblock %}</title>
-		<link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet" type="text/css">
 		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
 		{% block css_links %}
 		{% endblock %}
+		{% assets output="gen/packed.css", "css/main.css" %}
+			<link href="{{ ASSET_URL }}" rel="stylesheet" type="text/css">
+		{% endassets %}
 
 		<!-- icon links -->
 		<link rel="apple-touch-icon" sizes="57x57" href="/static/img/icons/apple-touch-icon-57x57.png">
@@ -205,5 +207,9 @@
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 		{% block scripts %}
 		{% endblock %}
+
+		{% assets output="gen/packed.js", "js/typeahead.jquery.min.js", "js/lookup.js" %}
+			<script src="{{ ASSET_URL }}"></script>
+		{% endassets %}
 	</body>
 </html>

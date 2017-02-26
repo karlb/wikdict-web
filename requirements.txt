@@ -2,3 +2,4 @@ flask
 flask-testing
 newrelic
 markdown
+Flask-Assets
