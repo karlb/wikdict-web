@@ -26,6 +26,23 @@ def block_too_many_requests(current_ip):
         latest_requests.append((datetime.now(), current_ip))
 
 
+def log_query(from_lang, to_lang, query, ip, results):
+    db_query('logging', """
+            CREATE TABLE IF NOT EXISTS search_log (
+                ts timestamp DEFAULT current_timestamp, lang1 text, lang2 text,
+                query text, results1, results2, ip, referrer, user_agent, hidden bool DEFAULT false);
+        """, path='')
+    db_query('logging', """
+                INSERT INTO search_log (lang1, lang2, query,
+                                        results1, results2,
+                                        ip, referrer, user_agent)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+             [from_lang, to_lang, query, len(results[0]), len(results[1]),
+              ip, request.referrer, request.user_agent.string],
+             path='')
+
+
 @app.route('/<from_lang>-<to_lang>/')
 @app.route('/<from_lang>-<to_lang>/<path:query>')  # without path, slashes would not be escaped
 def lookup(from_lang, to_lang, query=None):
@@ -45,26 +62,12 @@ def lookup(from_lang, to_lang, query=None):
         if not results[0] and not results[1]:
             templ_vals['did_you_mean'] = spellfix(from_lang, to_lang, query)
 
-        # log results for later analysis
-        db_query('logging', """
-            CREATE TABLE IF NOT EXISTS search_log (
-                ts timestamp DEFAULT current_timestamp, lang1 text, lang2 text,
-                query text, results1, results2, ip, referrer, user_agent, hidden bool DEFAULT false);
-        """, path='')
         if request.headers.getlist("X-Forwarded-For"):
             ip = request.headers.getlist("X-Forwarded-For")[0]
         else:
             ip = request.remote_addr
         block_too_many_requests(ip)
-        db_query('logging', """
-                INSERT INTO search_log (lang1, lang2, query,
-                                        results1, results2,
-                                        ip, referrer, user_agent)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            """,
-            [from_lang, to_lang, query, len(results[0]), len(results[1]),
-             ip, request.referrer, request.user_agent.string],
-            path='')
+        log_query(from_lang, to_lang, query, ip, results)
         wiktionary_links = OrderedDict(
             (key, val)
             for key, val in (
