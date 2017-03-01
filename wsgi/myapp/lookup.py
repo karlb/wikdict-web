@@ -55,10 +55,10 @@ def lookup(from_lang, to_lang, query=None):
     templ_vals = {}
 
     if query:
-        results = [
-            search_query(from_lang, to_lang, query),
-            search_query(to_lang, from_lang, query),
-        ]
+        results = sorted([
+            LangResultList(from_lang, to_lang, query),
+            LangResultList(to_lang, from_lang, query),
+        ], key=lambda x: -x.score)
         if not results[0] and not results[1]:
             templ_vals['did_you_mean'] = spellfix(from_lang, to_lang, query)
 
@@ -97,22 +97,36 @@ def lookup_redirect():
     return redirect(url)
 
 
-@timing
-def search_query(from_lang, to_lang, search_term, **kwargs):
-    search_term = '"' + search_term + '"'
-    return db_query(from_lang + '-' + to_lang, """
-            SELECT *
-            FROM (
-                    SELECT DISTINCT written_rep
-                    FROM search_trans
-                    WHERE form MATCH :term
-                )
-                JOIN translation USING (written_rep)
-            ORDER BY lower(written_rep) LIKE '%'|| lower(:term) ||'%' DESC,
-                length(written_rep), lexentry, coalesce(min_sense_num, '99'),
-                translation_score DESC
-            LIMIT 100
-        """, dict(term=search_term))
+class LangResultList:
+
+    def __init__(self, from_lang, to_lang, search_term):
+        self.from_lang = from_lang
+        self.to_lang = to_lang
+        self.results = self.search_translations(search_term)
+        self.score = self.results[0].translation_score if self.results else 0
+
+    @timing
+    def search_translations(self, search_term):
+        search_term = '"' + search_term + '"'
+        return db_query(self.from_lang + '-' + self.to_lang, """
+                SELECT *
+                FROM (
+                        SELECT DISTINCT written_rep
+                        FROM search_trans
+                        WHERE form MATCH :term
+                    )
+                    JOIN translation USING (written_rep)
+                ORDER BY lower(written_rep) LIKE '%'|| lower(:term) ||'%' DESC,
+                    length(written_rep), lexentry, coalesce(min_sense_num, '99'),
+                    translation_score DESC
+                LIMIT 100
+            """, dict(term=search_term))
+
+    def __len__(self):
+        return len(self.results)
+
+    def __iter__(self):
+        return iter(self.results)
 
 
 @timing

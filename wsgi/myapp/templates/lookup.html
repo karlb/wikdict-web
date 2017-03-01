@@ -148,6 +148,31 @@
 {% endmacro %}
 
 
+{% macro results_one_dir(left_lang, right_lang, results) %}
+{% if results %}
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>{{ language_names[left_lang] | capitalize }}</th>
+            <th>{{ language_names[right_lang] | capitalize }}</th>
+        </tr>
+        </thead>
+        {% for result in results %}
+        <tr>
+            <td>{{ show_word(result.written_rep, left_lang, result.part_of_speech, result.sense_list,
+                lexentry=result.lexentry) }}</td>
+            <td>
+                {% for t in result.trans_list.split(' | ') %}
+                {{ show_word(t, right_lang, result.part_of_speech) }}
+                <br>
+                {% endfor %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endif %}
+{% endmacro %}
+
 {% block main %}
 
 	{% if query %}
@@ -166,42 +191,14 @@
         <div id="result-row" class="row">
 
             <div id="results" class="col-md-9">
-                {% for results_one_dir in results %}
-                    {% if not results_one_dir %}
-                        {% continue %}
-                    {% endif %}
-                    {% with %}
-                    {% if loop.index == 1 %}
-                        {% set (left_lang, right_lang) = (from_lang, to_lang) %}
-                    {% elif loop.index == 2 %}
-                        {% set (left_lang, right_lang) = (to_lang, from_lang) %}
-                    {% endif %}
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>{{ language_names[left_lang] | capitalize }}</th>
-                                <th>{{ language_names[right_lang] | capitalize }}</th>
-                            </tr>
-                        </thead>
-                        {% for result in results_one_dir %}
-                            <tr>
-                                <td>{{ show_word(result.written_rep, left_lang, result.part_of_speech, result.sense_list,
-                                                 lexentry=result.lexentry) }}</td>
-                                <td>
-                                    {% for t in result.trans_list.split(' | ') %}
-                                        {{ show_word(t, right_lang, result.part_of_speech) }}
-                                        <br>
-                                    {% endfor %}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </table>
-                    {% endwith %}
-                {% else %}
+                {% for lang_result in results %}
+                    {{ results_one_dir(lang_result.from_lang, lang_result.to_lang, lang_result) }}
+                {% endfor %}
+                {% if not results[0] and not results[1] %}
                     <div class="jumbotron">
                         <p>Sorry, no translations for "{{ query }}" have been found.</p>
                     </div>
-                {% endfor %}
+                {% endif %}
 
                 {{ definition(results[2], from_lang) }}
                 {{ definition(results[3], to_lang) }}
