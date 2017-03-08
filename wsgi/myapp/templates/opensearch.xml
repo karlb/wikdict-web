@@ -7,6 +7,8 @@
 	<Contact>karl42@gmail.com</Contact>
 	<Url type="text/html"
 		template="http://www.wikdict.com/{{from_lang}}-{{to_lang}}/{searchTerms}?utm_source=opensearch"/>
+	<Url type="application/x-suggestions+json"
+		 template="http://www.wikdict.com/opensearch/typeahead/{{from_lang}}-{{to_lang}}/{searchTerms}?utm_source=opensearch"/>
 	<Attribution>WikDict.com data from Wiktionary via DBnary. Licensed under the CC BY-SA 3.0.</Attribution>
 	<SyndicationRight>open</SyndicationRight>
 	<Image height="16" width="16" type="image/png">http://www.wikdict.com/img/icons/favicon-16x16.png</Image>
