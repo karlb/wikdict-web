@@ -157,7 +157,8 @@
             <th>{{ language_names[right_lang] | capitalize }}</th>
         </tr>
         </thead>
-        {% for result in results %}
+        {% for lex_result in results %}
+        {% for result in lex_result %}
         <tr>
             <td>{{ show_word(result.written_rep, left_lang, result.part_of_speech, result.sense_list,
                 lexentry=result.lexentry) }}</td>
@@ -168,6 +169,7 @@
                 {% endfor %}
             </td>
         </tr>
+        {% endfor %}
         {% endfor %}
     </table>
 {% endif %}

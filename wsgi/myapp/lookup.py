@@ -1,8 +1,9 @@
 import urllib.parse
-
-from collections import OrderedDict, deque
-from flask import redirect, request, url_for, abort
 from datetime import datetime, timedelta
+from collections import OrderedDict, deque
+from itertools import groupby
+
+from flask import redirect, request, url_for, abort
 
 from .languages import language_names
 from . import app
@@ -104,8 +105,12 @@ class LangResultList:
     def __init__(self, from_lang, to_lang, search_term):
         self.from_lang = from_lang
         self.to_lang = to_lang
-        self.results = self.search_translations(search_term)
-        self.score = self.results[0].translation_score if self.results else 0
+        self.results = [
+            LexicalEntryResult(list(group))
+            for key, group in groupby(self.search_translations(search_term), key=lambda x: x.lexentry)
+        ]
+        self.results.sort(key=lambda x: -x.score)
+        self.score = self.results[0].score if self.results else 0
 
     @timing
     def search_translations(self, search_term):
@@ -118,11 +123,26 @@ class LangResultList:
                         WHERE form MATCH :term
                     )
                     JOIN translation USING (written_rep)
-                ORDER BY lower(written_rep) LIKE '%'|| lower(:term) ||'%' DESC,
-                    length(written_rep), lexentry, coalesce(min_sense_num, '99'),
-                    translation_score DESC
+                ORDER BY
+                    -- these only relevant if the limit is active, because we sort on LexicalEntryResult afterwards
+                    lower(written_rep) LIKE '%'|| lower(:term) ||'%' DESC, length(written_rep),
+                    -- this determines the sorting inside each LexicalEntryResult
+                    lexentry, coalesce(min_sense_num, '99'), importance * translation_score DESC
                 LIMIT 100
             """, dict(term=search_term))
+
+    def __len__(self):
+        return len(self.results)
+
+    def __iter__(self):
+        return iter(self.results)
+
+
+class LexicalEntryResult:
+
+    def __init__(self, results):
+        self.results = results
+        self.score = max(r.translation_score * r.importance for r in results)
 
     def __len__(self):
         return len(self.results)
@@ -167,6 +187,7 @@ def spellfix(from_lang, to_lang, search_term):
 
 @timing
 def vocable_details(vocable, lang, part_of_speech, from_lang, to_lang):
+    assert vocable
     r = db_query(lang, """
             WITH matches AS (
                 SELECT *
