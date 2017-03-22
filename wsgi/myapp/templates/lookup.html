@@ -200,8 +200,8 @@
                     </div>
                 {% endif %}
 
-                {{ definition(results[2], from_lang) }}
-                {{ definition(results[3], to_lang) }}
+                {#{ definition(results[2], from_lang) }#}
+                {#{ definition(results[3], to_lang) }#}
             </div>
 
             <div class="col-md-3">
@@ -241,7 +241,7 @@
 					<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
 						<select class="form-control lang-select">
 							<option> &nbsp; {{ language_names[lang] | capitalize }} ↔ &hellip;</option>
-							{% for lp in lang_pairs if lang in (lp.lang1, lp.lang2) if lp.large_enough %}
+							{% for lp in lang_pairs if lang in (lp.lang1, lp.lang2) and lp.large_enough %}
 								{% set to_lang = lp.lang1 if lp.lang1 != lang else lp.lang2 %}
 								<option value="{{ lang }}-{{ to_lang }}">{{ language_names[lang] | capitalize }} ↔ {{ language_names[to_lang] | capitalize }}</option>
 							{% endfor %}

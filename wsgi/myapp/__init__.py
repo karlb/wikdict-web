@@ -1,11 +1,13 @@
 import os
 from subprocess import check_output
 
+import jinja2
 from flask import Flask, Response, redirect, request, url_for, session, send_from_directory, Markup
 import flask_assets
 import markdown
 
 app = Flask(__name__.split('.')[0], static_folder='../static')
+app.jinja_env.undefined = jinja2.StrictUndefined
 assets = flask_assets.Environment(app)
 
 import myapp.lookup as lookup

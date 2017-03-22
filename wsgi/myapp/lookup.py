@@ -61,6 +61,8 @@ def lookup(from_lang, to_lang, query=None):
         ], key=lambda x: -x.score)
         if not results[0] and not results[1]:
             templ_vals['did_you_mean'] = spellfix(from_lang, to_lang, query)
+        else:
+            templ_vals['did_you_mean'] = []
 
         if request.headers.getlist("X-Forwarded-For"):
             ip = request.headers.getlist("X-Forwarded-For")[0]

@@ -79,7 +79,7 @@
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li class="dropdown {{ 'active' if page_name == 'lookup' }}">
+					<li class="dropdown {{ 'active' if page_name == 'lookup' else ''}}">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 							{% if from_lang %}
 								{{ language_names[from_lang] | capitalize }} ↔ {{ language_names[to_lang] | capitalize }}
@@ -144,7 +144,7 @@
 
 		<footer class="footer">
 			<div class="container container-outer text-muted">
-				<span title="Version {{ version }}">WikDict</span> by <a href="http://www.karl.berlin">Karl Bartel</a>.
+				WikDict by <a href="http://www.karl.berlin">Karl Bartel</a>.
 				Data from <a href="http://www.wiktionary.org">Wiktionary</a>
 				via <a href="http://kaiko.getalp.org/about-dbnary/">DBnary</a>
 				licensed under the <a href="//creativecommons.org/licenses/by-sa/3.0/" rel="license">Creative Commons Attribution-ShareAlike License</a>.
