@@ -3,7 +3,7 @@ $(function() {
     if (window.external && ("AddSearchProvider" in window.external)) {
         $('#add-search-provider-block').show();
         $('#add-search-provider').click(function () {
-            window.external.AddSearchProvider('http://www.wikdict.com/opensearch/' + from_lang + '-' + to_lang);
+            window.external.AddSearchProvider('https://www.wikdict.com/opensearch/' + from_lang + '-' + to_lang);
         });
     }
 
