@@ -1,5 +1,5 @@
 {% macro langli(lang1, lang2) %}
-	<li><a href="/{{ lang1 + '-' + lang2 }}">{{ language_names[lang1] | capitalize }} ↔ {{ language_names[lang2] | capitalize }}</a></li>
+	<li><a href="/{{ lang1 + '-' + lang2 }}/">{{ language_names[lang1] | capitalize }} ↔ {{ language_names[lang2] | capitalize }}</a></li>
 {% endmacro -%}
 
 <!DOCTYPE html>
