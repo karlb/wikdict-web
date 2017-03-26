@@ -18,6 +18,7 @@
 		href="/opensearch/{{from_lang}}-{{to_lang}}"
 		title="WikDict {{from_lang}}-{{to_lang}} Search" />
     <link rel="canonical" href="https://www.wikdict.com/{{from_lang}}-{{to_lang}}/{{query or ''}}">
+    {% if description %}<meta name=”description” content="{{ description }}">{% endif %}
 {% endblock %}
 
 {% block scripts %}

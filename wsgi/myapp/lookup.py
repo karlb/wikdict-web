@@ -4,6 +4,7 @@ from collections import OrderedDict, deque
 from itertools import groupby
 
 from flask import redirect, request, url_for, abort
+from markupsafe import Markup
 
 from .languages import language_names
 from . import app
@@ -89,6 +90,7 @@ def lookup(from_lang, to_lang, query=None):
         to_lang=to_lang,
         query=query,
         results=results,
+        description=results[0].description if results else None,
         page_name='lookup',
         wiktionary_links=wiktionary_links,
         **templ_vals
@@ -110,7 +112,23 @@ class LangResultList:
             for key, group in groupby(self.search_translations(search_term), key=lambda x: x.lexentry)
         ]
         self.results.sort(key=lambda x: -x.score)
-        self.score = self.results[0].score if self.results else 0
+        if self.results:
+            self.score = self.results[0].score
+            self.description = self.make_description()
+        else:
+            self.score = 0
+            self.description = None
+
+    def make_description(self):
+        lexentry_strs = []
+        for lexentry in self.results:
+            lexentry_strs.append(lexentry.written_rep + ': ' +
+                ', '.join(r.trans_list.replace(' | ', ', ') for r in lexentry)
+            )
+        description = Markup(' &mdash; ').join(lexentry_strs)
+        if len(description) > 160:
+            description = description[:159] + Markup('&hellip;')
+        return description
 
     @timing
     def search_translations(self, search_term):
@@ -142,6 +160,7 @@ class LexicalEntryResult:
 
     def __init__(self, results):
         self.results = results
+        self.written_rep = results[0].written_rep
         self.score = max(r.translation_score * r.importance for r in results)
 
     def __len__(self):
