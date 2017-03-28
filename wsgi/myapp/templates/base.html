@@ -92,7 +92,7 @@
 							{% if last_dicts %}
 								<li role="presentation" class="dropdown-header">Recent</li>
 								{% for d in last_dicts if from_lang is not defined or d != from_lang + '-' + to_lang %}
-									{{ langli(*d.split('-')) if loop.index <= 3}}
+									{{ langli(*d.split('-')) if loop.index <= 3 else ''}}
 								{% endfor %}
 								<li class="divider"></li>
 							{% endif %}
