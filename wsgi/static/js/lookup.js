@@ -30,12 +30,11 @@ $(function() {
             var prefix = q.slice(0, 3);
             if (loaded_prefix !== prefix) {
                 loaded_data = undefined;
-                loaded_prefix = undefined;
+                loaded_prefix = prefix;
                 $.ajax('/typeahead/' + from_lang + '-' + to_lang + '/' + encodeURI(encodeURI(prefix.toLowerCase())), {
                     success: function (data) {
                         loaded_data = data;
                         cb_async(match(q));
-                        loaded_prefix = prefix;
                     }
                 });
             }
