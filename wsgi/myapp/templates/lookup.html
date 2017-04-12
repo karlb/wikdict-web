@@ -39,7 +39,6 @@
         var to_lang = '{{ to_lang }}';
 	</script>
 
-    {% if request.path != '/' %}
     <script type="application/ld+json">
     {
       "@context": "http://schema.org",
@@ -65,7 +64,6 @@
       ]
     }
     </script>
-    {% endif %}
 {% endblock %}
 
 {% macro optional_link(url) %}
