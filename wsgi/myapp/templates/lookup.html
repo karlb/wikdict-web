@@ -163,7 +163,7 @@
             <td>{{ show_word(result.written_rep, left_lang, result.part_of_speech, result.sense_list,
                 lexentry=result.lexentry) }}</td>
             <td>
-                {% for t in result.trans_list.split(' | ') %}
+                {% for t in result.trans_list.split(' | ') if t != '' %}
                 {{ show_word(t, right_lang, result.part_of_speech) }}
                 <br>
                 {% endfor %}
