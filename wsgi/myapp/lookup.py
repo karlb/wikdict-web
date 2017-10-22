@@ -60,7 +60,7 @@ def lookup(from_lang, to_lang, query=None):
         results = sorted([
             LangResultList(from_lang, to_lang, query),
             LangResultList(to_lang, from_lang, query),
-        ], key=lambda x: -x.score)
+        ], key=lambda x: x.score, reverse=True)
         if not results[0] and not results[1]:
             templ_vals['did_you_mean'] = spellfix(from_lang, to_lang, query)
         else:
@@ -108,15 +108,15 @@ class LangResultList:
         self.from_lang = from_lang
         self.to_lang = to_lang
         self.results = [
-            LexicalEntryResult(list(group))
+            LexicalEntryResult(list(group), search_term)
             for key, group in groupby(self.search_translations(search_term), key=lambda x: x.lexentry)
         ]
-        self.results.sort(key=lambda x: -x.score)
+        self.results.sort(key=lambda x: x.score, reverse=True)
         if self.results:
             self.score = self.results[0].score
             self.description = self.make_description()
         else:
-            self.score = 0
+            self.score = tuple()
             self.description = None
 
     def make_description(self):
@@ -142,9 +142,9 @@ class LangResultList:
                     )
                     JOIN translation USING (written_rep)
                 ORDER BY
-                    -- these only relevant if the limit is active, because we sort on LexicalEntryResult afterwards
+                    -- only relevant if the limit is active, because we sort on LexicalEntryResult afterwards
                     lower(written_rep) LIKE '%'|| lower(:term) ||'%' DESC, length(written_rep),
-                    -- this determines the sorting inside each LexicalEntryResult
+                    -- determine the sorting inside each LexicalEntryResult
                     lexentry, coalesce(min_sense_num, '99'), importance * translation_score DESC
                 LIMIT 100
             """, dict(term=search_term))
@@ -158,10 +158,14 @@ class LangResultList:
 
 class LexicalEntryResult:
 
-    def __init__(self, results):
+    def __init__(self, results, search_term):
         self.results = results
         self.written_rep = results[0].written_rep
-        self.score = max(r.translation_score * r.importance for r in results)
+        self.score = (
+            self.written_rep == search_term,
+            self.written_rep in search_term,
+            max(r.translation_score * r.importance for r in results)
+        )
 
     def __len__(self):
         return len(self.results)
