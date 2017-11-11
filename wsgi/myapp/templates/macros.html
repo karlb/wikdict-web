@@ -15,7 +15,7 @@
         <tr>
             {% for cell in row %}
                 {% with col_name = rows[0]._fields[loop.index0] %}
-                    <td>{% call link(links[col_name].format(**row._asdict()) if links[col_name])%}{{ cell | urlize(40) }}{% endcall%}</td>
+                    <td>{% call link(links[col_name].format(**row._asdict()) if col_name in links else None)%}{{ cell | urlize(40) }}{% endcall%}</td>
                 {% endwith%}
             {% endfor %}
         </tr>
