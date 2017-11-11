@@ -107,6 +107,9 @@ def render_template(filename, **kwargs):
         last_dict = session.get('last_dicts', ['de-en'])[0]
         kwargs['from_lang'], kwargs['to_lang'] = last_dict.split('-')
 
+    if 'page_name' not in kwargs:
+        kwargs['page_name'] = None
+
     available_langs = get_available_langs()
     lang_pairs = get_lang_pairs()
     return flask.render_template(filename,
