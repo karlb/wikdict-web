@@ -37,7 +37,7 @@ def admin_index():
         CREATE VIEW IF NOT EXISTS search_log_filtered AS
         SELECT * FROM search_log
         WHERE NOT hidden
-        AND user_agent NOT LIKE '%bot%';
+        AND user_agent NOT LIKE '%bot%' AND user_agent NOT LIKE '%Yahoo! Slurp%';
     """, path='')
     return base.render_template('admin/index.html', urls=[
         rule.endpoint

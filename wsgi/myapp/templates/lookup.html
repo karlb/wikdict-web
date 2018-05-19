@@ -22,17 +22,6 @@
 {% endblock %}
 
 {% block scripts %}
-    <!-- hellotraffic view tracking -->
-    <script src="https://inter.rtb-cdn.net/vt.js"></script>
-    {% if query and (results[0] or results[1]) %}
-        <!-- hellotraffic conversion tracking -->
-        <script src="https://inter.rtb-cdn.net/ct.js"></script>
-    {% endif %}
-
-    <!-- robotdetect tracking-->
-    <script type="text/javascript">
-        try{!function(t,e,r){var n=1*new Date,o=e.createElement("script");o.type="text/javascript",o.async=!0,o.src=("https:"==e.location.protocol?"https://":"http://")+"rd.rtb-cdn.net/a/WyJhZHNwZXJ0IiwidGVzdDIiXQ.ileEueZ5mzT7CeBl7At2jLSvwtE/c.js?dt="+n+"&ref="+r(e.referrer)+"&loc="+r(e.location);var c=e.getElementsByTagName("script")[0];c.parentNode.insertBefore(o,c)}(window,document,encodeURIComponent)}finally{}
-    </script>
 
     <script>
         var from_lang = '{{ from_lang }}';
