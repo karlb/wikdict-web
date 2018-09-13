@@ -262,10 +262,6 @@ def entry_details(vocable, lexentry, lang, from_lang, to_lang):
         WHERE written_rep = ?
           AND lexentry = ?
     """, [vocable, lexentry])
-    if not rows:
-        # this should not happen, but for unknown reasons, it did happen for eng/do_you_speak_something__Phrase__1
-        # when searching for 'do'
-        return {}
     r = rows[0]._asdict()
     r.update({
         'display': r['display'] or r['written_rep'],
