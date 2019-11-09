@@ -1,4 +1,6 @@
 **/__pycache__
-wsgi/lib
+wsgi/lib/
+wsgi/static/gen/
+wsgi/static/.webassets-cache/
 venv
 data
