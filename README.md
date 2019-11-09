@@ -8,7 +8,7 @@ This is the web front end for WikDict dictionaries, which is running at [www.wik
 
 Clone the wikdict-web reposity
 
-    hg clone ssh://hg@bitbucket.org/wikdict/wikdict-web
+    git clone https://github.com/karlb/wikdict-web
     cd wikdict-web
 
 If you have generated dictionaries using [wikdict-gen], link those dictionaries to `data/dict`. If you don't have a local copy of the dictionaries, use the `download_dicts.sh` script to download a complete set of dictionaries.

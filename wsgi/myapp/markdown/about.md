@@ -30,7 +30,7 @@ All data is extracted from [Wiktionary](http://www.wiktionary.org) by the [DBnar
 * converts the data into other formats
 * provides a web interface
 
-The source code for all this can be found in the [bitbucket repository](https://bitbucket.org/wikdict/) and is licensed under the MIT license.
+The source code for all this can be found in the repositories for the [dictionary generation](https://github.com/karlb/wikdict-gen) and the [web interface](https://github.com/karlb/wikdict-web). Both are licensed under the MIT license.
 
 #### Data download
 
@@ -43,12 +43,12 @@ Please don't hesitate to [contact me][mail], as I'm interested in this data bein
 
 #### Contributing
 
-The easiest way for non-programmers to contribute is to provide feedback and bug reports. This can be done by [mail] or by creating [bitbucket issues][issues]. Improving the content of the Wiktionary of your choice (especially the translations section) will also help improving the data quality in the long run.
+The easiest way for non-programmers to contribute is to provide feedback and bug reports. This can be done by [mail] or by creating [github issues][issues]. Improving the content of the Wiktionary of your choice (especially the translations section) will also help improving the data quality in the long run.
 
 If you are willing to write code or want to contribute in a different way, please [get in contact][mail] to avoid duplicate work and get you started in the right direction.
 
-[mail]: mailto:karl42@gmail.com
-[issues]: https://bitbucket.org/wikdict/wikdict-gen/issues?status=new&status=open
+[mail]: mailto:karl@karl.berlin
+[issues]: https://github.com/karlb/wikdict-web/issues
 
 ---
 <small>MIT license logo by [ExcaliburZero](http://excaliburzero.deviantart.com/art/MIT-License-Logo-595847140)</small>
