@@ -10,7 +10,4 @@ exec(open(activate_this).read(), dict(__file__=activate_this))
 os.environ['OPENSHIFT_DATA_DIR'] = BASE_DIR + '/data'
 os.environ['OPENSHIFT_LOG_DIR'] = BASE_DIR + '/data'
 
-import newrelic.agent
-newrelic.agent.initialize(BASE_DIR + '/newrelic.ini')
-
 from myapp import app as application
