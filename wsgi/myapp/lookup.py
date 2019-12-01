@@ -1,3 +1,4 @@
+import sqlite3
 import urllib.parse
 from datetime import datetime, timedelta
 from collections import OrderedDict, deque
@@ -29,20 +30,24 @@ def block_too_many_requests(current_ip):
 
 
 def log_query(from_lang, to_lang, query, ip, results):
-    db_query('logging', """
-            CREATE TABLE IF NOT EXISTS search_log (
-                ts timestamp DEFAULT current_timestamp, lang1 text, lang2 text,
-                query text, results1, results2, ip, referrer, user_agent, hidden bool DEFAULT false);
-        """, path='')
-    db_query('logging', """
-                INSERT INTO search_log (lang1, lang2, query,
-                                        results1, results2,
-                                        ip, referrer, user_agent)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            """,
-             [from_lang, to_lang, query, len(results[0]), len(results[1]),
-              ip, request.referrer, request.user_agent.string],
-             path='')
+    try:
+        db_query('logging', """
+                CREATE TABLE IF NOT EXISTS search_log (
+                    ts timestamp DEFAULT current_timestamp, lang1 text, lang2 text,
+                    query text, results1, results2, ip, referrer, user_agent, hidden bool DEFAULT false);
+            """, path='')
+        db_query('logging', """
+                    INSERT INTO search_log (lang1, lang2, query,
+                                            results1, results2,
+                                            ip, referrer, user_agent)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                 [from_lang, to_lang, query, len(results[0]), len(results[1]),
+                  ip, request.referrer, request.user_agent.string],
+                 path='')
+    except sqlite3.OperationalError:
+        # It's ok to skip logging the query while the log db is locked
+        pass
 
 
 @app.route('/<from_lang>-<to_lang>/')
