@@ -17,13 +17,19 @@ latest_requests = deque(maxlen=30)
 
 
 def block_too_many_requests(current_ip):
+    try:
+        lr_list = list(latest_requests)
+    except RuntimeError:
+        # The latest_requests deque was modified during iteration. Let's just
+        # allow this request instead of retrying the check.
+        pass
     recent_requests_from_ip = len([
-        None for dt, ip in latest_requests
+        None for dt, ip in lr_list
         if dt > datetime.now() - timedelta(minutes=1) and ip == current_ip
     ])
     if recent_requests_from_ip > 20:
         abort(429, "You made too many requests. Please contact karl42@gmail.com to resolve this. "
-                   "I provide translation data in an easy to use format. "
+                   "I will provide translation data in an easy to use format. "
                    "If you see this error when normally using the web site, please let me know, too.")
     else:
         latest_requests.append((datetime.now(), current_ip))
