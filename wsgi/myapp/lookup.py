@@ -138,21 +138,31 @@ class LangResultList:
     @timing
     def search_translations(self, search_term):
         search_term = '"' + search_term + '"'
-        return db_query(self.from_lang + '-' + self.to_lang, """
-                SELECT *
-                FROM (
-                        SELECT DISTINCT written_rep
-                        FROM search_trans
-                        WHERE form MATCH :term
-                    )
-                    JOIN translation USING (written_rep)
-                ORDER BY
-                    -- only relevant if the limit is active, because we sort on LexicalEntryResult afterwards
-                    lower(written_rep) LIKE '%'|| lower(:term) ||'%' DESC, length(written_rep),
-                    -- determine the sorting inside each LexicalEntryResult
-                    lexentry, coalesce(min_sense_num, '99'), importance * translation_score DESC
-                LIMIT 100
-            """, dict(term=search_term))
+        try:
+            return db_query(self.from_lang + '-' + self.to_lang, """
+                    SELECT *
+                    FROM (
+                            SELECT DISTINCT written_rep
+                            FROM search_trans
+                            WHERE form MATCH :term
+                        )
+                        JOIN translation USING (written_rep)
+                    ORDER BY
+                        -- only relevant if the limit is active, because we sort on LexicalEntryResult afterwards
+                        lower(written_rep) LIKE '%'|| lower(:term) ||'%' DESC, length(written_rep),
+                        -- determine the sorting inside each LexicalEntryResult
+                        lexentry, coalesce(min_sense_num, '99'), importance * translation_score DESC
+                    LIMIT 100
+                """, dict(term=search_term))
+        except sqlite3.OperationalError as e:
+            try:
+                error_msg = e.args[0]
+            except IndexError:
+                raise e
+            if "malformed MATCH expression" in error_msg:
+                abort(400, 'Invalid search expression')
+            else:
+                raise e
 
     def __len__(self):
         return len(self.results)
