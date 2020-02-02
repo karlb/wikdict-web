@@ -2,7 +2,7 @@ import os
 from subprocess import check_output
 
 import jinja2
-from flask import Flask, Response, redirect, request, url_for, session, send_from_directory, Markup
+from flask import Flask, Response, redirect, request, url_for, session, send_from_directory, Markup, abort
 import flask_assets
 import markdown
 
@@ -61,8 +61,11 @@ def index():
 
 @app.route('/page/<page_name>')
 def page(page_name):
-    with open(base.APP_ROOT + '/markdown/' + page_name + '.md', encoding="utf-8") as f:
-        content = f.read()
+    try:
+        with open(base.APP_ROOT + '/markdown/' + page_name + '.md', encoding="utf-8") as f:
+            content = f.read()
+    except FileNotFoundError:
+        abort(404)
     content = Markup(markdown.markdown(content))
     return base.render_template('markdown.html',
         page_name=page_name,
