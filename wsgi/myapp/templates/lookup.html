@@ -69,7 +69,7 @@
     {% else %}
         {% set voc = vocable_details(vocable, lang, part_of_speech or None, from_lang, to_lang) %}
     {% endif %}
-    <span class="translation">
+    <span class="translation" data-lexentry="{{ voc.get('lexentry') or '' }}">
 		{% call optional_link(voc.url) -%}
 			{{ voc.display }}
 			{%- if voc.display_addition %}
