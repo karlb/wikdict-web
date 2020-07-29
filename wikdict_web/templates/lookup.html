@@ -78,7 +78,7 @@
 		{%- endcall -%}
         <span class="text-muted">
             {% if voc.gender %}
-                <span class="gender">{{ '{' + voc.gender[0] + '}' }}</span>
+                <span class="gender">{{ '{' + voc.gender + '}' }}</span>
             {% endif %}
             {% if voc.pronuns %}
                 <span class="pronun">{{ voc.pronuns | join(', ') }}</span>

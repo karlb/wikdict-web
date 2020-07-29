@@ -229,6 +229,16 @@ def spellfix(from_lang, to_lang, search_term):
     return [r.word for r in translated_fixes]
 
 
+def format_gender(gender):
+    if not gender:
+        return None
+    gender_map = {
+        'Neuter': 'n',
+        'CommonGender': 'u',
+    }
+    return gender_map.get(gender, gender[0])
+
+
 @timing
 def vocable_details(vocable, lang, part_of_speech, from_lang, to_lang):
     assert vocable
@@ -265,7 +275,7 @@ def vocable_details(vocable, lang, part_of_speech, from_lang, to_lang):
                 (SELECT count(*) FROM matches) AS count
         """, [vocable, part_of_speech, part_of_speech])[0]
     return {
-        'gender': r.gender,
+        'gender': format_gender(r.gender),
         'pronuns': set(r.pronun_list.split(' | ')) if r.pronun_list else None,
         'display': r.display or vocable,
         'display_addition': r.display_addition,
@@ -289,6 +299,7 @@ def entry_details(vocable, lexentry, lang, from_lang, to_lang):
         'display_addition': r['display_addition'],
         'url': url_for('lookup', from_lang=from_lang, to_lang=to_lang, query=vocable),
         'pronuns': r['pronun_list'].split(' | ') if r['pronun_list'] else [],
+        'gender': format_gender(r['gender'])
     })
     return r
 
