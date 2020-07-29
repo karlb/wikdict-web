@@ -4,6 +4,7 @@ import functools
 from collections import OrderedDict, namedtuple
 
 import sqlite3
+import sqlite_spellfix
 import flask
 from flask import session, g
 
@@ -77,7 +78,7 @@ def db_query(db_name, stmt, bind_params=(), path='dict', attach_dbs=None, explai
     conn.isolation_level = None  # autocommit
     conn.row_factory = namedtuple_factory
     conn.enable_load_extension(True)
-    conn.load_extension(APP_ROOT + '/../lib/spellfix1')
+    conn.load_extension(sqlite_spellfix.extension_path())
     cur = conn.cursor()
     for name, db in (attach_dbs or {}).items():
         cur.execute("ATTACH DATABASE '{}' AS {}".format(path_for_db(db), name))

@@ -1,16 +1,16 @@
-import myapp
+import wikdict_web
 import unittest
 from flask_testing import TestCase
 
 class MyTestCase(TestCase):
 
     def create_app(self):
-        myapp.app.config['TESTING'] = True
-        return myapp.app
+        wikdict_web.app.config['TESTING'] = True
+        return wikdict_web.app
 
     def test_root(self):
         rv = self.client.get('/')
-        assert rv.status_code == 302
+        self.assertEqual(rv.status_code, 200)
 
     def test_home(self):
         rv = self.client.get('/de-en/')

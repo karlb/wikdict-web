@@ -10,10 +10,10 @@ app = Flask(__name__.split('.')[0], static_folder='../static')
 app.jinja_env.undefined = jinja2.StrictUndefined
 assets = flask_assets.Environment(app)
 
-import myapp.lookup as lookup
-import myapp.admin
-import myapp.base as base
-import myapp.typeahead
+import wikdict_web.lookup as lookup
+import wikdict_web.admin
+import wikdict_web.base as base
+import wikdict_web.typeahead
 
 ADMINS = ['karl42@gmail.com']
 ASSET_REVISION = check_output('git describe --abbrev=12 --always --dirty=+'.split(' '), cwd=base.APP_ROOT)
@@ -88,7 +88,3 @@ def opensearch(from_lang, to_lang):
 #@app.route('/sitemap.xml')  # just add additional routes for more static files in root
 def static_from_root():
     return send_from_directory(app.static_folder + '/root', request.path[1:])
-
-
-if __name__ == "__main__":
-    app.run()

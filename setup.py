@@ -1,10 +1,14 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
-setup(name='YourAppName',
+with open('requirements.txt') as f:
+    install_requires = f.read().splitlines()
+
+setup(name='wikdict_web',
       version='1.0',
-      description='OpenShift App',
-      author='Your Name',
-      author_email='example@example.com',
-      url='http://www.python.org/sigs/distutils-sig/',
-#      install_requires=['Django>=1.3'],
+      packages=find_packages(),
+      include_package_data=True,
+      zip_safe=False,
+      install_requires=install_requires,
+      author='Karl Bartel',
+      author_email='karl@karl.berlin',
      )
