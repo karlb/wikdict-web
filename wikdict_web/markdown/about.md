@@ -30,16 +30,7 @@ All data is extracted from [Wiktionary](http://www.wiktionary.org) by the [DBnar
 * converts the data into other formats
 * provides a web interface
 
-The source code for all this can be found in the repositories for the [dictionary generation](https://github.com/karlb/wikdict-gen) and the [web interface](https://github.com/karlb/wikdict-web). Both are licensed under the MIT license.
-
-#### Data download
-
-The WikDict data is currently provided in two formats:
-
-* A [set of sqlite3 databases](http://download.wikdict.com/dictionaries/sqlite/), which is WikDict's native file format
-* XML files according to [TEI P5](http://www.tei-c.org/Guidelines/P5/). This includes only a subset of the available languages and data, currently.
-
-Please don't hesitate to [contact me][mail], as I'm interested in this data being used in as many places as possible!
+The source code for all this can be found in the repositories for the [dictionary generation](https://github.com/karlb/wikdict-gen) and the [web interface](https://github.com/karlb/wikdict-web). Both are licensed under the [MIT license](https://choosealicense.com/licenses/mit/).
 
 #### Contributing
 
