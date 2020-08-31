@@ -15,7 +15,7 @@ import wikdict_web.admin
 import wikdict_web.base as base
 import wikdict_web.typeahead
 
-ADMINS = ['karl42@gmail.com']
+ADMINS = ['karl@karl.berlin']
 ASSET_REVISION = check_output('git describe --abbrev=12 --always --dirty=+'.split(' '), cwd=base.APP_ROOT)
 
 # simple cache busting for static files, since Flask-Assets is only usable for js, css, etc.

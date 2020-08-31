@@ -4,7 +4,7 @@
 	<LongName>WikDict: {{ language_names[from_lang] | capitalize }} - {{ language_names[to_lang] | capitalize }}</LongName>
 	<Description>Bilingual dictionary {{ language_names[from_lang] | capitalize }} ↔ {{ language_names[to_lang] | capitalize }}</Description>
 	<Tags>bilingual dictionary WikDict Wiktionary free creativecommons</Tags>
-	<Contact>karl42@gmail.com</Contact>
+	<Contact>karl@karl.berlin</Contact>
 	<Url type="text/html"
 		template="https://www.wikdict.com/{{from_lang}}-{{to_lang}}/{searchTerms}?utm_source=opensearch"/>
 	<Url type="application/x-suggestions+json"

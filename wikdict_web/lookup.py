@@ -28,7 +28,7 @@ def block_too_many_requests(current_ip):
         if dt > datetime.now() - timedelta(minutes=1) and ip == current_ip
     ])
     if recent_requests_from_ip > 20:
-        abort(429, "You made too many requests. Please contact karl42@gmail.com to resolve this. "
+        abort(429, "You made too many requests. Please contact karl@karl.berlin to resolve this. "
                    "I will provide translation data in an easy to use format. "
                    "If you see this error when normally using the web site, please let me know, too.")
     else:
