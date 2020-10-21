@@ -59,7 +59,7 @@ def log_query(from_lang, to_lang, query, ip, results):
 @app.route('/<from_lang>-<to_lang>/')
 @app.route('/<from_lang>-<to_lang>/<path:query>')  # without path, slashes would not be escaped
 def lookup(from_lang, to_lang, query=None):
-    if len(from_lang) != 2 or len(to_lang) != 2:
+    if from_lang not in language_names or to_lang not in language_names:
         abort(404)
     if [from_lang, to_lang] != sorted((from_lang, to_lang)):
         return redirect(url_for('lookup', from_lang=to_lang, to_lang=from_lang,
