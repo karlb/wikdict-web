@@ -19,6 +19,11 @@ def timing(f):
     def f_with_timing(*args, **kwargs):
         start = time.time()
         result = f(*args, **kwargs)
+
+        # Skip timing when not run in request context
+        if not g:
+            return result
+
         duration = time.time() - start
         g.timing = getattr(g, 'timing', {})
         timing_dict = g.timing.setdefault(f.__name__, {
