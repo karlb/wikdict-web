@@ -2,4 +2,4 @@ flask
 flask-testing
 markdown
 Flask-Assets
-git+git://github.com/karlb/sqlite-spellfix
+sqlite-spellfix

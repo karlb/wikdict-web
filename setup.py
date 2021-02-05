@@ -9,6 +9,7 @@ setup(name='wikdict_web',
       include_package_data=True,
       zip_safe=False,
       install_requires=install_requires,
+      setup_requires=['wheel'],
       author='Karl Bartel',
       author_email='karl@karl.berlin',
      )
