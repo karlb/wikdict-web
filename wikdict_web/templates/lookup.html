@@ -98,34 +98,32 @@
 
 
 {% macro search_form() %}
-	<form action="/lookup" class="form-inline search-form">
-		{% if not query %}
-			<img src="{{ url_for('static', filename='img/arrow.png') }}" style="height:60px; margin: 7px 5px -28px" alt="">
-		{% endif %}
-		<div class="form-group">
-            <label class="sr-only" for="search-input">Search for term</label>
+    <div class="container">
+	<form action="/lookup" class="search-form">
+        <input type="hidden" name="index_name" value="{{from_lang}}-{{to_lang}}">
+        <div class="input-group">
             <input type="search" name="query" class="typeahead form-control" value="{{ query or '' }}"
                 id="search-input"
             >
-            <input type="hidden" name="index_name" value="{{from_lang}}-{{to_lang}}">
+            <button class="btn btn-primary">Translate</button>
         </div>
-		<button class="btn btn-primary">Translate</button>
 		{% if not query %}
 			<div class="use-notice">
 				Enter a word in {{ language_names[from_lang] }} or {{ language_names[to_lang] }}
 			</div>
 		{% endif %}
 	</form>
+    </div>
 {% endmacro %}
 
 
 {% macro definition(lex_entry, lang) %}
 	{% if lex_entry %}
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title">{{ lex_entry.written }} ({{ language_names[lang] }})</h3>
+		<div class="card">
+			<div class="card-header">
+				{{ lex_entry.written }} ({{ language_names[lang] }})
 			</div>
-			<div class="panel-body">
+			<div class="card-body">
 				<ol>
 					{% for s in lex_entry.senses if s.sense %}
 					<li>{{ s.sense }}</li>
@@ -197,21 +195,19 @@
 
             <div class="col-md-3">
                 {% if wiktionary_links %}
-                <div class="panel panel-default">
-                    <div class="panel-heading">Wiktionary Links</div>
-                    <div class="panel-body">
-                        <ul>
-                            {% for lang, items in wiktionary_links.items() if items %}
-                            <li>
-                                {{ language_names[lang] }}:
-                                {% for q, link in items %}
-                                    <a href="{{ link }}">{{ q }}</a>
-                                    {%- if not loop.last %}, {% endif %}
-                                {% endfor %}
-                            </li>
+                <div class="card">
+                    <div class="card-header">Wiktionary Links</div>
+                    <ul class="list-group list-group-flush">
+                        {% for lang, items in wiktionary_links.items() if items %}
+                        <li class="list-group-item">
+                            {{ language_names[lang] }}:
+                            {% for q, link in items %}
+                                <a href="{{ link }}">{{ q }}</a>
+                                {%- if not loop.last %}, {% endif %}
                             {% endfor %}
-                        </ul>
-                    </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
                 </div>
                 {% endif %}
             </div>
@@ -226,20 +222,22 @@
 				{{ search_form() }}
 			</div>
 
-			<h3>Other available Language Pairs</h3>
-			<div class="row">
-				{% for lang in available_langs %}
-					<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
-						<select class="form-control lang-select">
-							<option> &nbsp; {{ language_names[lang] | capitalize }} ↔ &hellip;</option>
-							{% for lp in lang_pairs if lang in (lp.lang1, lp.lang2) and lp.large_enough %}
-								{% set to_lang = lp.lang1 if lp.lang1 != lang else lp.lang2 %}
-								<option value="{{ lang }}-{{ to_lang }}">{{ language_names[lang] | capitalize }} ↔ {{ language_names[to_lang] | capitalize }}</option>
-							{% endfor %}
-						</select>
-					</div>
-				{% endfor %}
-			</div>
+            <div>
+                <h3>Other available Language Pairs</h3>
+                <div class="row">
+                    {% for lang in available_langs %}
+                        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                            <select class="form-control lang-select">
+                                <option> &nbsp; {{ language_names[lang] | capitalize }} ↔ &hellip;</option>
+                                {% for lp in lang_pairs if lang in (lp.lang1, lp.lang2) and lp.large_enough %}
+                                    {% set to_lang = lp.lang1 if lp.lang1 != lang else lp.lang2 %}
+                                    <option value="{{ lang }}-{{ to_lang }}">{{ language_names[lang] | capitalize }} ↔ {{ language_names[to_lang] | capitalize }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
 
             <div class="row">
                 <div class="col-md-6">

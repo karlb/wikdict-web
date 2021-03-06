@@ -4,3 +4,5 @@ wsgi/static/gen/
 wsgi/static/.webassets-cache/
 venv
 data
+/static/.webassets-cache
+/static/gen

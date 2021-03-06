@@ -1,11 +1,14 @@
 {% macro langli(lang1, lang2) %}
-	<li><a href="/{{ lang1 + '-' + lang2 }}/">{{ language_names[lang1] | capitalize }} ↔ {{ language_names[lang2] | capitalize }}</a></li>
+	<li><a class="dropdown-item" href="/{{ lang1 + '-' + lang2 }}/">{{ language_names[lang1] | capitalize }} ↔ {{ language_names[lang2] | capitalize }}</a></li>
 {% endmacro -%}
 
 <!DOCTYPE html>
-<html>
+<html class="h-100">
 	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>{% block title %}WikDict{% endblock %}</title>
+
 		{% block css_links %}
 		{% endblock %}
 		{% assets output="gen/packed.css", "bootstrap/css/bootstrap.min.css", "css/main.css" %}
@@ -53,60 +56,56 @@
 			}finally{}
 		</script>
 	</head>
-	<body>
+	<body class="d-flex flex-column h-100">
 		<!-- Static navbar -->
-		<nav class="navbar navbar-default navbar-static-top">
-		<div class="container container-outer">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="/">WikDict</a>
-			</div>
-			<div id="navbar" class="navbar-collapse collapse">
-				<ul class="nav navbar-nav">
-					<li class="dropdown {{ 'active' if page_name == 'lookup' else ''}}">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-							{% if from_lang %}
-								{{ language_names[from_lang] | capitalize }} ↔ {{ language_names[to_lang] | capitalize }}
-							{% else %}
-								Select Languages
-							{% endif %}
-							<span class="caret"></span>
-						</a>
-						<ul class="dropdown-menu" role="menu">
-							{% if last_dicts %}
-								<li role="presentation" class="dropdown-header">Recent</li>
-								{% for d in last_dicts if from_lang is not defined or d != from_lang + '-' + to_lang %}
-									{{ langli(*d.split('-')) if loop.index <= 3 else ''}}
-								{% endfor %}
-								<li class="divider"></li>
-							{% endif %}
+		<nav class="navbar navbar-expand-md navbar-light bg-light">
+		<div class="container d-flex justify-content-start">
+            <a class="navbar-brand" href="/">WikDict</a>
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle {{ 'active' if page_name == 'lookup' else ''}}" role="button" id="navbarScrollingDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        {% if from_lang %}
+                            {{ language_names[from_lang] | capitalize }} ↔ {{ language_names[to_lang] | capitalize }}
+                        {% else %}
+                            Select Languages
+                        {% endif %}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                        {% if last_dicts %}
+                            <li><h6 class="dropdown-header">Recent</h6></li>
+                            {% for d in last_dicts if from_lang is not defined or d != from_lang + '-' + to_lang %}
+                                {{ langli(*d.split('-')) if loop.index <= 3 else ''}}
+                            {% endfor %}
+                            <li><hr class="dropdown-divider"></li>
+                        {% endif %}
 
-							{% for lang1 in [from_lang, to_lang]%}
-								<li role="presentation" class="dropdown-header">{{ language_names[lang1] }}</li>
-								{% for lp in lang_pairs if lp.large_enough and lang1 in (lp.lang1, lp.lang2) %}
-									{{ langli(lang1, lp.lang2 if lp.lang2 != lang1 else lp.lang1) }}
-								{% endfor %}
-								<li class="divider"></li>
-							{% endfor %}
+                        {% for lang1 in [from_lang, to_lang]%}
+                            <li><h6 class="dropdown-header">{{ language_names[lang1] }}</h6></li>
+                            {% for lp in lang_pairs if lp.large_enough and lang1 in (lp.lang1, lp.lang2) %}
+                                {{ langli(lang1, lp.lang2 if lp.lang2 != lang1 else lp.lang1) }}
+                            {% endfor %}
+                            <li><hr class="dropdown-divider"></li>
+                        {% endfor %}
 
-							<li><a href="/">More&hellip;</a></li>
-						</ul>
-					</li>
-					<li {% if page_name == 'about' %} class="active"{% endif %}><a href="/page/about">About</a></li>
-					<li><a href="http://blog.wikdict.com">Blog</a></li>
-					<li {% if page_name == 'contact' %} class="active"{% endif %}><a href="/page/contact">Contact</a></li>
-					<li {% if page_name == 'download' %} class="active"{% endif %}><a href="/page/download">Downloads</a></li>
-				</ul>
-			</div>
+                        <li><a class="dropdown-item" href="/">More&hellip;</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsible-links" aria-controls="collapsible-links" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsible-links">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link {% if page_name == 'about' %}active{% endif %}" href="/page/about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="http://blog.wikdict.com">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link {% if page_name == 'contact' %}active{% endif %}" href="/page/contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link {% if page_name == 'download' %}active{% endif %}" href="/page/download">Downloads</a></li>
+                </ul>
+            </div>
 		</div>
 		</nav>
 
-		<div class="container container-outer">
+		<main class="container flex-grow-1 py-4">
 
 			{% block main %}
 			{% endblock %}
@@ -130,10 +129,10 @@
                 </table>
 			{% endif %}
 
-		</div>
+		</main>
 
-		<footer class="footer">
-			<div class="container container-outer text-muted">
+		<footer class="footer bg-light py-3">
+			<div class="container text-muted">
 				WikDict by <a href="http://www.karl.berlin">Karl Bartel</a>.
 				Data from <a href="http://www.wiktionary.org">Wiktionary</a>
 				via <a href="http://kaiko.getalp.org/about-dbnary/">DBnary</a>
@@ -142,7 +141,7 @@
 		</footer>
 
 		{% assets output="gen/packed.js",
-			"js/jquery-3.1.1.min.js", "bootstrap/js/bootstrap.min.js", "js/typeahead.jquery.min.js", "js/lookup.js" %}
+			"js/jquery-3.1.1.min.js", "bootstrap/js/bootstrap.bundle.min.js", "js/typeahead.jquery.min.js", "js/lookup.js" %}
 			<script src="{{ ASSET_URL }}" type="text/javascript"></script>
 		{% endassets %}
 		{% block scripts %}
