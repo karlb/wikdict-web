@@ -2,10 +2,11 @@
     color: black !important;
     font-size: 25px;
     font-weight: 500;
-    background-image: url(/static/img/icons/favicon-32x32.png);
-    background-repeat: no-repeat;
-    background-position: 15px 12px;
-    padding-left: 52px;
+}
+.navbar-brand img {
+    height: 1.2em;
+    margin-right: 0.2em;
+    margin-top: 0.1em;
 }
 
 .pronun .gender {
