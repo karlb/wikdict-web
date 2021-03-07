@@ -59,16 +59,14 @@
 	<body class="d-flex flex-column h-100">
 		<!-- Static navbar -->
 		<nav class="navbar navbar-expand-md navbar-light bg-light">
-		<div class="container d-flex justify-content-start">
-            <a class="navbar-brand" href="/"><img src="/static/img/wikdict.svg" alt="">WikDict</a>
+		<div class="container" style="align-items: flex-start">
+            <a class="navbar-brand" href="/"><img src="/static/img/wikdict.svg" alt=""><span class="brand-text">WikDict</span></a>
             <ul class="navbar-nav flex-grow-1">
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle {{ 'active' if page_name == 'lookup' else ''}}" role="button" id="navbarScrollingDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        {% if from_lang %}
-                            {{ language_names[from_lang] | capitalize }} ↔ {{ language_names[to_lang] | capitalize }}
-                        {% else %}
-                            Select Languages
-                        {% endif %}
+                        <span class="navbar-lang">{{ language_names[from_lang] | capitalize }}</span>
+                        ↔
+                        <span class="navbar-lang">{{ language_names[to_lang] | capitalize }}</span>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
                         {% if last_dicts %}

@@ -1,7 +1,22 @@
 .navbar-brand {
-    color: black !important;
-    font-size: 25px;
-    font-weight: 500;
+    font-size: 1.4em;
+    margin-top: -0.06em;
+}
+@media (max-width: 360px) {
+    .navbar-brand .brand-text {
+        display: none;
+    }
+    .navbar-brand {
+        margin-right: 0.4rem;
+    }
+}
+.navbar-lang {
+    max-width: 20vw;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    white-space: nowrap;
 }
 .navbar-brand img {
     height: 1.2em;
