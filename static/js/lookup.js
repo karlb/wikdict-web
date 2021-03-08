@@ -1,12 +1,4 @@
 $(function() {
-    // search provider
-    if (window.external && ("AddSearchProvider" in window.external)) {
-        $('#add-search-provider-block').show();
-        $('#add-search-provider').click(function () {
-            window.external.AddSearchProvider('https://www.wikdict.com/opensearch/' + from_lang + '-' + to_lang);
-        });
-    }
-
     // language selection
     $('.lang-select').change(function () {
         window.location = '/' + this.value + '/';
