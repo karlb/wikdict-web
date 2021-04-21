@@ -25,7 +25,7 @@ Apart from the end user oriented dictionaries, the raw information is also avail
 
 #### SQLite Databases
 
-This is the native format used by WikDict. These databases contain all information available on the website and all other formats are created by converting from this format. Use the [sqlite3 command line tool](https://sqlite.org/cli.html) or one of the many other database tools with SQLite support to interact with the data.
+This is the native format used by WikDict. [These databases](http://download.wikdict.com/dictionaries/sqlite) contain all information available on the website and all other formats are created by converting from this format. Use the [sqlite3 command line tool](https://sqlite.org/cli.html) or one of the many other database tools with SQLite support to interact with the data.
 
 The data is split up into separate databases, a pair of databases for each language pair (one per direction, mostly containing translation) and one database per language (containing basic information about words, e.g. part of speech, inflections).
 
