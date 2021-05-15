@@ -98,18 +98,20 @@ def lookup(from_lang, to_lang, query: str=None):
                 for lang in (from_lang, to_lang)
             ) if val  # skip langs without results
         )
+        description = make_description(results[0])
     else:
         results = None
         wiktionary_links = None
         templ_vals['rough_translations'] = '%.1f' % (
             sum(lp.total_trans for lp in base.get_lang_pairs()) // 100000 / 10
         )
+        description = 'Free bilingual dictionaries for many languages'
     return base.render_template('lookup.html',
         from_lang=from_lang,
         to_lang=to_lang,
         query=query,
         results=results,
-        description=make_description(results[0]),
+        description=description,
         page_name='lookup',
         wiktionary_links=wiktionary_links,
         **templ_vals
