@@ -15,6 +15,13 @@ def format_gender(gender):
     return gender_map.get(gender, gender[0])
 
 
+def format_pronun(pronun):
+    """ Wrap pronunciation in slashes if it is not wrapped """
+    if pronun.startswith("/") or pronun.startswith("["):
+        return pronun
+    return "/" + pronun + "/"
+
+
 def fetch_idioms(conn, query):
     """ Fetches short translations summary for matches
 

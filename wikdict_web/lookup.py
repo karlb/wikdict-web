@@ -187,4 +187,5 @@ def make_description(results: wikdict_query.CombinedResult):
 def add_functions():
     return dict(
         format_gender=wikdict_query.format_gender,
+        format_pronun=wikdict_query.format_pronun,
     )

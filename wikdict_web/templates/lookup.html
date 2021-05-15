@@ -117,7 +117,11 @@
             <div class="text-muted forms">
                 {{ lexentry.forms | join(', ') if lexentry.forms }}
                 {% if lexentry.pronuns %}
-                    &nbsp; /{{ lexentry.pronuns | join('/, /') }}/
+                    &nbsp;
+                    {% for p in lexentry.pronuns %}
+                        {{ format_pronun(p) }}
+                        {{ ',' if not loop.last }}
+                    {% endfor%}
                 {% endif %}
             </div>
             <ol class="sense-groups">
