@@ -77,16 +77,25 @@ def namedtuple_factory(cursor, row):
     return Row(*row)
 
 
-def db_query(db_name, stmt, bind_params=(), path='dict', attach_dbs=None, explain=False):
-    path_for_db = lambda db: DATA_DIR + '/' + path + '/' + db + '.sqlite3'
-    conn = sqlite3.connect(path_for_db(db_name))
+def path_for_db(db, path='dict'):
+    return DATA_DIR + '/' + path + '/' + db + '.sqlite3'
+
+
+def get_conn(db_name, path='dict', attach_dbs=None):
+    print(path_for_db(db_name, path))
+    conn = sqlite3.connect(path_for_db(db_name, path))
     conn.isolation_level = None  # autocommit
     conn.row_factory = namedtuple_factory
     conn.enable_load_extension(True)
     conn.load_extension(sqlite_spellfix.extension_path())
+    return conn
+
+
+def db_query(db_name, stmt, bind_params=(), path='dict', attach_dbs=None, explain=False):
+    conn = get_conn(db_name, path, attach_dbs)
     cur = conn.cursor()
     for name, db in (attach_dbs or {}).items():
-        cur.execute("ATTACH DATABASE '{}' AS {}".format(path_for_db(db), name))
+        cur.execute("ATTACH DATABASE '{}' AS {}".format(path_for_db(db, path), name))
     if explain:
         condensed_stmt = ' '.join(stmt.split())
         print('\nPlan for {}'.format(repr(condensed_stmt[:160])))

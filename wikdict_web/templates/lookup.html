@@ -63,39 +63,6 @@
 	{%- endif -%}
 {% endmacro %}
 
-{% macro show_word(vocable, lang, part_of_speech, sense_list=None, lexentry=None) %}
-    {% if lexentry %}
-        {% set voc = entry_details(vocable, lexentry, lang, from_lang, to_lang) %}
-    {% else %}
-        {% set voc = vocable_details(vocable, lang, part_of_speech or None, from_lang, to_lang) %}
-    {% endif %}
-    <span class="translation" data-lexentry="{{ voc.get('lexentry') or '' }}">
-		{% call optional_link(voc.url) -%}
-			{{ voc.display }}
-			{%- if voc.display_addition %}
-				({{ voc.display_addition }})
-			{%- endif -%}
-		{%- endcall -%}
-        <span class="text-muted">
-            {% if voc.gender %}
-                <span class="gender">{{ '{' + voc.gender + '}' }}</span>
-            {% endif %}
-            {% if voc.pronuns %}
-                <span class="pronun">{{ voc.pronuns | join(', ') }}</span>
-            {% endif %}
-        </span>
-	</span>
-    {% if sense_list %}
-        <div class="text-muted">
-            <ul class="gloss">
-                {% for gloss in sense_list.split(' | ') %}
-                <li>{{ gloss }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
-{% endmacro %}
-
 
 {% macro search_form() %}
     <div class="container">
@@ -135,30 +102,63 @@
 {% endmacro %}
 
 
-{% macro results_one_dir(left_lang, right_lang, results) %}
+{% macro results_one_dir(results) %}
 {% if results %}
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>{{ language_names[left_lang] | capitalize }}</th>
-            <th>{{ language_names[right_lang] | capitalize }}</th>
-        </tr>
-        </thead>
-        {% for lex_result in results %}
-        {% for result in lex_result %}
-        <tr>
-            <td>{{ show_word(result.written_rep, left_lang, result.part_of_speech, result.sense_list,
-                lexentry=result.lexentry) }}</td>
-            <td>
-                {% for t in result.trans_list.split(' | ') if t != '' %}
-                {{ show_word(t, right_lang, result.part_of_speech) }}
-                <br>
+    <h2 class="lang-result text-muted">{{ results.from_lang }}</h2>
+    {% for lexentry in results['definitions'] %}
+        <div>
+            <h3>
+                {{ lexentry.written_rep }}
+                <small class="text-muted">
+                    {{ lexentry.part_of_speech if lexentry.part_of_speech}}
+                    {{ "{" + format_gender(lexentry.gender) + "}" if lexentry.gender }}
+                </small>
+            </h3>
+            <div class="text-muted forms">
+                {{ lexentry.forms | join(', ') if lexentry.forms }}
+                {% if lexentry.pronuns %}
+                    &nbsp; /{{ lexentry.pronuns | join('/, /') }}/
+                {% endif %}
+            </div>
+            <ol class="sense-groups">
+                {% for sg in lexentry["sense_groups"] %}
+                    <li style="">
+                        <div>
+                            {% for trans in sg['translations'] %}
+                                {#-
+                                    TODO: should we check for the existance of the link target?
+                                    If we don't want that, we can use a plain <a> instead of optional_link.
+                                #}
+                                {% call optional_link(trans) %}{{ trans }}{% endcall -%}
+                                {{- ',' if not loop.last -}}
+                            {% endfor %}
+                        </div>
+                        {% if sg['senses'] %}
+                            <ul class="gloss text-muted">
+                                {% for sense in sg['senses'] %}
+                                    <li>{{sense}}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </li>
                 {% endfor %}
-            </td>
-        </tr>
-        {% endfor %}
-        {% endfor %}
-    </table>
+            </ol>
+        </div>
+    {% endfor %}
+{% endif %}
+
+{% if results['idioms'] %}
+    <dl class="row">
+    {% for idiom in results['idioms'] %}
+        <dt class="col-sm-3"><a href="{{ idiom.written_rep }}">{{ idiom.written_rep }}</a></dt>
+        <dd class="col-sm-9">
+            {% for trans in idiom.translations %}
+                {% call optional_link(trans) %}{{ trans }}{% endcall -%}
+                {{- ',' if not loop.last -}}
+            {% endfor %}
+        </dd>
+    {% endfor %}
+    </dl>
 {% endif %}
 {% endmacro %}
 
@@ -181,7 +181,8 @@
 
             <div id="results" class="col-md-9">
                 {% for lang_result in results %}
-                    {{ results_one_dir(lang_result.from_lang, lang_result.to_lang, lang_result) }}
+                    {% if not loop.first and lang_result %}<hr>{% endif %}
+                    {{ results_one_dir(lang_result) }}
                 {% endfor %}
                 {% if not results[0] and not results[1] %}
                     <div class="jumbotron">

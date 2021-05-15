@@ -1,3 +1,31 @@
+.sense-groups {
+    display: table;
+}
+.sense-groups > li {
+    /* display: flex; flex-direction: row; */
+    display: table-row;
+}
+.sense-groups > li > * {
+    display: table-cell;
+    padding-bottom: 0.25em;
+}
+.sense-groups > li > *:first-child {
+    min-width: 8em;
+}
+.forms {
+    margin: -0.6em 0 0.4em 0;
+}
+.lang-result {
+    float: right;
+}
+#results a {
+    color: var(--dark);
+}
+#results a:hover {
+    text-decoration: underline;
+}
+
+
 .navbar-brand {
     font-size: 1.4em;
     margin-top: -0.06em;
