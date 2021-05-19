@@ -25,6 +25,13 @@
     text-decoration: underline;
 }
 
+/* Indent second and following lines. Element should not have padding itself */
+.text-indent {
+    display: block;
+    padding-left: 1em;
+    text-indent: -1em;
+}
+
 
 .navbar-brand {
     font-size: 1.4em;

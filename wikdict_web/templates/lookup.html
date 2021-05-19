@@ -154,7 +154,7 @@
 {% if results['idioms'] %}
     <dl class="row">
     {% for idiom in results['idioms'] %}
-        <dt class="col-sm-3"><a href="{{ idiom.written_rep }}">{{ idiom.written_rep }}</a></dt>
+        <dt class="col-sm-3"><a class="text-indent" href="{{ idiom.written_rep }}">{{ idiom.written_rep }}</a></dt>
         <dd class="col-sm-9">
             {% for trans in idiom.translations %}
                 {% call optional_link(trans) %}{{ trans }}{% endcall -%}
