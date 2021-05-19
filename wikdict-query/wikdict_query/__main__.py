@@ -30,13 +30,9 @@ def print_result(r):
         print()
 
 
-query = sys.argv[1]
-conn = sqlite3.connect(
-    "/home/karl/code/github/wikdict-gen/dictionaries/wdweb/de-sv.sqlite3"
-    # "/home/karl/code/github/wikdict-gen/dictionaries/wdweb/sv-de.sqlite3"
-)
-
-# lexentries = list(define(conn, query))
+db_filename = sys.argv[1]
+query = sys.argv[2]
+conn = sqlite3.connect(db_filename)
 
 result = combined_result(conn, query)
 
