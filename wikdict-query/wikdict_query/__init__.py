@@ -3,6 +3,7 @@ import json
 from pprint import pprint
 import sys
 from dataclasses import dataclass
+from typing import Iterable
 
 
 def format_gender(gender):
@@ -48,7 +49,7 @@ def fetch_idioms(conn, query):
         )
 
 
-def _process_fetched_lexentry(result):
+def _process_fetched_lexentry(result) -> dict:
     result = dict(result)
 
     for key in ["sense_groups", "forms", "pronuns"]:
@@ -87,7 +88,7 @@ def _score_match(matchinfo: bytes, form, query) -> float:
         raise
 
 
-def match(conn, query, limit=10, min_match_score=0):
+def match(conn, query, limit=10, min_match_score=0) -> Iterable[dict]:
     """ Detailed matches for all forms.
 
     Use min_match_score to restrict results to more exact matches.
@@ -122,7 +123,7 @@ def match(conn, query, limit=10, min_match_score=0):
         yield _process_fetched_lexentry(result)
 
 
-def define(conn, query):
+def define(conn, query) -> Iterable[dict]:
     return match(conn, query, min_match_score=1)
     # cur = conn.cursor()
     # cur.row_factory = sqlite3.Row
