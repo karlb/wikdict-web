@@ -113,7 +113,7 @@
         <table class="lexentry table table-striped">
 			<thead>
 			<tr>
-				<th>
+				<th colspan="2">
 					<h3>
 						{{ lexentry.written_rep }}
 						<small class="text-muted">
@@ -132,7 +132,6 @@
 						{% endif %}
 					</div>
 				</th>
-				<th></th>
 			</tr>
 			</thead>
 			{% for sg in lexentry["sense_groups"] %}
@@ -197,7 +196,6 @@
 
             <div id="results" class="col-md-9">
                 {% for lang_result in results %}
-                    {% if not loop.first and lang_result %}<hr>{% endif %}
                     {{ results_one_dir(lang_result) }}
                 {% endfor %}
                 {% if not results[0] and not results[1] %}
