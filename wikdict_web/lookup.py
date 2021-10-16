@@ -77,7 +77,9 @@ def lookup(from_lang, to_lang, query: str=None):
             wikdict_query.combined_result(conn2, query),
         ]
         results[0].from_lang = from_lang  # type: ignore
+        results[0].to_lang = to_lang  # type: ignore
         results[1].from_lang = to_lang  # type: ignore
+        results[1].to_lang = from_lang  # type: ignore
         results.sort(key=lambda r: -r.score)
 
         if not results[0] and not results[1]:

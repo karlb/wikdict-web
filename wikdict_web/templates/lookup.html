@@ -104,65 +104,77 @@
 
 {% macro results_one_dir(results) %}
 {% if results %}
-    <h2 class="lang-result text-muted">{{ results.from_lang }}</h2>
+<div class="lang-result">
+	<h2 class="text-muted">
+		<span>{{ results.from_lang }}</span>
+		<span>{{ results.to_lang }}</span>
+	</h2>
     {% for lexentry in results['definitions'] %}
-        <div>
-            <h3>
-                {{ lexentry.written_rep }}
-                <small class="text-muted">
-                    {{ lexentry.part_of_speech if lexentry.part_of_speech}}
-                    {{ "{" + format_gender(lexentry.gender) + "}" if lexentry.gender }}
-                </small>
-            </h3>
-            <div class="text-muted forms">
-                {{ lexentry.forms | join(', ') if lexentry.forms }}
-                {% if lexentry.pronuns %}
-                    &nbsp;
-                    {% for p in lexentry.pronuns %}
-                        {{ format_pronun(p) }}
-                        {{ ',' if not loop.last }}
-                    {% endfor%}
-                {% endif %}
-            </div>
-            <ol class="sense-groups">
-                {% for sg in lexentry["sense_groups"] %}
-                    <li style="">
-                        <div>
-                            {% for trans in sg['translations'] %}
-                                {#-
-                                    TODO: should we check for the existance of the link target?
-                                    If we don't want that, we can use a plain <a> instead of optional_link.
-                                #}
-                                {% call optional_link(trans) %}{{ trans }}{% endcall -%}
-                                {{- ',' if not loop.last -}}
-                            {% endfor %}
-                        </div>
-                        {% if sg['senses'] %}
-                            <ul class="gloss text-muted">
-                                {% for sense in sg['senses'] %}
-                                    <li>{{sense}}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    </li>
-                {% endfor %}
-            </ol>
-        </div>
+        <table class="lexentry table table-striped">
+			<thead>
+			<tr>
+				<th>
+					<h3>
+						{{ lexentry.written_rep }}
+						<small class="text-muted">
+							{{ lexentry.part_of_speech if lexentry.part_of_speech}}
+							{{ "{" + format_gender(lexentry.gender) + "}" if lexentry.gender }}
+						</small>
+					</h3>
+					<div class="text-muted forms">
+						{{ lexentry.forms | join(', ') if lexentry.forms }}
+						{% if lexentry.pronuns %}
+							&nbsp;
+							{% for p in lexentry.pronuns %}
+								{{ format_pronun(p) }}
+								{{ ',' if not loop.last }}
+							{% endfor%}
+						{% endif %}
+					</div>
+				</th>
+				<th></th>
+			</tr>
+			</thead>
+			{% for sg in lexentry["sense_groups"] %}
+				<tr class="sense-groups">
+					<td>
+						{% if sg['senses'] %}
+							<ul class="gloss text-muted">
+								{% for sense in sg['senses'] %}
+									<li>{{sense}}</li>
+								{% endfor %}
+							</ul>
+						{% endif %}
+					</td>
+					<td>
+						{% for trans in sg['translations'] %}
+							{#-
+								TODO: should we check for the existance of the link target?
+								If we don't want that, we can use a plain <a> instead of optional_link.
+							#}
+							{% call optional_link(trans) %}{{ trans }}{% endcall -%}
+							{{- ',' if not loop.last -}}
+						{% endfor %}
+					</td>
+				</tr>
+			{% endfor %}
+        </table>
     {% endfor %}
-{% endif %}
 
-{% if results['idioms'] %}
-    <dl class="row">
-    {% for idiom in results['idioms'] %}
-        <dt class="col-sm-3"><a class="text-indent" href="{{ idiom.written_rep }}">{{ idiom.written_rep }}</a></dt>
-        <dd class="col-sm-9">
-            {% for trans in idiom.translations %}
-                {% call optional_link(trans) %}{{ trans }}{% endcall -%}
-                {{- ',' if not loop.last -}}
-            {% endfor %}
-        </dd>
-    {% endfor %}
-    </dl>
+    {% if results['idioms'] %}
+        <dl class="row">
+        {% for idiom in results['idioms'] %}
+            <dt class="col-sm-3"><a class="text-indent" href="{{ idiom.written_rep }}">{{ idiom.written_rep }}</a></dt>
+            <dd class="col-sm-9">
+                {% for trans in idiom.translations %}
+                    {% call optional_link(trans) %}{{ trans }}{% endcall -%}
+                    {{- ',' if not loop.last -}}
+                {% endfor %}
+            </dd>
+        {% endfor %}
+        </dl>
+    {% endif %}
+</div>
 {% endif %}
 {% endmacro %}
 
