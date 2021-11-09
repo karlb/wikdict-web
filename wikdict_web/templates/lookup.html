@@ -106,8 +106,8 @@
 {% if results %}
 <div class="lang-result">
 	<h2 class="text-muted">
-		<span>{{ results.from_lang }}</span>
-		<span>{{ results.to_lang }}</span>
+		<span>{{ languages[results.from_lang].flag }} {{ results.from_lang }}</span>
+		<span>{{ results.to_lang }} {{ languages[results.to_lang].flag }}</span>
 	</h2>
     {% for lexentry in results['definitions'] %}
         <table class="lexentry table table-striped">
