@@ -9,6 +9,7 @@ import flask
 from flask import session, g
 
 from .languages import language_names
+from wikdict_query.data import languages
 
 DATA_DIR = os.environ['OPENSHIFT_DATA_DIR']
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -128,6 +129,7 @@ def render_template(filename, **kwargs):
     lang_pairs = get_lang_pairs()
     return flask.render_template(filename,
         language_names=language_names,
+        languages=languages,
         available_langs=available_langs,
         lang_pairs=lang_pairs,
         last_dicts=[d for d in session.get('last_dicts', []) if d != kwargs['from_lang'] + '-' + kwargs['to_lang']],

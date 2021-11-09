@@ -76,7 +76,7 @@
         </div>
 		{% if not query %}
 			<div class="use-notice">
-				Enter a word in {{ language_names[from_lang] }} or {{ language_names[to_lang] }}
+				Enter a word in {{ languages[from_lang].label_en }} or {{ languages[to_lang].label_en }}
 			</div>
 		{% endif %}
 	</form>
