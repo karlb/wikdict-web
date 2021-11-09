@@ -40,9 +40,6 @@ for language_from in "${languages[@]}"; do
 done
 
 
-mkdir -p data/dict
-
-
 for name in wikdict "${languages[@]}" "${language_pairs[@]}"; do
     basename="${name}.sqlite3"
     filename="data/dict/${basename}"
