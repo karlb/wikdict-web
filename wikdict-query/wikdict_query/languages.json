@@ -1,0 +1,1070 @@
+[
+  {
+    "lang": "http://www.wikidata.org/entity/Q9035",
+    "langLabel": "Danish",
+    "iso3": "dan",
+    "iso2": "da"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33295",
+    "langLabel": "Fijian",
+    "iso3": "fij",
+    "iso2": "fj"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33348",
+    "langLabel": "Chuvash",
+    "iso3": "chv",
+    "iso2": "cv"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33273",
+    "langLabel": "Chewa",
+    "iso3": "nya",
+    "iso2": "ny"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q188",
+    "langLabel": "German",
+    "iso3": "deu",
+    "iso2": "de"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33673",
+    "langLabel": "Kannada",
+    "iso3": "kan",
+    "iso2": "kn"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33947",
+    "langLabel": "Northern Sami",
+    "iso3": "sme",
+    "iso2": "se"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q34014",
+    "langLabel": "Swazi",
+    "iso3": "ssw",
+    "iso2": "ss"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q34094",
+    "langLabel": "Tongan",
+    "iso3": "ton",
+    "iso2": "to"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q7930",
+    "langLabel": "Malagasy",
+    "iso3": "mlg",
+    "iso2": "mg"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9240",
+    "langLabel": "Indonesian",
+    "iso3": "ind",
+    "iso2": "id"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q36236",
+    "langLabel": "Malayalam",
+    "iso3": "mal",
+    "iso2": "ml"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q36217",
+    "langLabel": "Lingala",
+    "iso3": "lin",
+    "iso2": "ln"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q36451",
+    "langLabel": "Māori",
+    "iso3": "mri",
+    "iso2": "mi"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q36510",
+    "langLabel": "Modern Greek",
+    "iso3": "ell",
+    "iso2": "el"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q36850",
+    "langLabel": "Twi",
+    "iso3": "twi",
+    "iso2": "tw"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9314",
+    "langLabel": "Scottish Gaelic",
+    "iso3": "gla",
+    "iso2": "gd"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9199",
+    "langLabel": "Vietnamese",
+    "iso3": "vie",
+    "iso2": "vi"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q34257",
+    "langLabel": "Wolof",
+    "iso3": "wol",
+    "iso2": "wo"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33900",
+    "langLabel": "Ndonga",
+    "iso3": "ndo",
+    "iso2": "ng"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q34235",
+    "langLabel": "Nuosu",
+    "iso3": "iii",
+    "iso2": "ii"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9067",
+    "langLabel": "Hungarian",
+    "iso3": "hun",
+    "iso2": "hu"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9027",
+    "langLabel": "Swedish",
+    "iso3": "swe",
+    "iso2": "sv"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q56475",
+    "langLabel": "Hausa",
+    "iso3": "hau",
+    "iso2": "ha"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q7913",
+    "langLabel": "Romanian",
+    "iso3": "ron",
+    "iso2": "ro"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9078",
+    "langLabel": "Latvian",
+    "iso3": "lav",
+    "iso2": "lv"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9078",
+    "langLabel": "Latvian",
+    "iso3": "lvs",
+    "iso2": "lv"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33454",
+    "langLabel": "Fula",
+    "iso3": "ful",
+    "iso2": "ff"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9063",
+    "langLabel": "Slovene",
+    "iso3": "slv",
+    "iso2": "sl"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q27811",
+    "langLabel": "Afar",
+    "iso3": "aar",
+    "iso2": "aa"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33573",
+    "langLabel": "Kinyarwanda",
+    "iso3": "kin",
+    "iso2": "rw"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q8798",
+    "langLabel": "Ukrainian",
+    "iso3": "ukr",
+    "iso2": "uk"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q36094",
+    "langLabel": "Kanuri",
+    "iso3": "kau",
+    "iso2": "kr"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33262",
+    "langLabel": "Chamorro",
+    "iso3": "cha",
+    "iso2": "ch"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q7838",
+    "langLabel": "Swahili",
+    "iso3": "swa",
+    "iso2": "sw"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q36126",
+    "langLabel": "Komi",
+    "iso3": "kom",
+    "iso2": "kv"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9168",
+    "langLabel": "Persian",
+    "iso3": "fas",
+    "iso2": "fa"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q12107",
+    "langLabel": "Breton",
+    "iso3": "bre",
+    "iso2": "br"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q34327",
+    "langLabel": "Tsonga",
+    "iso3": "tso",
+    "iso2": "ts"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q4627",
+    "langLabel": "Aymara",
+    "iso3": "aym",
+    "iso2": "ay"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9237",
+    "langLabel": "Malay",
+    "iso3": "msa",
+    "iso2": "ms"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q5111",
+    "langLabel": "Abkhaz",
+    "iso3": "abk",
+    "iso2": "ab"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33491",
+    "langLabel": "Haitian Creole",
+    "iso3": "hat",
+    "iso2": "ht"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q7737",
+    "langLabel": "Russian",
+    "iso3": "rus",
+    "iso2": "ru"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q34004",
+    "langLabel": "Shona",
+    "iso3": "sna",
+    "iso2": "sn"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q34128",
+    "langLabel": "Tahitian",
+    "iso3": "tah",
+    "iso2": "ty"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q8641",
+    "langLabel": "Yiddish",
+    "iso3": "yid",
+    "iso2": "yi"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q25164",
+    "langLabel": "Nynorsk",
+    "iso3": "nno",
+    "iso2": "nn"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33976",
+    "langLabel": "Sardinian",
+    "iso3": "srd",
+    "iso2": "sc"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q35876",
+    "langLabel": "Guarani",
+    "iso3": "grn",
+    "iso2": "gn"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q36280",
+    "langLabel": "Marshallese",
+    "iso3": "mah",
+    "iso2": "mh"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33552",
+    "langLabel": "Kashmiri",
+    "iso3": "kas",
+    "iso2": "ks"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q27183",
+    "langLabel": "Inupiat",
+    "iso3": "ipk",
+    "iso2": "ik"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q143",
+    "langLabel": "Esperanto",
+    "iso3": "epo",
+    "iso2": "eo"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9252",
+    "langLabel": "Kazakh",
+    "iso3": "kaz",
+    "iso2": "kk"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33617",
+    "langLabel": "Hiri Motu",
+    "iso3": "hmo",
+    "iso2": "ho"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9176",
+    "langLabel": "Korean",
+    "iso3": "kor",
+    "iso2": "ko"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q29561",
+    "langLabel": "Avaric",
+    "iso3": "ava",
+    "iso2": "av"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33578",
+    "langLabel": "Igbo",
+    "iso3": "ibo",
+    "iso2": "ig"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q7026",
+    "langLabel": "Catalan",
+    "iso3": "cat",
+    "iso2": "ca"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q8097",
+    "langLabel": "Telugu",
+    "iso3": "tel",
+    "iso2": "te"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9228",
+    "langLabel": "Burmese",
+    "iso3": "mya",
+    "iso2": "my"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q809",
+    "langLabel": "Polish",
+    "iso3": "pol",
+    "iso2": "pl"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q34124",
+    "langLabel": "Tigrinya",
+    "iso3": "tir",
+    "iso2": "ti"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q36785",
+    "langLabel": "Southern Ndebele",
+    "iso3": "nbl",
+    "iso2": "nr"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q34271",
+    "langLabel": "Tibetan",
+    "iso3": "bod",
+    "iso2": "bo"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9051",
+    "langLabel": "Luxembourgish",
+    "iso3": "ltz",
+    "iso2": "lb"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q25285",
+    "langLabel": "Tatar",
+    "iso3": "tat",
+    "iso2": "tt"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q32704",
+    "langLabel": "Venda",
+    "iso3": "ven",
+    "iso2": "ve"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q58635",
+    "langLabel": "Punjabi",
+    "iso3": "pan",
+    "iso2": "pa"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q34219",
+    "langLabel": "Walloon",
+    "iso3": "wln",
+    "iso2": "wa"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q34137",
+    "langLabel": "Tswana",
+    "iso3": "tsn",
+    "iso2": "tn"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q35613",
+    "langLabel": "Northern Ndebele",
+    "iso3": "nde",
+    "iso2": "nd"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33875",
+    "langLabel": "Ojibwe",
+    "iso3": "oji",
+    "iso2": "oj"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q294",
+    "langLabel": "Icelandic",
+    "iso3": "isl",
+    "iso2": "is"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q34002",
+    "langLabel": "Sundanese",
+    "iso3": "sun",
+    "iso2": "su"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q36157",
+    "langLabel": "Luba-Katanga",
+    "iso3": "lub",
+    "iso2": "lu"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q14196",
+    "langLabel": "Afrikaans",
+    "iso3": "afr",
+    "iso2": "af"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33315",
+    "langLabel": "Herero",
+    "iso3": "her",
+    "iso2": "hz"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9129",
+    "langLabel": "Greek",
+    "iso3": "ell",
+    "iso2": "el"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q10179",
+    "langLabel": "Zulu",
+    "iso3": "zul",
+    "iso2": "zu"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q102172",
+    "langLabel": "Limburgish",
+    "iso3": "lim",
+    "iso2": "li"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q5146",
+    "langLabel": "Portuguese",
+    "iso3": "por",
+    "iso2": "pt"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q1321",
+    "langLabel": "Spanish",
+    "iso3": "spa",
+    "iso2": "es"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q1860",
+    "langLabel": "English",
+    "iso3": "eng",
+    "iso2": "en"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9246",
+    "langLabel": "Mongolian",
+    "iso3": "mon",
+    "iso2": "mn"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33583",
+    "langLabel": "Kirundi",
+    "iso3": "run",
+    "iso2": "rn"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q1571",
+    "langLabel": "Marathi",
+    "iso3": "mar",
+    "iso2": "mr"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33823",
+    "langLabel": "Nepali",
+    "iso3": "nep",
+    "iso2": "ne"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q8785",
+    "langLabel": "Armenian",
+    "iso3": "hye",
+    "iso2": "hy"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9142",
+    "langLabel": "Irish",
+    "iso3": "gle",
+    "iso2": "ga"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q5287",
+    "langLabel": "Japanese",
+    "iso3": "jpn",
+    "iso2": "ja"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q1405077",
+    "langLabel": "Kwanyama",
+    "iso3": "kua",
+    "iso2": "kj"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9307",
+    "langLabel": "Galician",
+    "iso3": "glg",
+    "iso2": "gl"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9043",
+    "langLabel": "Norwegian",
+    "iso3": "nor",
+    "iso2": "no"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q36368",
+    "langLabel": "Kurdish",
+    "iso3": "kur",
+    "iso2": "ku"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33549",
+    "langLabel": "Javanese",
+    "iso3": "jav",
+    "iso2": "jv"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q256",
+    "langLabel": "Turkish",
+    "iso3": "tur",
+    "iso2": "tr"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q6654",
+    "langLabel": "Croatian",
+    "iso3": "hrv",
+    "iso2": "hr"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q13389",
+    "langLabel": "Bashkir",
+    "iso3": "bak",
+    "iso2": "ba"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q7918",
+    "langLabel": "Bulgarian",
+    "iso3": "bul",
+    "iso2": "bg"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9091",
+    "langLabel": "Belarusian",
+    "iso3": "bel",
+    "iso2": "be"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9267",
+    "langLabel": "Turkmen",
+    "iso3": "tuk",
+    "iso2": "tk"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33954",
+    "langLabel": "Sango",
+    "iso3": "sag",
+    "iso2": "sg"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q13275",
+    "langLabel": "Somali",
+    "iso3": "som",
+    "iso2": "so"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q13307",
+    "langLabel": "Nauruan",
+    "iso3": "nau",
+    "iso2": "na"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q13267",
+    "langLabel": "Sinhala",
+    "iso3": "sin",
+    "iso2": "si"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q34057",
+    "langLabel": "Tagalog",
+    "iso3": "tgl",
+    "iso2": "tl"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q13263",
+    "langLabel": "Uyghur",
+    "iso3": "uig",
+    "iso2": "ug"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33350",
+    "langLabel": "Chechen",
+    "iso3": "che",
+    "iso2": "ce"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q35452",
+    "langLabel": "Bislama",
+    "iso3": "bis",
+    "iso2": "bi"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q5137",
+    "langLabel": "Gujarati",
+    "iso3": "guj",
+    "iso2": "gu"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9083",
+    "langLabel": "Lithuanian",
+    "iso3": "lit",
+    "iso2": "lt"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q32656",
+    "langLabel": "Dhivehi",
+    "iso3": "div",
+    "iso2": "dv"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q13310",
+    "langLabel": "Navajo",
+    "iso3": "nav",
+    "iso2": "nv"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q1412",
+    "langLabel": "Finnish",
+    "iso3": "fin",
+    "iso2": "fi"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q13199",
+    "langLabel": "Romansh",
+    "iso3": "roh",
+    "iso2": "rm"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q8765",
+    "langLabel": "Aragonese",
+    "iso3": "arg",
+    "iso2": "an"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33968",
+    "langLabel": "Ossetian",
+    "iso3": "oss",
+    "iso2": "os"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q30005",
+    "langLabel": "Ewe",
+    "iso3": "ewe",
+    "iso2": "ee"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q58680",
+    "langLabel": "Pashto",
+    "iso3": "pus",
+    "iso2": "ps"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q13216",
+    "langLabel": "Zhuang",
+    "iso3": "zha",
+    "iso2": "za"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q27175",
+    "langLabel": "West Frisian",
+    "iso3": "fry",
+    "iso2": "fy"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q29401",
+    "langLabel": "Assamese",
+    "iso3": "asm",
+    "iso2": "as"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q25355",
+    "langLabel": "Greenlandic",
+    "iso3": "kal",
+    "iso2": "kl"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33864",
+    "langLabel": "Oromo",
+    "iso3": "orm",
+    "iso2": "om"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9299",
+    "langLabel": "Serbian",
+    "iso3": "srp",
+    "iso2": "sr"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9058",
+    "langLabel": "Slovak",
+    "iso3": "slk",
+    "iso2": "sk"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q25258",
+    "langLabel": "Faroese",
+    "iso3": "fao",
+    "iso2": "fo"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q34311",
+    "langLabel": "Yoruba",
+    "iso3": "yor",
+    "iso2": "yo"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q28026",
+    "langLabel": "Akan",
+    "iso3": "aka",
+    "iso2": "ak"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9211",
+    "langLabel": "Lao",
+    "iso3": "lao",
+    "iso2": "lo"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9288",
+    "langLabel": "Hebrew",
+    "iso3": "heb",
+    "iso2": "he"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9255",
+    "langLabel": "Kyrgyz",
+    "iso3": "kir",
+    "iso2": "ky"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q13955",
+    "langLabel": "Arabic",
+    "iso3": "ara",
+    "iso2": "ar"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33997",
+    "langLabel": "Sindhi",
+    "iso3": "snd",
+    "iso2": "sd"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q25167",
+    "langLabel": "Bokmål",
+    "iso3": "nob",
+    "iso2": "nb"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q7411",
+    "langLabel": "Dutch",
+    "iso3": "nld",
+    "iso2": "nl"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33368",
+    "langLabel": "Luganda",
+    "iso3": "lug",
+    "iso2": "lg"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33587",
+    "langLabel": "Gikuyu",
+    "iso3": "kik",
+    "iso2": "ki"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9205",
+    "langLabel": "Khmer",
+    "iso3": "khm",
+    "iso2": "km"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q14185",
+    "langLabel": "Occitan",
+    "iso3": "oci",
+    "iso2": "oc"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9264",
+    "langLabel": "Uzbek",
+    "iso3": "uzb",
+    "iso2": "uz"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q5885",
+    "langLabel": "Tamil",
+    "iso3": "tam",
+    "iso2": "ta"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q652",
+    "langLabel": "Italian",
+    "iso3": "ita",
+    "iso2": "it"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33810",
+    "langLabel": "Odia",
+    "iso3": "ory",
+    "iso2": "or"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9056",
+    "langLabel": "Czech",
+    "iso3": "ces",
+    "iso2": "cs"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q34011",
+    "langLabel": "Samoan",
+    "iso3": "smo",
+    "iso2": "sm"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9260",
+    "langLabel": "Tajik",
+    "iso3": "tgk",
+    "iso2": "tg"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9072",
+    "langLabel": "Estonian",
+    "iso3": "ekk",
+    "iso2": "et"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9309",
+    "langLabel": "Welsh",
+    "iso3": "cym",
+    "iso2": "cy"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9072",
+    "langLabel": "Estonian",
+    "iso3": "est",
+    "iso2": "et"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9301",
+    "langLabel": "Serbo-Croatian",
+    "iso3": "hbs",
+    "iso2": "sh"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9610",
+    "langLabel": "Bengali",
+    "iso3": "ben",
+    "iso2": "bn"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9303",
+    "langLabel": "Bosnian",
+    "iso3": "bos",
+    "iso2": "bs"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q1617",
+    "langLabel": "Urdu",
+    "iso3": "urd",
+    "iso2": "ur"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q7850",
+    "langLabel": "Chinese",
+    "iso3": "zho",
+    "iso2": "zh"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9292",
+    "langLabel": "Azerbaijani",
+    "iso3": "aze",
+    "iso2": "az"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33081",
+    "langLabel": "Dzongkha",
+    "iso3": "dzo",
+    "iso2": "dz"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9166",
+    "langLabel": "Maltese",
+    "iso3": "mlt",
+    "iso2": "mt"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9217",
+    "langLabel": "Thai",
+    "iso3": "tha",
+    "iso2": "th"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33702",
+    "langLabel": "Kongo",
+    "iso3": "kon",
+    "iso2": "kg"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q8752",
+    "langLabel": "Basque",
+    "iso3": "eus",
+    "iso2": "eu"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q34340",
+    "langLabel": "Sesotho",
+    "iso3": "sot",
+    "iso2": "st"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33111",
+    "langLabel": "Corsican",
+    "iso3": "cos",
+    "iso2": "co"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q12175",
+    "langLabel": "Manx",
+    "iso3": "glv",
+    "iso2": "gv"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33390",
+    "langLabel": "Cree",
+    "iso3": "cre",
+    "iso2": "cr"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q28244",
+    "langLabel": "Amharic",
+    "iso3": "amh",
+    "iso2": "am"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q9296",
+    "langLabel": "Macedonian",
+    "iso3": "mkd",
+    "iso2": "mk"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q5218",
+    "langLabel": "Quechua",
+    "iso3": "que",
+    "iso2": "qu"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q8108",
+    "langLabel": "Georgian",
+    "iso3": "kat",
+    "iso2": "ka"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q29921",
+    "langLabel": "Inuktitut",
+    "iso3": "iku",
+    "iso2": "iu"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q33243",
+    "langLabel": "Bambara",
+    "iso3": "bam",
+    "iso2": "bm"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q25289",
+    "langLabel": "Cornish",
+    "iso3": "cor",
+    "iso2": "kw"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q8748",
+    "langLabel": "Albanian",
+    "iso3": "sqi",
+    "iso2": "sq"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q1568",
+    "langLabel": "Hindi",
+    "iso3": "hin",
+    "iso2": "hi"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q150",
+    "langLabel": "French",
+    "iso3": "fra",
+    "iso2": "fr"
+  },
+  {
+    "lang": "http://www.wikidata.org/entity/Q13218",
+    "langLabel": "Xhosa",
+    "iso3": "xho",
+    "iso2": "xh"
+  }
+]
