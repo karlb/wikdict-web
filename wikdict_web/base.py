@@ -83,8 +83,13 @@ def path_for_db(db, path='dict'):
 
 
 def get_conn(db_name, path='dict', attach_dbs=None):
-    print(path_for_db(db_name, path))
-    conn = sqlite3.connect(path_for_db(db_name, path))
+    db_path = path_for_db(db_name, path)
+
+    print(db_path)
+    if not os.path.exists(db_path):
+        raise sqlite3.OperationalError('Database file "{}" does not exist'.format(db_path))
+
+    conn = sqlite3.connect(db_path)
     conn.isolation_level = None  # autocommit
     conn.row_factory = namedtuple_factory
     conn.enable_load_extension(True)
