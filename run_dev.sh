@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 if [ ! -d venv ]; then
 	python3 -m venv venv
-	CFLAGS='-DSQLITE_ENABLE_ICU' CPPFLAGS=`pkg-config --cflags icu-uc icu-uc icu-i18n` LDFLAGS=`pkg-config --libs icu-uc icu-uc icu-i18n` venv/bin/pip install git+https://github.com/karlb/pysqlite3
 fi
 
 . venv/bin/activate
