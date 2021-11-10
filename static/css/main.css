@@ -92,6 +92,7 @@
 }
 .main-page .search-block {
 	text-align: center;
+	margin-top: 30px;
 }
 .main-page {
     display: flex;
