@@ -11,9 +11,9 @@
 		 template="https://www.wikdict.com/opensearch/typeahead/{{from_lang}}-{{to_lang}}/{searchTerms}?utm_source=opensearch"/>
 	<Attribution>WikDict.com data from Wiktionary via DBnary. Licensed under the CC BY-SA 3.0.</Attribution>
 	<SyndicationRight>open</SyndicationRight>
-	<Image height="16" width="16" type="image/png">http://www.wikdict.com/img/icons/favicon-16x16.png</Image>
-	<Image height="32" width="32" type="image/png">http://www.wikdict.com/img/icons/favicon-32x32.png</Image>
-	<Image height="96" width="96" type="image/png">http://www.wikdict.com/img/icons/favicon-96x96.png</Image>
-	<Image height="194" width="194" type="image/png">http://www.wikdict.com/img/icons/favicon-194x194.png</Image>
-	<Image height="16" width="16" type="image/vnd.microsoft.icon">http://www.wikdict.com/img/icons/favicon.ico</Image>
+	<Image height="16" width="16" type="image/png">https://www.wikdict.com/img/icons/favicon-16x16.png</Image>
+	<Image height="32" width="32" type="image/png">https://www.wikdict.com/img/icons/favicon-32x32.png</Image>
+	<Image height="96" width="96" type="image/png">https://www.wikdict.com/img/icons/favicon-96x96.png</Image>
+	<Image height="194" width="194" type="image/png">https://www.wikdict.com/img/icons/favicon-194x194.png</Image>
+	<Image height="16" width="16" type="image/vnd.microsoft.icon">https://www.wikdict.com/img/icons/favicon.ico</Image>
 </OpenSearchDescription>

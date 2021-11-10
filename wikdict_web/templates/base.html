@@ -48,7 +48,7 @@
 					if (document.referrer && (p.exec(document.referrer)[6] !== document.location.hostname))
 					{
 						var x = new XMLHttpRequest();
-						x.open('POST',"http://www.translunary.com/api/v1.0/refer/karl/www.wikdict.com",true);
+						x.open('POST',"https://www.translunary.com/api/v1.0/refer/karl/www.wikdict.com",true);
 						x.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 						x.send("ref="+encodeURIComponent(document.referrer));
 					}
@@ -95,7 +95,7 @@
             <div class="collapse navbar-collapse" style="justify-content: flex-end" id="collapsible-links">
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link {% if page_name == 'about' %}active{% endif %}" href="/page/about">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="http://blog.wikdict.com">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="https://blog.wikdict.com">Blog</a></li>
                     <li class="nav-item"><a class="nav-link {% if page_name == 'contact' %}active{% endif %}" href="/page/contact">Contact</a></li>
                     <li class="nav-item"><a class="nav-link {% if page_name == 'download' %}active{% endif %}" href="/page/download">Downloads</a></li>
                 </ul>
@@ -131,9 +131,9 @@
 
 		<footer class="footer bg-light py-3">
 			<div class="container text-muted">
-				WikDict by <a href="http://www.karl.berlin">Karl Bartel</a>.
-				Data from <a href="http://www.wiktionary.org">Wiktionary</a>
-				via <a href="http://kaiko.getalp.org/about-dbnary/">DBnary</a>
+				WikDict by <a href="https://www.karl.berlin">Karl Bartel</a>.
+				Data from <a href="https://www.wiktionary.org">Wiktionary</a>
+				via <a href="https://kaiko.getalp.org/about-dbnary/">DBnary</a>
 				licensed under the <a href="//creativecommons.org/licenses/by-sa/3.0/" rel="license">Creative Commons Attribution-ShareAlike License</a>.
 			</div>
 		</footer>

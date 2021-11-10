@@ -2,7 +2,7 @@
 
 This is the web front end for WikDict dictionaries, which is running at [www.wikdict.com].
 
-[www.wikdict.com]: http://www.wikdict.com
+[www.wikdict.com]: https://www.wikdict.com
 
 # Development Setup
 

@@ -8,7 +8,7 @@ Please request new formats by creating a [github issue](https://github.com/karlb
 
 #### StarDict
 
-The [dictionaries in StarDict format](http://download.wikdict.com/dictionaries/stardict/) can be used with a wide variety of different dictionary applications, e.g.:
+The [dictionaries in StarDict format](https://download.wikdict.com/dictionaries/stardict/) can be used with a wide variety of different dictionary applications, e.g.:
 
 * [GoldenDict](http://goldendict.org/) for Linux, Windows
 * [GoldenDict mobile](http://goldendict.mobi/) for Android (non-free)
@@ -17,7 +17,7 @@ The [dictionaries in StarDict format](http://download.wikdict.com/dictionaries/s
 
 #### Kobo E-Readers
 
-After downloading [dictionaries for Kobo e-readers](http://download.wikdict.com/dictionaries/kobo/), connect your e-reader to your PC and copy the zip file(s) to the `.kobo/dict/` folder on your device. Then disconnect the device and enjoy the new dictionaries!
+After downloading [dictionaries for Kobo e-readers](https://download.wikdict.com/dictionaries/kobo/), connect your e-reader to your PC and copy the zip file(s) to the `.kobo/dict/` folder on your device. Then disconnect the device and enjoy the new dictionaries!
 
 ### For Developers
 
@@ -25,7 +25,7 @@ Apart from the end user oriented dictionaries, the raw information is also avail
 
 #### SQLite Databases
 
-This is the native format used by WikDict. [These databases](http://download.wikdict.com/dictionaries/sqlite) contain all information available on the website and all other formats are created by converting from this format. Use the [sqlite3 command line tool](https://sqlite.org/cli.html) or one of the many other database tools with SQLite support to interact with the data.
+This is the native format used by WikDict. [These databases](https://download.wikdict.com/dictionaries/sqlite) contain all information available on the website and all other formats are created by converting from this format. Use the [sqlite3 command line tool](https://sqlite.org/cli.html) or one of the many other database tools with SQLite support to interact with the data.
 
 The data is split up into separate databases, a pair of databases for each language pair (one per direction, mostly containing translation) and one database per language (containing basic information about words, e.g. part of speech, inflections).
 
@@ -33,4 +33,4 @@ To query across multiple databases, use the [`ATTACH DATABASE` command](https://
 
 #### TEI P5 (XML)
 
-If you like XML or come from the linguistic community, you might prefer [these XML files](http://download.wikdict.com/dictionaries/tei/recommended/) encoded in [TEI P5](http://www.tei-c.org/Guidelines/P5/). Each language pair has two XML files, one for each translation direction.
+If you like XML or come from the linguistic community, you might prefer [these XML files](https://download.wikdict.com/dictionaries/tei/recommended/) encoded in [TEI P5](https://www.tei-c.org/Guidelines/P5/). Each language pair has two XML files, one for each translation direction.

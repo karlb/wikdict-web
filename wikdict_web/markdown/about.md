@@ -20,7 +20,7 @@ WikDict aims to provide free bilingual dictionary data for all use cases. You ar
 #### Which data is available and where does if come from?
 
 <img style="float: right; width: 15%" src="/static/img/markdown/mit-license.svg">
-All data is extracted from [Wiktionary](http://www.wiktionary.org) by the [DBnary](http://kaiko.getalp.org/about-dbnary/) project. So for data to be available, it has to be in one the the Wiktionaries support by DBnary. On top of the extraction work done by DBnary, WikDict
+All data is extracted from [Wiktionary](https://www.wiktionary.org) by the [DBnary](http://kaiko.getalp.org/about-dbnary/) project. So for data to be available, it has to be in one the the Wiktionaries support by DBnary. On top of the extraction work done by DBnary, WikDict
 
 * parses HTML and Wiki formatting from the results to provide proper human-readable output 
 * reduces the differences in data structure between different language Wiktionaries
@@ -42,4 +42,4 @@ If you are willing to write code or want to contribute in a different way, pleas
 [issues]: https://github.com/karlb/wikdict-web/issues
 
 ---
-<small>MIT license logo by [ExcaliburZero](http://excaliburzero.deviantart.com/art/MIT-License-Logo-595847140)</small>
+<small>MIT license logo by [ExcaliburZero](https://excaliburzero.deviantart.com/art/MIT-License-Logo-595847140)</small>
