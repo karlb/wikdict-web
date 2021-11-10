@@ -161,7 +161,7 @@ def spellfix(from_lang, to_lang, search_term):
 
 @timing
 def get_wiktionary_links(lang, word):
-    url = 'http://%s.wiktionary.org/wiki/%s#%s'
+    url = 'https://%s.wiktionary.org/wiki/%s#%s'
     lang_name = urllib.parse.quote_plus(language_names[lang]).replace('%', '.')
     sql = """
         SELECT written_rep FROM vocable

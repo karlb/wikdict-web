@@ -1,6 +1,6 @@
 [
     {
-      "origin": ["http://www.wikdict.com", "*"],
+      "origin": ["*"],
       "responseHeader": ["Content-Type"],
       "method": ["GET", "HEAD", "DELETE"],
       "maxAgeSeconds": 3600
