@@ -17,4 +17,4 @@ Now you can run the development server
 
     ./run_dev.sh
 
-and connect to http://localhost:4000/.
+and connect to http://localhost:5000/.
