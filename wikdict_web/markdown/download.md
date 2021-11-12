@@ -2,7 +2,7 @@
 
 WikDict's mission is to bring you dictionaries that can be freely used, copied and modified without limiting you to using this web site. Therefore, you can download the dictionaries in different formats and use them according to the [Creative Commons BY-SA](https://creativecommons.org/licenses/by-sa/3.0/) license.
 
-Please request new formats by creating a [github issue](https://github.com/karlb/wikdict-gen/issues), or just [ask by e-mail](mailto:karl@karl.berlin).
+Please request new formats by creating a [GitHub issue](https://github.com/karlb/wikdict-gen/issues), or just [ask by e-mail](mailto:karl@karl.berlin).
 
 ### For End Users
 
@@ -33,4 +33,4 @@ To query across multiple databases, use the [`ATTACH DATABASE` command](https://
 
 #### TEI P5 (XML)
 
-If you like XML or come from the linguistic community, you might prefer [these XML files](https://download.wikdict.com/dictionaries/tei/recommended/) encoded in [TEI P5](https://www.tei-c.org/Guidelines/P5/). Each language pair has two XML files, one for each translation direction.
+If you like XML or come from the linguistic community, you may prefer [these XML files](https://download.wikdict.com/dictionaries/tei/recommended/) encoded in [TEI P5](https://www.tei-c.org/Guidelines/P5/). Each language pair has two XML files, one for each translation direction.

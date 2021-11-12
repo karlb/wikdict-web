@@ -20,11 +20,11 @@ WikDict aims to provide free bilingual dictionary data for all use cases. You ar
 #### Which data is available and where does if come from?
 
 <img style="float: right; width: 15%" src="/static/img/markdown/mit-license.svg">
-All data is extracted from [Wiktionary](https://www.wiktionary.org) by the [DBnary](http://kaiko.getalp.org/about-dbnary/) project. So for data to be available, it has to be in one the the Wiktionaries support by DBnary. On top of the extraction work done by DBnary, WikDict
+All data is extracted from [Wiktionary](https://www.wiktionary.org) by the [DBnary](http://kaiko.getalp.org/about-dbnary/) project. So for data to be available, it has to be in one of the Wiktionaries supported by DBnary. On top of the extraction work done by DBnary, WikDict
 
 * parses HTML and Wiki formatting from the results to provide proper human-readable output 
 * reduces the differences in data structure between different language Wiktionaries
-* combines translations from diffrenent language Wiktionaries in a smart way to increase the number of translations
+* combines translations from different language Wiktionaries in a smart way to increase the number of translations
 * assigns importance scores to words and translations for better sorting, filtering and suggestions
 * merges translations to give more concise output
 * converts the data into other formats
@@ -34,9 +34,9 @@ The source code for all this can be found in the repositories for the [dictionar
 
 #### Contributing
 
-The easiest way for non-programmers to contribute is to provide feedback and bug reports. This can be done by [mail] or by creating [github issues][issues]. Improving the content of the Wiktionary of your choice (especially the translations section) will also help improving the data quality in the long run.
+The easiest way for non-programmers to contribute is to provide feedback and bug reports. This can be done by [mail] or by creating [GitHub issues][issues]. Improving the content of the Wiktionary of your choice (especially the translations section) will also help improving the data quality in the long run.
 
-If you are willing to write code or want to contribute in a different way, please [get in contact][mail] to avoid duplicate work and get you started in the right direction.
+If you are willing to write code or want to contribute in a different way, please [get in touch][mail] to avoid duplicate work and get you started in the right direction.
 
 [mail]: mailto:karl@karl.berlin
 [issues]: https://github.com/karlb/wikdict-web/issues
