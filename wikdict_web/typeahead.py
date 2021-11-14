@@ -16,7 +16,7 @@ def get_typeahead_data(from_lang, to_lang, query, limit=None):
             FROM other.simple_translation
             WHERE written_rep LIKE :query || '%'
         )
-        ORDER BY max_score * rel_importance DESC
+        ORDER BY max_score * coalesce(rel_importance, 0.01) DESC
     """
     if limit:
         sql += ' LIMIT {}'.format(limit)
