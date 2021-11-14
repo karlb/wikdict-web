@@ -1,3 +1,4 @@
+import argparse
 import sqlite3
 from pprint import pprint
 import sys
@@ -30,11 +31,15 @@ def print_result(r):
         print()
 
 
-db_filename = sys.argv[1]
-query = sys.argv[2]
-conn = sqlite3.connect(db_filename)
+parser = argparse.ArgumentParser(prog='python -m wikdict_query')
+parser.add_argument('db_filename', metavar='DB_FILENAME', help='Path to SQLite3 file')
+parser.add_argument('query', metavar='WORD', help='Word to look up')
 
-result = combined_result(conn, query)
+config = parser.parse_args()
+
+conn = sqlite3.connect(config.db_filename)
+
+result = combined_result(conn, config.query)
 
 for lexentry in result.definitions:
     # pprint(dict(lexentry))
