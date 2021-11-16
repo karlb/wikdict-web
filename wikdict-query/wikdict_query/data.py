@@ -169,7 +169,7 @@ class Language:
         return "".join(chr(127365 + ord(c)) for c in country_code)
 
 
-with open(Path(__file__).parent / "languages.json") as f:
+with open(Path(__file__).parent / "languages.json", encoding="utf-8") as f:
     languages = {
         l["iso2"]: Language(label_en=l["langLabel"], iso2=l["iso2"], iso3=l["iso3"])
         for l in json.load(f)
