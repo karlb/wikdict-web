@@ -6,3 +6,5 @@ venv
 data
 /static/.webassets-cache
 /static/gen
+/.eggs
+/*.egg-info
