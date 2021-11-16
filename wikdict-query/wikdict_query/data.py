@@ -5,18 +5,22 @@ from dataclasses import dataclass
 """
 languages.json has been queried at https://query.wikidata.org with
 
-SELECT DISTINCT ?lang ?langLabel ?iso3 ?iso2 WHERE {
+SELECT ?lang ?langLabel ?iso3 ?iso2 WHERE {
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
   {
     SELECT DISTINCT ?lang ?iso3 ?iso2
     WHERE {
-      ?lang p:P31 ?language_concept;
-            wdt:P220 ?iso3;
+      {?lang p:P31 ?language_concept}  # modern languages
+      UNION
+      {VALUES ?lang {wd:Q397}}  # add latin
+      
+      ?lang wdt:P220 ?iso3;
             wdt:P218 ?iso2.
       ?language_concept (ps:P31/(wdt:P279*)) wd:Q1288568.
     }
   }
 }
+ORDER BY ?iso2
 
 and afterwards formatted with jq.
 """
