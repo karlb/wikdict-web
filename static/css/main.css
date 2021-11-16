@@ -22,14 +22,15 @@
     padding-right: 0.5em;
 }
 
-.lang-result dl,
-.lang-result th
-{
+.lang-result th {
     padding-left: 1em;
 }
 /* .lang-result > *:last-child { */
 /*     margin-bottom: 0 */
 /* } */
+.idioms {
+    padding: 0 1em;
+}
 
 #results table td {
     width: 50%;

@@ -161,10 +161,11 @@
     {% endfor %}
 
     {% if results['idioms'] %}
+    <div class="idioms">
         <dl class="row">
         {% for idiom in results['idioms'] %}
-            <dt class="col-sm-3"><a class="text-indent" href="{{ idiom.written_rep }}">{{ idiom.written_rep }}</a></dt>
-            <dd class="col-sm-9">
+            <dt class="col-sm-6"><a class="text-indent" href="{{ idiom.written_rep }}">{{ idiom.written_rep }}</a></dt>
+            <dd class="col-sm-6">
                 {% for trans in idiom.translations %}
                     {% call optional_link(trans) %}{{ trans }}{% endcall -%}
                     {{- ',' if not loop.last -}}
@@ -172,6 +173,7 @@
             </dd>
         {% endfor %}
         </dl>
+    </div>
     {% endif %}
 </div>
 {% endif %}
