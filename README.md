@@ -18,3 +18,5 @@ Now you can run the development server
     ./run_dev.sh
 
 and connect to http://localhost:5000/.
+
+[wikdict-gen]: https://github.com/karlb/wikdict-gen
