@@ -23,6 +23,17 @@ def format_pronun(pronun):
     return "/" + pronun + "/"
 
 
+def literal_query(query):
+    """Don't interprete any special query syntax
+
+    SQLite's FTS extensions support special query syntax for AND, OR and
+    prefix searches, as well as grouping and negation. There are not of much
+    use in the dictionary case, but they break some legitimate queries. So
+    let's treat all queries literally by enlosing them in quotes.
+    """
+    return '"' + query.replace('"', '') + '"'
+
+
 def fetch_idioms(conn, query):
     """ Fetches short translations summary for matches
 
@@ -40,7 +51,7 @@ def fetch_idioms(conn, query):
         ORDER BY importance DESC
         LIMIT 10
     """,
-        dict(written_rep=query),
+        dict(written_rep=literal_query(query))
     ):
         yield dict(
             written_rep=result["written_rep"],
@@ -118,7 +129,7 @@ def match(conn, query, limit=10, min_match_score=0) -> Iterable[dict]:
             ORDER BY score DESC
             LIMIT :limit
     """,
-        dict(query=query, limit=limit, min_match_score=min_match_score),
+        dict(query=literal_query(query), limit=limit, min_match_score=min_match_score),
     ):
         yield _process_fetched_lexentry(result)
 
