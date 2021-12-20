@@ -9,7 +9,7 @@ WikDict aims to provide free bilingual dictionary data for all use cases. You ar
 
 #### How do I search WikDict?
 
-* Search for single words or common phrases. WikDict can do intelligent lookup in a dictionary, but it can't translate scentences or arbitrary word combinations.
+* Search for single words or common phrases. WikDict can do intelligent lookup in a dictionary, but it can't translate sentences or arbitrary word combinations.
 * Don't worry about writing in upper/lower case. Both "haus" and "Haus" will match the dictionary entry "Haus".
 * Skip accents and other diacritics if you want to. Typing "Tur" will find "Tür".
 
@@ -17,7 +17,7 @@ WikDict aims to provide free bilingual dictionary data for all use cases. You ar
 
 ### The WikDict data
 
-#### Which data is available and where does if come from?
+#### Which data is available and where does it come from?
 
 <img style="float: right; width: 15%" src="/static/img/markdown/mit-license.svg">
 All data is extracted from [Wiktionary](https://www.wiktionary.org) by the [DBnary](http://kaiko.getalp.org/about-dbnary/) project. So for data to be available, it has to be in one of the Wiktionaries supported by DBnary. On top of the extraction work done by DBnary, WikDict
