@@ -75,14 +75,16 @@ def _score_match(matchinfo: bytes, form, query) -> float:
 
     0.5: half of the terms match (using normalized forms)
     1:   all terms match (using normalized forms)
-    2:   all terms are identical
-    3:   all terms are identical, including case
+    10:   all terms are identical
+    20:   all terms are identical, including case
     """
+    # I don't know why the query comes in quoted, but let's remove the quotes
+    query = query.strip('"')
     try:
         if form == query:
-            return 3
+            return 20
         if form.lower() == query.lower():
-            return 2
+            return 10 
 
         # Decode matchinfo blob according to https://www.sqlite.org/fts3.html#matchinfo
         offset = 0
@@ -104,7 +106,7 @@ def match(conn, query, limit=10, min_match_score=0) -> Iterable[dict]:
 
     Use min_match_score to restrict results to more exact matches.
     """
-    conn.create_function("score_match", 3, _score_match)
+    conn.create_function("score_match", 3, _score_match, deterministic=True)
     cur = conn.cursor()
     cur.row_factory = sqlite3.Row
     for result in cur.execute(
