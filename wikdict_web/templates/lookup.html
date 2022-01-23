@@ -110,7 +110,7 @@
 		<span>{{ results.to_lang }} {{ languages[results.to_lang].flag }}</span>
 	</h2>
     {% for lexentry in results['definitions'] %}
-        <table class="lexentry table table-striped">
+		<table class="lexentry table table-striped" data-lexentry="{{ lexentry.lexentry }}">
 			<thead>
 			<tr>
 				<th colspan="2">
