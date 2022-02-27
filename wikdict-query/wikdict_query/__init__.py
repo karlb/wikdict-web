@@ -17,7 +17,7 @@ def format_gender(gender):
 
 
 def format_pronun(pronun):
-    """ Wrap pronunciation in slashes if it is not wrapped """
+    """Wrap pronunciation in slashes if it is not wrapped"""
     if pronun.startswith("/") or pronun.startswith("["):
         return pronun
     return "/" + pronun + "/"
@@ -31,11 +31,11 @@ def literal_query(query):
     use in the dictionary case, but they break some legitimate queries. So
     let's treat all queries literally by enlosing them in quotes.
     """
-    return '"' + query.replace('"', '') + '"'
+    return '"' + query.replace('"', "") + '"'
 
 
 def fetch_idioms(conn, query):
-    """ Fetches short translations summary for matches
+    """Fetches short translations summary for matches
 
     Only the base form will be searched, but partial matches will be returned
     for entries with multiple terms.
@@ -51,7 +51,7 @@ def fetch_idioms(conn, query):
         ORDER BY importance DESC
         LIMIT 10
     """,
-        dict(written_rep=literal_query(query))
+        dict(written_rep=literal_query(query)),
     ):
         yield dict(
             written_rep=result["written_rep"],
@@ -71,7 +71,7 @@ def _process_fetched_lexentry(result) -> dict:
 
 
 def _score_match(matchinfo: bytes, form, query) -> float:
-    """ Score how well the matches form matches the query
+    """Score how well the matches form matches the query
 
     0.5: half of the terms match (using normalized forms)
     1:   all terms match (using normalized forms)
@@ -84,7 +84,7 @@ def _score_match(matchinfo: bytes, form, query) -> float:
         if form == query:
             return 20
         if form.lower() == query.lower():
-            return 10 
+            return 10
 
         # Decode matchinfo blob according to https://www.sqlite.org/fts3.html#matchinfo
         offset = 0
@@ -102,7 +102,7 @@ def _score_match(matchinfo: bytes, form, query) -> float:
 
 
 def match(conn, query, limit=10, min_match_score=0) -> Iterable[dict]:
-    """ Detailed matches for all forms.
+    """Detailed matches for all forms.
 
     Use min_match_score to restrict results to more exact matches.
     """
@@ -161,7 +161,7 @@ class CombinedResult:
 
 
 def combined_result(conn, query) -> CombinedResult:
-    """ Returns both definitions and idioms """
+    """Returns both definitions and idioms"""
 
     definitions = list(define(conn, query))
     idioms = list(fetch_idioms(conn, query))

@@ -31,9 +31,9 @@ def print_result(r):
         print()
 
 
-parser = argparse.ArgumentParser(prog='python -m wikdict_query')
-parser.add_argument('db_filename', metavar='DB_FILENAME', help='Path to SQLite3 file')
-parser.add_argument('query', metavar='WORD', help='Word to look up')
+parser = argparse.ArgumentParser(prog="python -m wikdict_query")
+parser.add_argument("db_filename", metavar="DB_FILENAME", help="Path to SQLite3 file")
+parser.add_argument("query", metavar="WORD", help="Word to look up")
 
 config = parser.parse_args()
 

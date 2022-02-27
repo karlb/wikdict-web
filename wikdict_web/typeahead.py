@@ -19,20 +19,22 @@ def get_typeahead_data(from_lang, to_lang, query, limit=None):
         ORDER BY max_score * coalesce(rel_importance, 0.01) DESC
     """
     if limit:
-        sql += ' LIMIT {}'.format(limit)
-    return db_query(from_lang + '-' + to_lang, sql,
-                    dict(query=query, from_lang=from_lang, to_lang=to_lang),
-                    attach_dbs=dict(other=to_lang + '-' + from_lang)
-                    )
+        sql += " LIMIT {}".format(limit)
+    return db_query(
+        from_lang + "-" + to_lang,
+        sql,
+        dict(query=query, from_lang=from_lang, to_lang=to_lang),
+        attach_dbs=dict(other=to_lang + "-" + from_lang),
+    )
 
 
-@app.route('/typeahead/<from_lang>-<to_lang>/<path:query>')
+@app.route("/typeahead/<from_lang>-<to_lang>/<path:query>")
 def typeahead(from_lang, to_lang, query):
     rows = get_typeahead_data(from_lang, to_lang, query)
     return jsonify(rows)
 
 
-@app.route('/opensearch/typeahead/<from_lang>-<to_lang>/<path:query>')
+@app.route("/opensearch/typeahead/<from_lang>-<to_lang>/<path:query>")
 def typeahead_opensearch(from_lang, to_lang, query):
     if len(query) < 2:
         return jsonify([])
