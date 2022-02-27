@@ -17,6 +17,7 @@ import flask_assets
 import markdown
 
 app = Flask(__name__.split(".")[0], static_folder="../static")
+app.config.update(SECRET_KEY=os.environ.get("FLASK_SECRET"))
 app.jinja_env.undefined = jinja2.StrictUndefined
 assets = flask_assets.Environment(app)
 
@@ -62,7 +63,6 @@ if not app.debug:
     mail_handler.setLevel(logging.ERROR)
     app.logger.addHandler(mail_handler)
 
-app.secret_key = os.environ["OPENSHIFT_SECRET_TOKEN"]
 app.jinja_env.add_extension("jinja2.ext.loopcontrols")
 #'jinja2.ext.autoescape',
 #'jinja2.ext.with_',

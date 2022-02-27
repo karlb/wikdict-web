@@ -1,5 +1,5 @@
 FLASK_DEBUG=true
 OPENSHIFT_LOG_DIR=.
-OPENSHIFT_SECRET_TOKEN=insecure-token-for-local-dev
+FLASK_SECRET=insecure-token-for-local-dev
 OPENSHIFT_DATA_DIR=data
 WIKDICT_ADMIN_PASSWORD=test
