@@ -14,6 +14,7 @@ The [dictionaries in StarDict format](https://download.wikdict.com/dictionaries/
 * [GoldenDict mobile](http://goldendict.mobi/) for Android (non-free)
 * [WordMateX](https://play.google.com/store/apps/details?id=org.d1scw0rld.wordmatex&hl=en) for Android (non-free)
 * [Dictionary Universal](https://apps.apple.com/us/app/dictionary-universal/id312088272) for iOS (non-free)
+* [KOReader](https://github.com/koreader/koreader) for a variety of e-readers and Android devices
 
 #### Kobo E-Readers
 
