@@ -101,12 +101,16 @@ def _score_match(matchinfo: bytes, form, query) -> float:
         raise
 
 
+def add_score_match(conn):
+    conn.create_function("score_match", 3, _score_match, deterministic=True)
+
+
 def match(conn, query, limit=10, min_match_score=0) -> Iterable[dict]:
     """Detailed matches for all forms.
 
     Use min_match_score to restrict results to more exact matches.
     """
-    conn.create_function("score_match", 3, _score_match, deterministic=True)
+    add_score_match(conn)
     cur = conn.cursor()
     cur.row_factory = sqlite3.Row
     for result in cur.execute(
