@@ -211,7 +211,7 @@
                 {% for lang_result in results %}
                     {{ results_one_dir(lang_result) }}
                 {% endfor %}
-                {% if not results[0] and not results[1] %}
+                {% if not results %}
                     <div class="jumbotron">
                         <p>Sorry, no translations for "{{ query }}" have been found.</p>
                     </div>

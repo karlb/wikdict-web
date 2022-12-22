@@ -67,8 +67,8 @@ def log_query(from_lang, to_lang, query, ip, results):
                 from_lang,
                 to_lang,
                 query,
-                len(results[0]),
-                len(results[1]),
+                sum(len(r) for r in results if r.from_lang == from_lang),
+                sum(len(r) for r in results if r.from_lang == to_lang),
                 ip,
                 request.referrer,
                 request.user_agent.string,
@@ -78,6 +78,14 @@ def log_query(from_lang, to_lang, query, ip, results):
     except sqlite3.OperationalError:
         # It's ok to skip logging the query while the log db is locked
         pass
+
+
+def get_combined_result(lang, other_lang, query, **kwargs):
+    conn = get_conn(lang + "-" + other_lang)
+    r = wikdict_query.combined_result(conn, query, **kwargs)
+    r.from_lang = lang  # type: ignore
+    r.to_lang = other_lang  # type: ignore
+    return r
 
 
 @app.route("/<from_lang>-<to_lang>/")
@@ -96,19 +104,12 @@ def lookup(from_lang, to_lang, query: str = None):
     results = []
 
     if query:
-        conn = get_conn(from_lang + "-" + to_lang)
-        conn2 = get_conn(to_lang + "-" + from_lang)
-        results = [
-            wikdict_query.combined_result(conn, query),
-            wikdict_query.combined_result(conn2, query),
-        ]
-        results[0].from_lang = from_lang  # type: ignore
-        results[0].to_lang = to_lang  # type: ignore
-        results[1].from_lang = to_lang  # type: ignore
-        results[1].to_lang = from_lang  # type: ignore
+        for lang, other_lang in [(from_lang, to_lang), (to_lang, from_lang)]:
+            if r := get_combined_result(lang, other_lang, query):
+                results.append(r)
         results.sort(key=lambda r: -r.score)
 
-        if not results[0] and not results[1]:
+        if not results:
             templ_vals["did_you_mean"] = spellfix(from_lang, to_lang, query)
             for lang, other_lang in [(from_lang, to_lang), (to_lang, from_lang)]:
                 if lang not in wikdict_compound.supported_langs:
@@ -123,11 +124,10 @@ def lookup(from_lang, to_lang, query: str = None):
                 if parts:
                     templ_vals["compound_parts"] = parts
                     for p in parts:
-                        conn = get_conn(lang + "-" + other_lang)
-                        r = wikdict_query.combined_result(conn, p, include_idioms=False)
-                        r.from_lang = lang  # type: ignore
-                        r.to_lang = other_lang  # type: ignore
-                        results.append(r)
+                        if r := get_combined_result(
+                            lang, other_lang, p, include_idioms=False
+                        ):
+                            results.append(r)
                     break
         else:
             templ_vals["did_you_mean"] = []
@@ -146,7 +146,7 @@ def lookup(from_lang, to_lang, query: str = None):
             )
             if val  # skip langs without results
         )
-        description = make_description(results[0])
+        description = make_description(results[0]) if results else ""
     else:
         wiktionary_links = None
         templ_vals["rough_translations"] = "%.1f" % (
@@ -162,7 +162,7 @@ def lookup(from_lang, to_lang, query: str = None):
         description=description,
         page_name="lookup",
         wiktionary_links=wiktionary_links,
-        **templ_vals
+        **templ_vals,
     )
 
 
