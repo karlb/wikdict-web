@@ -3,11 +3,12 @@ import urllib.parse
 from datetime import datetime, timedelta
 from collections import OrderedDict, deque
 from itertools import groupby
-from typing import Tuple
+from typing import Tuple, Any
 
 from flask import redirect, request, url_for, abort
 from markupsafe import Markup
 import wikdict_query
+import wikdict_compound
 
 from .languages import language_names
 from . import app
@@ -91,7 +92,8 @@ def lookup(from_lang, to_lang, query: str = None):
             url_for("lookup", from_lang=to_lang, to_lang=from_lang, query=query)
         )
 
-    templ_vals = {}
+    templ_vals: dict[str, Any] = dict(compound_parts=None)
+    results = []
 
     if query:
         conn = get_conn(from_lang + "-" + to_lang)
@@ -108,6 +110,25 @@ def lookup(from_lang, to_lang, query: str = None):
 
         if not results[0] and not results[1]:
             templ_vals["did_you_mean"] = spellfix(from_lang, to_lang, query)
+            for lang, other_lang in [(from_lang, to_lang), (to_lang, from_lang)]:
+                if lang not in wikdict_compound.supported_langs:
+                    continue
+                try:
+                    parts_with_score = wikdict_compound.split_compound(
+                        db_path="data/compound_dbs", lang=lang, compound=query
+                    )
+                except wikdict_compound.NoMatch:
+                    continue
+                parts = [part for part, *_ in parts_with_score]
+                if parts:
+                    templ_vals["compound_parts"] = parts
+                    for p in parts:
+                        conn = get_conn(lang + "-" + other_lang)
+                        r = wikdict_query.combined_result(conn, p, include_idioms=False)
+                        r.from_lang = lang  # type: ignore
+                        r.to_lang = other_lang  # type: ignore
+                        results.append(r)
+                    break
         else:
             templ_vals["did_you_mean"] = []
 
@@ -127,7 +148,6 @@ def lookup(from_lang, to_lang, query: str = None):
         )
         description = make_description(results[0])
     else:
-        results = None
         wiktionary_links = None
         templ_vals["rough_translations"] = "%.1f" % (
             sum(lp.total_trans for lp in base.get_lang_pairs()) // 100000 / 10

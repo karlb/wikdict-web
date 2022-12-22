@@ -164,11 +164,11 @@ class CombinedResult:
         return len(self.definitions) + len(self.idioms)
 
 
-def combined_result(conn, query) -> CombinedResult:
+def combined_result(conn, query, include_idioms=True) -> CombinedResult:
     """Returns both definitions and idioms"""
 
     definitions = list(define(conn, query))
-    idioms = list(fetch_idioms(conn, query))
+    idioms = list(fetch_idioms(conn, query)) if include_idioms else []
 
     # Remove idioms that are already shown in definitions
     idioms = [

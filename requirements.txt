@@ -3,3 +3,4 @@ flask-testing
 markdown
 Flask-Assets
 sqlite-spellfix
+wikdict-compound==0.1

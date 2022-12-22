@@ -197,6 +197,17 @@
         <div id="result-row" class="row">
 
             <div id="results" class="col-md-9">
+
+                {% if compound_parts %}
+                    <div class="alert alert-dark" role="alert">
+                        {{ query }} =
+                        {% for word in compound_parts %}
+                            <a href="{{ url_for('lookup', from_lang=from_lang, to_lang=to_lang, query=word) }}">{{ word }}</a>
+                            {%- if not loop.last %} + {% endif %}
+                        {% endfor%}
+                    </div>
+                {% endif %}
+
                 {% for lang_result in results %}
                     {{ results_one_dir(lang_result) }}
                 {% endfor %}
