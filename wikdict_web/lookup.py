@@ -116,7 +116,9 @@ def lookup(from_lang, to_lang, query: str = None):
                     continue
                 try:
                     parts_with_score = wikdict_compound.split_compound(
-                        db_path="data/compound_dbs", lang=lang, compound=query
+                        db_path=base.DATA_DIR / "compound_dbs",
+                        lang=lang,
+                        compound=query,
                     )
                 except wikdict_compound.NoMatch:
                     continue

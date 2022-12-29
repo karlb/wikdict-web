@@ -2,6 +2,7 @@ import os
 import time
 import functools
 from collections import OrderedDict, namedtuple
+from pathlib import Path
 
 import sqlite3
 import sqlite_spellfix
@@ -11,7 +12,7 @@ from flask import session, g
 from .languages import language_names
 from wikdict_query.data import languages
 
-DATA_DIR = os.environ["OPENSHIFT_DATA_DIR"]
+DATA_DIR = Path(os.environ["OPENSHIFT_DATA_DIR"])
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -91,7 +92,7 @@ def namedtuple_factory(cursor, row):
 
 
 def path_for_db(db, path="dict"):
-    return DATA_DIR + "/" + path + "/" + db + ".sqlite3"
+    return DATA_DIR / path / f"{db}.sqlite3"
 
 
 def get_conn(db_name, path="dict", attach_dbs=None):
@@ -162,5 +163,5 @@ def render_template(filename, **kwargs):
             if d != kwargs["from_lang"] + "-" + kwargs["to_lang"]
         ],
         sorted_timing=sorted_timing,
-        **kwargs
+        **kwargs,
     )
