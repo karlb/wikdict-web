@@ -52,7 +52,7 @@ if not app.debug:
 
     from logging.handlers import SMTPHandler
 
-    credentials = (os.environ.get("SENDGRID_USER"), os.environ.get("SENDGRID_PASSWORD"))
+    credentials = (os.environ["SMTP_USER"], os.environ["SMTP_PASSWORD"])
     mail_handler = SMTPHandler(
         "smtp.sendgrid.net",
         "server-error@wikdict.com",
