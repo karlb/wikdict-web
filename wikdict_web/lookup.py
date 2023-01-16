@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from collections import OrderedDict, deque
 from itertools import groupby
 from typing import Tuple, Any
+import functools
 
 from flask import redirect, request, url_for, abort
 from markupsafe import Markup
@@ -17,6 +18,13 @@ from .base import timing, db_query, get_conn
 
 
 latest_requests = deque(maxlen=30)
+
+
+def lru_cache(*args, **kwargs):
+    if app.debug:
+        return args[0]
+    else:
+        return functools.lru_cache(*args, **kwargs)
 
 
 def block_too_many_requests(current_ip):
@@ -159,6 +167,7 @@ def lookup_redirect():
     return redirect(url)
 
 
+@lru_cache
 @timing
 def spellfix(from_lang, to_lang, search_term):
     translated_fixes = db_query(
@@ -193,6 +202,7 @@ def spellfix(from_lang, to_lang, search_term):
     return [r.word for r in translated_fixes]
 
 
+@lru_cache
 @timing
 def get_compounds(from_lang, to_lang, query):
     results = []
