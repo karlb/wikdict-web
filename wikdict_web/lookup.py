@@ -206,6 +206,7 @@ def spellfix(from_lang, to_lang, search_term):
 @timing
 def get_compounds(from_lang, to_lang, query):
     results = []
+    compound_parts = None
     for lang, other_lang in [(from_lang, to_lang), (to_lang, from_lang)]:
         if lang not in wikdict_compound.supported_langs:
             continue
