@@ -110,27 +110,12 @@ def lookup(from_lang, to_lang, query: str = None):
         results.sort(key=lambda r: -r.score)
 
         if not results:
+            compound_results, templ_vals["compound_parts"] = get_compounds(
+                from_lang, to_lang, query
+            )
+            results += compound_results
+        if not results:
             templ_vals["did_you_mean"] = spellfix(from_lang, to_lang, query)
-            for lang, other_lang in [(from_lang, to_lang), (to_lang, from_lang)]:
-                if lang not in wikdict_compound.supported_langs:
-                    continue
-                try:
-                    parts_with_score = wikdict_compound.split_compound(
-                        db_path=base.DATA_DIR / "compound_dbs",
-                        lang=lang,
-                        compound=query,
-                    )
-                except wikdict_compound.NoMatch:
-                    continue
-                parts = [part for part, *_ in parts_with_score]
-                if parts:
-                    templ_vals["compound_parts"] = parts
-                    for p in parts:
-                        if r := get_combined_result(
-                            lang, other_lang, p, include_idioms=False
-                        ):
-                            results.append(r)
-                    break
         else:
             templ_vals["did_you_mean"] = []
 
@@ -206,6 +191,30 @@ def spellfix(from_lang, to_lang, search_term):
         ),
     )
     return [r.word for r in translated_fixes]
+
+
+@timing
+def get_compounds(from_lang, to_lang, query):
+    results = []
+    for lang, other_lang in [(from_lang, to_lang), (to_lang, from_lang)]:
+        if lang not in wikdict_compound.supported_langs:
+            continue
+        try:
+            parts_with_score = wikdict_compound.split_compound(
+                db_path=base.DATA_DIR / "compound_dbs",
+                lang=lang,
+                compound=query,
+            )
+        except wikdict_compound.NoMatch:
+            continue
+        parts = [part for part, *_ in parts_with_score]
+        if parts:
+            compound_parts = parts
+            for p in parts:
+                if r := get_combined_result(lang, other_lang, p, include_idioms=False):
+                    results.append(r)
+            break
+    return results, compound_parts
 
 
 @timing
