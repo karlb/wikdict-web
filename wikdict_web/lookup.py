@@ -206,21 +206,22 @@ def spellfix(from_lang, to_lang, search_term):
 @timing
 def get_compounds(from_lang, to_lang, query):
     results = []
-    compound_parts = None
+    part_reps = None
     for lang, other_lang in [(from_lang, to_lang), (to_lang, from_lang)]:
         if lang not in wikdict_compound.supported_langs:
             continue
-        parts = wikdict_compound.split_compound(
+        solution = wikdict_compound.split_compound(
             db_path=base.DATA_DIR / "compound_dbs",
             lang=lang,
             compound=query,
-        ).parts
-        if parts:
-            part_reps = [p.written_rep for p in parts]
-            for p in part_reps:
-                if r := get_combined_result(lang, other_lang, p, include_idioms=False):
-                    results.append(r)
-            break
+        )
+        if not solution:
+            continue
+        part_reps = [p.written_rep for p in solution.parts]
+        for p in part_reps:
+            if r := get_combined_result(lang, other_lang, p, include_idioms=False):
+                results.append(r)
+        break
     return results, part_reps
 
 
