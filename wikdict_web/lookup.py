@@ -210,22 +210,18 @@ def get_compounds(from_lang, to_lang, query):
     for lang, other_lang in [(from_lang, to_lang), (to_lang, from_lang)]:
         if lang not in wikdict_compound.supported_langs:
             continue
-        try:
-            parts_with_score = wikdict_compound.split_compound(
-                db_path=base.DATA_DIR / "compound_dbs",
-                lang=lang,
-                compound=query,
-            )
-        except wikdict_compound.NoMatch:
-            continue
-        parts = [part for part, *_ in parts_with_score]
+        parts = wikdict_compound.split_compound(
+            db_path=base.DATA_DIR / "compound_dbs",
+            lang=lang,
+            compound=query,
+        ).parts
         if parts:
-            compound_parts = parts
-            for p in parts:
+            part_reps = [p.written_rep for p in parts]
+            for p in part_reps:
                 if r := get_combined_result(lang, other_lang, p, include_idioms=False):
                     results.append(r)
             break
-    return results, compound_parts
+    return results, part_reps
 
 
 @timing
