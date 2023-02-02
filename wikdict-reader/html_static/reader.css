@@ -1,0 +1,60 @@
+.wd-annotated-text a {
+  text-decoration: none;
+}
+.wd-annotated-text a:hover,
+.wd-annotated-text a[data-current] {
+  text-decoration: underline;
+}
+
+
+.wd-tooltip {
+  display: none;
+
+  background: #333;
+  color: white;
+  padding: 0.5em 1em;
+  font-size: 0.8em;
+  border-radius: 0.5em;
+
+  max-width:40%;
+}
+.wd-tooltip[data-show] {
+  display: block;
+}
+.wd-tooltip hr {
+  margin: 0.1rem 0;
+  opacity: 0.15;
+}
+
+.wd-arrow,
+.wd-arrow::before {
+  position: absolute;
+  width: 1em;
+  height: 1em;
+  background: inherit;
+}
+
+.wd-arrow {
+  visibility: hidden;
+}
+
+.wd-arrow::before {
+  visibility: visible;
+  content: '';
+  transform: rotate(45deg);
+}
+.wd-tooltip[data-popper-placement^='top'] > .wd-arrow {
+  bottom: -0.5em;
+}
+
+.wd-tooltip[data-popper-placement^='bottom'] > .wd-arrow {
+  top: -0.5em;
+}
+
+.wd-tooltip[data-popper-placement^='left'] > .wd-arrow {
+  right: -0.5em;
+}
+
+.wd-tooltip[data-popper-placement^='right'] > .wd-arrow {
+  left: -0.5em;
+}
