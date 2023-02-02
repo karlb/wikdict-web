@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <h2>Reader: Annotated Text</h2>
+    <small>Click on a word to see the {{ languages[to_lang].label_en }} translation.</small>
+
+    <hr>
+    {{ annotated_text }}
+
+    {% if is_truncated %}
+        <hr>
+        <p>
+        Your text exceeded the maximum supported length and has been truncated. If this seriously limits the usefulness of this service, please let me know at <a href="mailto:karl@karl.berlin">karl@karl.berlin</a> and describe your use case.
+        </p>
+    {% endif %}
+
+    <a href='' class="btn btn-outline-secondary btn-sm" style="margin-top: 1em">Enter new text</a>
+
+{% endblock %}

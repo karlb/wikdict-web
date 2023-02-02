@@ -41,5 +41,12 @@ If you are willing to write code or want to contribute in a different way, pleas
 [mail]: mailto:karl@karl.berlin
 [issues]: https://github.com/karlb/wikdict-web/issues
 
+
+### Contact
+
+<strong>Karl Bartel</strong><br>
+<a href="https://www.karl.berlin">www.karl.berlin</a><br>
+<a href="mailto:karl@karl.berlin">karl@karl.berlin</a>
+
 ---
 <small>MIT license logo by [ExcaliburZero](https://excaliburzero.deviantart.com/art/MIT-License-Logo-595847140)</small>

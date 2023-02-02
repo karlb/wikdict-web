@@ -22,6 +22,7 @@ app.jinja_env.undefined = jinja2.StrictUndefined
 assets = flask_assets.Environment(app)
 
 import wikdict_web.lookup as lookup
+import wikdict_web.reader
 import wikdict_web.admin
 import wikdict_web.base as base
 import wikdict_web.typeahead

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<h2>Reader: Annotate Text</h2>
+<form method="POST" style="display: flex; flex-direction: column; flex-grow: 1">
+    <label for="input-text" style="display: flex">
+        <small style="margin: auto 0; flex-grow: 1">
+            Enter a <b>{{ languages[from_lang].label_en }} text</b> and WikDict will add <b>{{ languages[to_lang].label_en }} translations</b> to each word.
+        </small>
+        <a
+            href="{{ url_for('reader', from_lang=to_lang, to_lang=from_lang) }}"
+            class="btn btn-outline-secondary btn-sm"
+            style="margin-left: 0.1em; flex-grow: 1"
+        >Swap Languages</a>
+    </label>
+
+    <textarea id="input-text" name="text" style="margin: 0.5em 0; flex-grow: 1"></textarea>
+
+    <button type="submit" class="btn btn-primary">Add translations</button>
+</form>
+{% endblock %}
