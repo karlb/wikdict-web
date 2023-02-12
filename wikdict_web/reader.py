@@ -47,7 +47,7 @@ def reader(from_lang, to_lang):
 
     conn = base.get_conn(from_lang + "-" + to_lang)
     annotated_text = None
-    if request.method == "GET":
+    if request.method in ["GET", "HEAD"]:
         return base.render_template("reader-input.html", **templ_vals)
     if request.method == "POST":
         # annotate text with translations
@@ -66,5 +66,6 @@ def reader(from_lang, to_lang):
             "reader-output.html",
             annotated_text=annotated_text,
             is_truncated=len(input_text) > MAX_INPUT_BYTES,
-            **templ_vals
+            **templ_vals,
         )
+    raise Exception(f"Bad HTTP method {request.method!r}")
