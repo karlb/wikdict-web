@@ -2,7 +2,7 @@ from io import StringIO
 from typing import Iterable
 
 from flask import request
-from jinja2 import Markup, escape
+from markupsafe import Markup, escape
 from wikdict_reader.html import create_partial_html
 from wikdict_reader import make_lookup, LookupFunction
 import wikdict_compound
