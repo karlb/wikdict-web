@@ -226,6 +226,11 @@ def get_compounds(from_lang, to_lang, query):
             if r := get_combined_result(lang, other_lang, p, include_idioms=False):
                 results.append(r)
         break
+
+    if len(part_reps) >= len(query) / 2:
+        # Too high likelyhood of useless split
+        return [], None
+
     return results, part_reps
 
 
