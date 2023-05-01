@@ -98,7 +98,6 @@ def path_for_db(db, path="dict"):
 def get_conn(db_name, path="dict", attach_dbs=None):
     db_path = path_for_db(db_name, path)
 
-    print(db_path)
     if not os.path.exists(db_path):
         raise sqlite3.OperationalError(
             'Database file "{}" does not exist'.format(db_path)
