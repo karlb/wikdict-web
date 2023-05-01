@@ -205,6 +205,10 @@ def spellfix(from_lang, to_lang, search_term):
 @lru_cache
 @timing
 def get_compounds(from_lang, to_lang, query):
+    if app.config["TESTING"]:
+        # Compound dbs are not available in testing setup, yet
+        return [], None
+
     results = []
     part_reps = None
     for lang, other_lang in [(from_lang, to_lang), (to_lang, from_lang)]:
