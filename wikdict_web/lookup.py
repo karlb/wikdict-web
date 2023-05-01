@@ -210,7 +210,7 @@ def get_compounds(from_lang, to_lang, query):
         return [], None
 
     results = []
-    part_reps = None
+    part_reps = []
     for lang, other_lang in [(from_lang, to_lang), (to_lang, from_lang)]:
         if lang not in wikdict_compound.supported_langs:
             continue
