@@ -10,11 +10,11 @@ from flask import (
     url_for,
     session,
     send_from_directory,
-    Markup,
     abort,
 )
 import flask_assets
 import markdown
+from markupsafe import Markup
 
 app = Flask(__name__.split(".")[0], static_folder="../static")
 app.config.update(SECRET_KEY=os.environ.get("FLASK_SECRET"))
@@ -31,6 +31,7 @@ ADMINS = ["karl@karl.berlin"]
 ASSET_REVISION = check_output(
     "git describe --abbrev=12 --always --dirty=+".split(" "), cwd=base.APP_ROOT
 )
+
 
 # simple cache busting for static files, since Flask-Assets is only usable for js, css, etc.
 @app.url_defaults
