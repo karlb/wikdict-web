@@ -101,7 +101,11 @@ def get_combined_result(lang, other_lang, query, **kwargs):
     "/<from_lang>-<to_lang>/<path:query>"
 )  # without path, slashes would not be escaped
 def lookup(from_lang, to_lang, query: str = None):
-    if from_lang not in language_names or to_lang not in language_names:
+    if (
+        from_lang not in language_names
+        or to_lang not in language_names
+        or from_lang == to_lang
+    ):
         abort(404)
     if [from_lang, to_lang] != sorted((from_lang, to_lang)):
         return redirect(
