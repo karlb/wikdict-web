@@ -213,28 +213,37 @@ def get_compounds(from_lang, to_lang, query):
         # Compound dbs are not available in testing setup, yet
         return [], None
 
-    results = []
-    part_reps = []
+    # Collect solutions for both languages
+    solutions = []
     for lang, other_lang in [(from_lang, to_lang), (to_lang, from_lang)]:
         if lang not in wikdict_compound.supported_langs:
             continue
-        solution = wikdict_compound.split_compound(
+        lang_solution = wikdict_compound.split_compound(
             db_path=base.DATA_DIR / "compound_dbs",
             lang=lang,
             compound=query,
             ignore_word=query,
         )
-        if not solution:
+        if not lang_solution:
             continue
-        part_reps = [p.written_rep for p in solution.parts]
-        for p in part_reps:
-            if r := get_combined_result(lang, other_lang, p, include_idioms=False):
-                results.append(r)
-        break
+        if len(lang_solution.parts) >= len(query) / 2:
+            # Too high likelyhood of useless split
+            continue
+        solutions.append([lang, other_lang, lang_solution])
 
-    if len(part_reps) >= len(query) / 2:
-        # Too high likelyhood of useless split
+    if not solutions:
         return [], None
+
+    # Choose result for language with highest score
+    solutions.sort(key=lambda x: -x[2].score)
+    lang, other_lang, solution = solutions[0]
+
+    # Add details to result
+    results = []
+    part_reps = [p.written_rep for p in solution.parts]
+    for p in part_reps:
+        if r := get_combined_result(lang, other_lang, p, include_idioms=False):
+            results.append(r)
 
     return results, part_reps
 
