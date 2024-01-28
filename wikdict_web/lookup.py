@@ -222,6 +222,7 @@ def get_compounds(from_lang, to_lang, query):
             db_path=base.DATA_DIR / "compound_dbs",
             lang=lang,
             compound=query,
+            ignore_word=query,
         )
         if not solution:
             continue
