@@ -226,7 +226,7 @@ def get_compounds(from_lang, to_lang, query):
         )
         if not lang_solution:
             continue
-        if len(lang_solution.parts) >= len(query) / 2:
+        if len(lang_solution.parts) >= len(query) / 3:
             # Too high likelyhood of useless split
             continue
         solutions.append([lang, other_lang, lang_solution])
