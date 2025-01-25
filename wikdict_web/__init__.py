@@ -47,7 +47,7 @@ if not app.debug:
     from logging.handlers import RotatingFileHandler
 
     file_handler = RotatingFileHandler(
-        os.environ["OPENSHIFT_LOG_DIR"] + "/flask.log", maxBytes=10000, backupCount=1
+        os.environ["DATA_ROOT"] + "/flask.log", maxBytes=10000, backupCount=1
     )
     file_handler.setLevel(logging.INFO)
     app.logger.addHandler(file_handler)

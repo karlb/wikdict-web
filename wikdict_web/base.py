@@ -12,7 +12,7 @@ from flask import session, g
 from .languages import language_names
 from wikdict_query.data import languages
 
-DATA_DIR = Path(os.environ["OPENSHIFT_DATA_DIR"])
+DATA_DIR = Path(os.environ["DATA_ROOT"])
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 
