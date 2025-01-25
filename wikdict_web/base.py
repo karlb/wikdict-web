@@ -95,7 +95,7 @@ def path_for_db(db, path="dict"):
     return DATA_DIR / path / f"{db}.sqlite3"
 
 
-def get_conn(db_name, path="dict", attach_dbs=None):
+def get_conn(db_name, path="dict", attach_dbs=None, write=False):
     db_path = path_for_db(db_name, path)
 
     if not os.path.exists(db_path):
@@ -103,7 +103,7 @@ def get_conn(db_name, path="dict", attach_dbs=None):
             'Database file "{}" does not exist'.format(db_path)
         )
 
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(f"file:{db_path}" + ("" if write else "?immutable=1"))
     conn.isolation_level = None  # autocommit
     conn.row_factory = namedtuple_factory
     conn.enable_load_extension(True)
@@ -112,9 +112,15 @@ def get_conn(db_name, path="dict", attach_dbs=None):
 
 
 def db_query(
-    db_name, stmt, bind_params=(), path="dict", attach_dbs=None, explain=False
+    db_name,
+    stmt,
+    bind_params=(),
+    path="dict",
+    attach_dbs=None,
+    explain=False,
+    write=False,
 ):
-    conn = get_conn(db_name, path, attach_dbs)
+    conn = get_conn(db_name, path, attach_dbs, write)
     cur = conn.cursor()
     for name, db in (attach_dbs or {}).items():
         cur.execute("ATTACH DATABASE '{}' AS {}".format(path_for_db(db, path), name))

@@ -2,8 +2,7 @@ import sqlite3
 import urllib.parse
 from datetime import datetime, timedelta
 from collections import OrderedDict, deque
-from itertools import groupby
-from typing import Tuple, Any
+from typing import Any
 import functools
 
 from flask import redirect, request, url_for, abort
@@ -62,6 +61,7 @@ def log_query(from_lang, to_lang, query, ip, results):
                     query text, results1, results2, ip, referrer, user_agent, hidden bool DEFAULT false);
             """,
             path="",
+            write=True,
         )
         db_query(
             "logging",
@@ -82,6 +82,7 @@ def log_query(from_lang, to_lang, query, ip, results):
                 request.user_agent.string,
             ],
             path="",
+            write=True,
         )
     except sqlite3.OperationalError:
         # It's ok to skip logging the query while the log db is locked
