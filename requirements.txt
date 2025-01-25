@@ -1,8 +1,0 @@
-flask
-flask-testing
-jinja2
-markdown
-more-itertools
-Flask-Assets
-sqlite-spellfix
-wikdict-compound==0.2

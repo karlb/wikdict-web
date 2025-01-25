@@ -1,0 +1,19 @@
+[project]
+name = "wikdict-web"
+version = "1.0"
+description = "Web frontend for WikDict's bilingual dictionaries"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "flask>=3.1.0",
+    "flask-assets>=2.1.0",
+    "flask-testing>=0.8.1",
+    "jinja2>=3.1.5",
+    "markdown>=3.7",
+    "more-itertools>=10.6.0",
+    "sqlite-spellfix>=1.1",
+    "wikdict-compound==0.2",
+]
+authors = [
+  {name = "Karl Bartel", email = "karl@karl.berlin"},
+]
