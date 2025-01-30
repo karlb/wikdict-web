@@ -1,7 +1,7 @@
 [project]
-name = "wikdict-query"
+name = "wikdict-reader"
 version = "0.1.0"
-description = "Query WikDict SQLite databases"
+description = "Annotate texts with translations"
 authors = [
   {name = "Karl Bartel", email = "karl@karl.berlin"},
 ]

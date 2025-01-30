@@ -1,6 +1,13 @@
 version = 1
 requires-python = ">=3.9"
 
+[manifest]
+members = [
+    "wikdict-query",
+    "wikdict-reader",
+    "wikdict-web",
+]
+
 [[package]]
 name = "blinker"
 version = "1.9.0"
@@ -229,6 +236,16 @@ wheels = [
 ]
 
 [[package]]
+name = "wikdict-query"
+version = "0.1.0"
+source = { editable = "wikdict-query" }
+
+[[package]]
+name = "wikdict-reader"
+version = "0.1.0"
+source = { editable = "wikdict-reader" }
+
+[[package]]
 name = "wikdict-web"
 version = "1.0"
 source = { virtual = "." }
@@ -241,6 +258,8 @@ dependencies = [
     { name = "more-itertools" },
     { name = "sqlite-spellfix" },
     { name = "wikdict-compound" },
+    { name = "wikdict-query" },
+    { name = "wikdict-reader" },
 ]
 
 [package.metadata]
@@ -253,6 +272,8 @@ requires-dist = [
     { name = "more-itertools", specifier = ">=10.6.0" },
     { name = "sqlite-spellfix", specifier = ">=1.1" },
     { name = "wikdict-compound", specifier = "==0.2" },
+    { name = "wikdict-query", editable = "wikdict-query" },
+    { name = "wikdict-reader", editable = "wikdict-reader" },
 ]
 
 [[package]]

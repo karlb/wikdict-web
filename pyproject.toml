@@ -13,7 +13,16 @@ dependencies = [
     "more-itertools>=10.6.0",
     "sqlite-spellfix>=1.1",
     "wikdict-compound==0.2",
+    "wikdict-query",
+    "wikdict-reader",
 ]
 authors = [
   {name = "Karl Bartel", email = "karl@karl.berlin"},
 ]
+
+[tool.uv.sources]
+wikdict-query = { workspace = true }
+wikdict-reader = { workspace = true }
+
+[tool.uv.workspace]
+members = ["wikdict-query", "wikdict-reader"]
