@@ -1,12 +1,8 @@
 #!.venv/bin/python
-import sys
-import sqlite3
 import re
-import json
-from dataclasses import dataclass
-from typing import Optional, Sequence, Iterable, Iterator, Callable
-from more_itertools import seekable  # type: ignore
+from typing import Iterable, Optional
 
+from more_itertools import seekable  # type: ignore
 
 from wikdict_reader.lookup import LookupFunction
 
@@ -22,9 +18,7 @@ def rewind(self, count):
 seekable.rewind = rewind
 
 
-def find_translation_for_longest_phrase_at(
-    next_words: seekable, lookup: LookupFunction
-):
+def find_translation_for_longest_phrase_at(next_words: seekable, lookup: LookupFunction):
     """Try to find translations for segments with multiple words.
 
     Whenever a translation is found, try to find a translation for a phrase
@@ -76,9 +70,7 @@ Segment = tuple[str, Optional[list]]
 
 
 def find_next_match(next_words, lookup: LookupFunction) -> Iterable[Segment]:
-    phrase, results, lead, tail = find_translation_for_longest_phrase_at(
-        next_words, lookup
-    )
+    phrase, results, lead, tail = find_translation_for_longest_phrase_at(next_words, lookup)
 
     segments: list[Segment] = [(phrase, list(results) if results else None)]
     if lead:

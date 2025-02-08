@@ -1,0 +1,19 @@
+/*
+a[href^="#tr-"], a[href^="#tr-"]:hover, a[href^="#tr-"]:focus, a[href^="#tr-"]:active {
+     text-decoration: none;
+     color: inherit;
+}
+*/
+a.tr {
+     color: inherit !important;
+     /* text-decoration: none !important; */
+     /* text-decoration: underline !important; */
+     /* text-decoration-color: #ddd !important; */
+     /* text-decoration-width: 0.01em !important; */
+}
+a.tr:link {
+     color: inherit !important;
+     /* text-decoration: none !important; */
+     /* text-decoration: underline !important; */
+     /* text-decoration-color: 0.01em !important; */
+}

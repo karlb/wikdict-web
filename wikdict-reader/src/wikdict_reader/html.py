@@ -1,21 +1,22 @@
 #!.venv/bin/python
 import fileinput
+import json
+import re
+import sqlite3
 import sys
 from pathlib import Path
-import sqlite3
-import json
-from typing import Literal
+from typing import Iterable, Literal
 
-import wikdict_query  # type: ignore
-
-from wikdict_reader.translate_segments import translate_segments
 from wikdict_reader.lookup import make_lookup
+from wikdict_reader.translate_segments import translate_segments
 
-STATIC_DIR = Path(__file__).resolve().parent.parent / "html_static"
+STATIC_DIR = Path(__file__).resolve().parent.parent.parent / "html_static"
 
 
 def text_to_html_id(text: str) -> str:
-    return "translate-" + text.replace(" ", "_")
+    # Remove any characters that aren't alphanumeric, hyphen, underscore, colon, or period
+    text = re.sub(r"[^\w\-\.:]", "-", text)
+    return "tr-" + text
 
 
 def process_line(f, lookup, line, used_translations) -> None:
@@ -31,16 +32,11 @@ def process_line(f, lookup, line, used_translations) -> None:
             f.write("</a>")
 
 
-def format_annotation(f, trans_id, trans) -> None:
-    """Turn query result rows into HTML output"""
-    f.write(f'<div id="{trans_id}" class="wd-tooltip">\n')
+def format_popup_content(trans: dict[str, list]) -> Iterable[str]:
     all_shown_translations: set[str] = set()
     for i, t in enumerate(trans):
-
         # Deduplicate translations across all sense groups of the same translation block
-        translations_for_all_senses: dict[
-            str, Literal[True]
-        ] = {}  # used dict as ordered set
+        translations_for_all_senses: dict[str, Literal[True]] = {}  # used dict as ordered set
         for sg in json.loads(t["sense_groups"]):
             translations_for_all_senses |= dict.fromkeys(sg["translations"])
 
@@ -51,17 +47,23 @@ def format_annotation(f, trans_id, trans) -> None:
 
         # Format translation block
         if i != 0:
-            f.write(f"<hr>\n")
-        f.write(f"<b>{t['written_rep']}</b>: {', '.join(translations_for_all_senses)}")
+            yield "<br>\n"
+        yield f"<b>{t['written_rep']}</b>: {', '.join(translations_for_all_senses)}"
 
-    f.write('\n<div class="wd-arrow" data-popper-arrow></div>\n')
-    f.write("</div>\n")
+
+def format_popup(trans_id: str, trans: dict[str, list]) -> str:
+    """Turn query result rows into HTML output"""
+    out = []
+    out.append(f'<div id="{trans_id}" class="wd-tooltip">\n')
+
+    out.append('\n<div class="wd-arrow" data-popper-arrow></div>\n')
+    out += format_popup_content(trans)
+    out.append("</div>\n")
+    return "".join(out)
 
 
 def create_partial_html(f, lookup, lines, max_bytes=float("inf")) -> None:
-    f.write(
-        f'<style type="text/css">{open(STATIC_DIR / "reader.css").read()}</style>\n'
-    )
+    f.write(f'<style type="text/css">{open(STATIC_DIR / "reader.css").read()}</style>\n')
 
     used_translations: dict[str, list] = {}
 
@@ -81,7 +83,7 @@ def create_partial_html(f, lookup, lines, max_bytes=float("inf")) -> None:
     # Add (initially hidden) annotations
     f.write('<div id="poppers-container">\n')
     for trans_id, trans in used_translations.items():
-        format_annotation(f, trans_id, trans)
+        f.write(format_popup(trans_id, trans))
     f.write("</div>\n")
 
     # Add JavaScript code
@@ -101,4 +103,5 @@ def create_html_page(f, lookup, lines, max_bytes=float("inf")) -> None:
 
 if __name__ == "__main__":
     conn = sqlite3.connect("/home/karl/code/github/wikdict-web/data/dict/sv-de.sqlite3")
-    create_html_page(sys.stdout, make_lookup(conn), fileinput.input(), max_bytes=2000)
+    split_lang = "sv"
+    create_html_page(sys.stdout, make_lookup(conn, split_lang), fileinput.input(), max_bytes=2000)

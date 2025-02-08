@@ -1,12 +1,33 @@
 [project]
 name = "wikdict-reader"
 version = "0.1.0"
-description = "Annotate texts with translations"
-authors = [
-  {name = "Karl Bartel", email = "karl@karl.berlin"},
-]
+description = "Annotate text with translations"
+readme = "README.md"
 license = "MIT"
+authors = [
+    { name = "Karl Bartel", email = "karl@karl.berlin" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "lxml>=5.3.0",
+    "more-itertools>=10.5.0",
+    #"wikdict-query"  #no release yet, installed locally with `uv pip install -e ~/code/github/wikdict-web/wikdict-query/`
+    "wikdict-compound>=0.2",
+]
+
+[project.scripts]
+translate_epub = "wikdict_reader.cli:epub"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.3",
+]
+
+[tool.ruff]
+line-length = 100
+[tool.ruff.lint]
+extend-select = ["I"]  # import sorting

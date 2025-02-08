@@ -1,0 +1,10 @@
+* Show works without translation after splitting compound words. Otherwise, the remaining part looks irritating in some cases
+
+Problematic words:
+* koncentrera sig
+* levt
+* "resa" matches "resa bort" with highest score
+* show base form in translation?
+
+Fixed in Wiktionary
+* skulle (not the expected translation)
