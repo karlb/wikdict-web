@@ -1,10 +1,9 @@
 import os
 from functools import wraps
 
-from flask import request, Response
+from flask import Response, request
 
-from . import app
-from . import base
+from . import app, base
 
 
 def check_auth(username, password):

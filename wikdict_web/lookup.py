@@ -1,20 +1,18 @@
+import functools
 import sqlite3
 import urllib.parse
-from datetime import datetime, timedelta
 from collections import OrderedDict, deque
+from datetime import datetime, timedelta
 from typing import Any
-import functools
 
-from flask import redirect, request, url_for, abort
-from markupsafe import Markup
-import wikdict_query
 import wikdict_compound
+import wikdict_query
+from flask import abort, redirect, request, url_for
+from markupsafe import Markup
 
+from . import app, base
+from .base import db_query, get_conn, timing
 from .languages import language_names
-from . import app
-from . import base
-from .base import timing, db_query, get_conn
-
 
 latest_requests = deque(maxlen=30)
 

@@ -1,7 +1,7 @@
 from flask.json import jsonify
 
 from . import app
-from .base import timing, db_query
+from .base import db_query
 
 
 def get_typeahead_data(from_lang, to_lang, query, limit=None):

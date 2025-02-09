@@ -1,8 +1,8 @@
-import sqlite3
 import json
-from pprint import pprint
+import sqlite3
 import sys
 from dataclasses import dataclass
+from pprint import pprint
 from typing import Iterable
 
 

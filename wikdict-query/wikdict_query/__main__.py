@@ -1,9 +1,7 @@
 import argparse
 import sqlite3
-from pprint import pprint
-import sys
 
-from wikdict_query import match, format_gender, fetch_idioms, define, combined_result
+from wikdict_query import combined_result
 
 
 def print_result(r):
@@ -25,7 +23,7 @@ def print_result(r):
         print(", ".join(r["pronuns"]))
 
     for i, sg in enumerate(r["sense_groups"]):
-        print(f"{i+1}.", ", ".join(sg["translations"]), end="")
+        print(f"{i + 1}.", ", ".join(sg["translations"]), end="")
         if sg["senses"]:
             print(" --", ", ".join(sg["senses"]), end="")
         print()

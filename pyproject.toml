@@ -26,3 +26,6 @@ wikdict-reader = { workspace = true }
 
 [tool.uv.workspace]
 members = ["wikdict-query", "wikdict-reader"]
+
+[tool.ruff.lint]
+select = ["I"]

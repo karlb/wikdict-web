@@ -1,6 +1,8 @@
-import wikdict_web
 import unittest
+
 from flask_testing import TestCase
+
+import wikdict_web
 
 
 class MyTestCase(TestCase):

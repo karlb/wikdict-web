@@ -1,6 +1,6 @@
 import json
-from pathlib import Path
 from dataclasses import dataclass
+from pathlib import Path
 
 """
 languages.json has been queried at https://query.wikidata.org with

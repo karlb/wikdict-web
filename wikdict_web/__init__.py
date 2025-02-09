@@ -1,19 +1,17 @@
 import os
 from subprocess import check_output
 
+import flask_assets
 import jinja2
+import markdown
 from flask import (
     Flask,
     Response,
-    redirect,
-    request,
-    url_for,
-    session,
-    send_from_directory,
     abort,
+    request,
+    send_from_directory,
+    session,
 )
-import flask_assets
-import markdown
 from markupsafe import Markup
 
 app = Flask(__name__.split(".")[0], static_folder="../static")
@@ -21,11 +19,20 @@ app.config.update(SECRET_KEY=os.environ.get("FLASK_SECRET"))
 app.jinja_env.undefined = jinja2.StrictUndefined
 assets = flask_assets.Environment(app)
 
-import wikdict_web.lookup as lookup
-import wikdict_web.reader
 import wikdict_web.admin
 import wikdict_web.base as base
+import wikdict_web.lookup
+import wikdict_web.reader
 import wikdict_web.typeahead
+
+__all__ = [
+    app,
+    base,
+    wikdict_web.lookup,
+    wikdict_web.reader,
+    wikdict_web.admin,
+    wikdict_web.typeahead,
+]
 
 ADMINS = ["karl@karl.berlin"]
 ASSET_REVISION = check_output(
@@ -43,7 +50,6 @@ def static_cache_buster(endpoint, values):
 app.debug = os.environ.get("FLASK_DEBUG", "false").lower() == "true"
 if not app.debug:
     import logging
-
     from logging.handlers import RotatingFileHandler
 
     file_handler = RotatingFileHandler(
@@ -74,8 +80,7 @@ app.jinja_env.add_extension("jinja2.ext.loopcontrols")
 def index():
     last_dict = session.get("last_dicts", ["de-en"])[0]
     from_lang, to_lang = last_dict.split("-")
-    return lookup.lookup(from_lang, to_lang)
-    # return redirect(url_for('lookup', from_lang=from_lang, to_lang=to_lang))
+    return wikdict_web.lookup.lookup(from_lang, to_lang)
 
 
 @app.route("/page/<page_name>")

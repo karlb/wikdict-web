@@ -1,15 +1,13 @@
 from io import StringIO
 from typing import Iterable
 
+import wikdict_compound
 from flask import request
 from markupsafe import Markup, escape
+from wikdict_reader import LookupFunction, make_lookup
 from wikdict_reader.html import create_partial_html
-from wikdict_reader import make_lookup, LookupFunction
-import wikdict_compound
 
-from . import app
-from . import base
-
+from . import app, base
 
 MAX_INPUT_BYTES = 4000
 

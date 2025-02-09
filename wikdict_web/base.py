@@ -1,16 +1,16 @@
-import os
-import time
 import functools
+import os
+import sqlite3
+import time
 from collections import OrderedDict, namedtuple
 from pathlib import Path
 
-import sqlite3
-import sqlite_spellfix
 import flask
-from flask import session, g
+import sqlite_spellfix
+from flask import g, session
+from wikdict_query.data import languages
 
 from .languages import language_names
-from wikdict_query.data import languages
 
 DATA_DIR = Path(os.environ["DATA_ROOT"])
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))

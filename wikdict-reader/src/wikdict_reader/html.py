@@ -90,7 +90,7 @@ def create_partial_html(f, lookup, lines, max_bytes=float("inf")) -> None:
     f.write(
         f"""
     <script src="https://unpkg.com/@popperjs/core@2"></script>
-    <script>{open(STATIC_DIR / 'reader.js').read()}</script>
+    <script>{open(STATIC_DIR / "reader.js").read()}</script>
     """
     )
 
