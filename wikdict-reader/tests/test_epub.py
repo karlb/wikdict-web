@@ -4,7 +4,6 @@ import pytest
 from lxml import etree
 
 import wikdict_reader.epub as epub
-import wikdict_reader.translate_segments as ts
 
 from .test_translate_segments import same_lookup
 
@@ -14,18 +13,17 @@ from .test_translate_segments import same_lookup
     [
         (
             "<p>Content</p>",
-            '<p><a epub:type="noteref" href="#tr-0" class="unstyled">Content</a></p>',
+            '<p><a epub:type="noteref" href="#tr-Content" class="tr">Content</a></p>',
         ),
         (
             "<div>before<p>Content</p>after</div>",
-            '<div>before<p><a epub:type="noteref" href="#tr-0" class="unstyled">Content</a></p>after</div>',
+            '<div>before<p><a epub:type="noteref" href="#tr-Content" class="tr">Content</a></p>after</div>',
         ),
     ],
 )
 def test_annotate_single_node(markup, expected, monkeypatch):
-    monkeypatch.setattr(ts, "lookup", same_lookup(["Content"]))
     root = etree.fromstring(markup)
-    epub.annotate_element(root.xpath("//*[text()='Content']")[0], {})
+    epub.annotate_element_text(root.xpath("//*[text()='Content']")[0], {}, same_lookup(["Content"]))
     assert re.sub(r' xmlns:\w+=".*?"', "", etree.tostring(root, encoding="unicode")) == expected
 
 
@@ -70,9 +68,8 @@ def test_annotate_single_node(markup, expected, monkeypatch):
 )
 def test_conserve_text(markup, expected, monkeypatch):
     words = re.findall(r"\w+", markup)
-    monkeypatch.setattr(ts, "lookup", same_lookup(words))
     root = etree.fromstring(markup)
     for elem in root.iter():
-        epub.annotate_element(elem, {})
+        epub.annotate_element_text(elem, {}, same_lookup(words))
     print(re.sub(r' xmlns:\w+=".*?"', "", etree.tostring(root, encoding="unicode")))
     assert etree.tostring(root, encoding="unicode", method="text") == expected
