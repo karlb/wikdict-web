@@ -51,7 +51,7 @@ def reader(from_lang, to_lang):
         # annotate text with translations
         input_text = escape(request.form["text"].strip())
         f = StringIO()
-        simple_lookup = make_lookup(conn, from_lang)
+        simple_lookup = make_lookup(conn, base.COMPOUND_DB_PATH, from_lang)
         create_partial_html(
             f,
             lambda phrase: lookup(phrase, from_lang, simple_lookup),

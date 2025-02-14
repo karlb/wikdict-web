@@ -14,6 +14,7 @@ from .languages import language_names
 
 DATA_DIR = Path(os.environ["DATA_ROOT"])
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+COMPOUND_DB_PATH = DATA_DIR / "compound_dbs"
 
 
 def timing(f):

@@ -50,12 +50,12 @@ def basic_lookup(cur, phrase: str) -> Iterable:
         return []
 
 
-def compound_lookup(split_lang, phrase) -> list[str]:
+def compound_lookup(compound_db_path, split_lang, phrase) -> list[str]:
     if not split_lang:
         return []
 
     split = wikdict_compound.split_compound(
-        db_path="/home/karl/code/github/wikdict-compound/compound_dbs/",  # TODO
+        db_path=compound_db_path,
         lang=split_lang,
         compound=phrase,
         ignore_word=phrase,
@@ -69,21 +69,23 @@ def compound_lookup(split_lang, phrase) -> list[str]:
 
 
 @lru_cache(maxsize=1024)
-def default_lookup(cur, split_lang, phrase):
+def default_lookup(cur, compound_db_path, split_lang, phrase):
     result = basic_lookup(cur, phrase)
 
     # If we don't find a translation and are down to a single word, try
     # splitting the word into parts and translate them separately.
     if not result and " " not in phrase and len(phrase) >= 4:
-        for part in compound_lookup(split_lang, phrase):
+        for part in compound_lookup(compound_db_path, split_lang, phrase):
             result += basic_lookup(cur, part.written_rep)
 
     return result
 
 
-def make_lookup(conn: sqlite3.Connection, split_lang: Optional[str]) -> LookupFunction:
+def make_lookup(
+    conn: sqlite3.Connection, compound_db_path, split_lang: Optional[str]
+) -> LookupFunction:
     wikdict_query.add_score_match(conn)
     cur = conn.cursor()
     cur.row_factory = sqlite3.Row
 
-    return lambda phrase: default_lookup(cur, split_lang, phrase)
+    return lambda phrase: default_lookup(cur, compound_db_path, split_lang, phrase)
