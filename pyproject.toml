@@ -23,6 +23,7 @@ authors = [
 [tool.uv.sources]
 wikdict-query = { workspace = true }
 wikdict-reader = { workspace = true }
+wikdict-compound = { git = "https://github.com/karlb/wikdict-compound/" }
 
 [tool.uv.workspace]
 members = ["wikdict-query", "wikdict-reader"]

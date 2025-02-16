@@ -22,7 +22,7 @@ name = "click"
 version = "8.1.8"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "colorama", marker = "platform_system == 'Windows'" },
+    { name = "colorama", marker = "sys_platform == 'win32'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/b9/2e/0090cbf739cee7d23781ad4b89a9894a41538e4fcf4c31dcdd705b78eb8b/click-8.1.8.tar.gz", hash = "sha256:ed53c9d8990d83c2a27deae68e4ee337473f6330c040a31d4225c9574d16096a", size = 226593 }
 wheels = [
@@ -294,11 +294,7 @@ wheels = [
 [[package]]
 name = "wikdict-compound"
 version = "0.2"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/b8/5c/32da3eed59e4748c3361c12624750788300d5ad6797f0e5962df23d90863/wikdict-compound-0.2.tar.gz", hash = "sha256:f073da75469a7a9012c873e70585bfcfcf49c1b53ef7d249938fe3240a94c886", size = 8249 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/9b/3c/8f79098d477ab4480983928bde30a8f3f2cd88bdd72d0376da14eb023cc1/wikdict_compound-0.2-py3-none-any.whl", hash = "sha256:b7962d0b0482b4bc3e0898aa37c24fd92b0d4f9fa0eeadb1a2afd26446b0785b", size = 8765 },
-]
+source = { git = "https://github.com/karlb/wikdict-compound/#a13096a85a249cf8b3cb6553569d73e670f091c2" }
 
 [[package]]
 name = "wikdict-query"
@@ -315,7 +311,7 @@ dependencies = [
     { name = "wikdict-compound" },
 ]
 
-[package.dependency-groups]
+[package.dev-dependencies]
 dev = [
     { name = "pytest" },
 ]
@@ -324,10 +320,10 @@ dev = [
 requires-dist = [
     { name = "lxml", specifier = ">=5.3.0" },
     { name = "more-itertools", specifier = ">=10.5.0" },
-    { name = "wikdict-compound", specifier = ">=0.2" },
+    { name = "wikdict-compound", git = "https://github.com/karlb/wikdict-compound/" },
 ]
 
-[package.metadata.dependency-groups]
+[package.metadata.requires-dev]
 dev = [{ name = "pytest", specifier = ">=8.3.3" }]
 
 [[package]]
@@ -356,7 +352,7 @@ requires-dist = [
     { name = "markdown", specifier = ">=3.7" },
     { name = "more-itertools", specifier = ">=10.6.0" },
     { name = "sqlite-spellfix", specifier = ">=1.1" },
-    { name = "wikdict-compound", specifier = "==0.2" },
+    { name = "wikdict-compound", git = "https://github.com/karlb/wikdict-compound/" },
     { name = "wikdict-query", editable = "wikdict-query" },
     { name = "wikdict-reader", editable = "wikdict-reader" },
 ]
