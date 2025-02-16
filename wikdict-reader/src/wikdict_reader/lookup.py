@@ -51,7 +51,7 @@ def basic_lookup(cur, phrase: str) -> Iterable:
 
 
 def compound_lookup(compound_db_path, split_lang, phrase) -> list[str]:
-    if not split_lang:
+    if split_lang not in wikdict_compound.supported_langs:
         return []
 
     split = wikdict_compound.split_compound(
