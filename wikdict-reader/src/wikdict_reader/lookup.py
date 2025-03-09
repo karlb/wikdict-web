@@ -9,7 +9,9 @@ import wikdict_query
 LookupFunction = Callable[[str], Iterable]
 
 
-def basic_lookup(cur, phrase: str) -> Iterable:
+def basic_lookup(conn, phrase: str) -> Iterable:
+    cur = conn.cursor()
+    cur.row_factory = sqlite3.Row
     try:
         return cur.execute(
             """
@@ -48,6 +50,8 @@ def basic_lookup(cur, phrase: str) -> Iterable:
     except sqlite3.OperationalError as e:
         print(f"Lookup failed for {phrase!r}: {e}", file=sys.stderr)
         return []
+    finally:
+        cur.close()
 
 
 def compound_lookup(compound_db_path, split_lang, phrase) -> list[str]:
@@ -69,14 +73,14 @@ def compound_lookup(compound_db_path, split_lang, phrase) -> list[str]:
 
 
 @lru_cache(maxsize=1024)
-def default_lookup(cur, compound_db_path, split_lang, phrase):
-    result = basic_lookup(cur, phrase)
+def default_lookup(conn, compound_db_path, split_lang, phrase):
+    result = basic_lookup(conn, phrase)
 
     # If we don't find a translation and are down to a single word, try
     # splitting the word into parts and translate them separately.
     if not result and " " not in phrase and len(phrase) >= 4:
         for part in compound_lookup(compound_db_path, split_lang, phrase):
-            result += basic_lookup(cur, part.written_rep)
+            result += basic_lookup(conn, part.written_rep)
 
     return result
 
@@ -85,7 +89,5 @@ def make_lookup(
     conn: sqlite3.Connection, compound_db_path, split_lang: Optional[str]
 ) -> LookupFunction:
     wikdict_query.add_score_match(conn)
-    cur = conn.cursor()
-    cur.row_factory = sqlite3.Row
 
-    return lambda phrase: default_lookup(cur, compound_db_path, split_lang, phrase)
+    return lambda phrase: default_lookup(conn, compound_db_path, split_lang, phrase)
