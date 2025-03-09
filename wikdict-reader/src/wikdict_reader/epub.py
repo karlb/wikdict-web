@@ -132,7 +132,8 @@ def annotate_file(filename, dir_depth, lookup_function: LookupFunction):
     with open(filename, "rb") as f:
         context = etree.iterparse(f, events=("start", "end"))
 
-        for event, elem in context:
+        # Modifying the elements while parsing is not safe, so we add `list` here
+        for event, elem in list(context):
             if elem.tag == BODY_TAG:
                 in_body = event == "start"
             elif elem.tag == A_TAG:
