@@ -1,3 +1,6 @@
 NGINX_SERVER_NAME=www.wikdict.com
 NGINX_HTTPS_ONLY=1
 NGINX_STATIC_PATHS=/static/sitemap:/home/piku/.piku/data/wikdict/sitemap/,/static:static
+UWSGI_PROCESSES=6
+UWSGI_LISTEN=200
+UWSGI_ENABLE_THREADS=true
