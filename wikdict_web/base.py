@@ -124,7 +124,11 @@ def db_query(
     conn = get_conn(db_name, path, attach_dbs, write)
     cur = conn.cursor()
     for name, db in (attach_dbs or {}).items():
-        cur.execute("ATTACH DATABASE '{}' AS {}".format(path_for_db(db, path), name))
+        cur.execute(
+            "ATTACH DATABASE 'file:{}?immutable=1' AS {}".format(
+                path_for_db(db, path), name
+            )
+        )
     if explain:
         condensed_stmt = " ".join(stmt.split())
         print("\nPlan for {}".format(repr(condensed_stmt[:160])))
