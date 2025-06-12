@@ -62,7 +62,7 @@ if not app.debug:
 
     credentials = (os.environ["SMTP_USER"], os.environ["SMTP_PASSWORD"])
     mail_handler = SMTPHandler(
-        "smtp.sendgrid.net",
+        os.environ["SMTP_SERVER"],
         "server-error@wikdict.com",
         ADMINS,
         "WikDict Error",
