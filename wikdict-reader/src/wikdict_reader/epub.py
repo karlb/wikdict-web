@@ -11,6 +11,12 @@ from more_itertools import peekable
 from .html import format_popup_content, text_to_html_id
 from .translate_segments import LookupFunction, translate_segments
 
+# Get the CSS file path relative to the package installation
+# __file__ is in site-packages/wikdict_reader/epub.py
+# html_static is in site-packages/html_static/
+_PACKAGE_DIR = Path(__file__).parent.parent
+_CSS_PATH = _PACKAGE_DIR / "html_static" / "wikdict_epub.css"
+
 nsmap = {
     "xhtml": "http://www.w3.org/1999/xhtml",
     "epub": "http://www.idpf.org/2007/ops",
@@ -197,7 +203,7 @@ def translate_epub(in_dir: Path | str, out_filename: str, lookup_function: Looku
     with ZipFile(out_filename, "w") as out_zip:
         # The file "mimetype" must be the first in the zip
         out_zip.writestr("mimetype", "application/epub+zip")
-        out_zip.write("html_static/wikdict_epub.css", "wikdict_epub.css")
+        out_zip.write(_CSS_PATH, "wikdict_epub.css")
 
         for path in in_dir.rglob("*"):
             if not path.is_file():
