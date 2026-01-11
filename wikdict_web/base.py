@@ -104,7 +104,9 @@ def get_conn(db_name, path="dict", attach_dbs=None, write=False):
             'Database file "{}" does not exist'.format(db_path)
         )
 
-    conn = sqlite3.connect(f"file:{db_path}" + ("" if write else "?immutable=1"))
+    conn = sqlite3.connect(
+        f"file:{db_path}" + ("" if write else "?immutable=1"), uri=True
+    )
     conn.isolation_level = None  # autocommit
     conn.row_factory = namedtuple_factory
     conn.enable_load_extension(True)
