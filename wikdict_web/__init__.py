@@ -24,6 +24,7 @@ import wikdict_web.base as base
 import wikdict_web.lookup
 import wikdict_web.reader
 import wikdict_web.typeahead
+from wikdict_web.languages import language_names
 
 __all__ = [
     app,
@@ -102,6 +103,8 @@ def page(page_name):
 
 @app.route("/opensearch/<from_lang>-<to_lang>")
 def opensearch(from_lang, to_lang):
+    if from_lang not in language_names or to_lang not in language_names:
+        abort(404)
     return Response(
         base.render_template(
             "opensearch.xml",
