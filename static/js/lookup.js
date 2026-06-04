@@ -198,7 +198,9 @@ $(function() {
 
         input.on('blur', function () { window.setTimeout(close, 120); });
 
-        input.focus();
+        // Focus is handled declaratively by the input's `autofocus` attribute,
+        // which fires at parse time (before this bundle loads). We still select
+        // here so a query already in the box (results page) is ready to retype.
         setTimeout(function () { input.select(); }, 50);
 
         // When the active pair changes (e.g. via the home-page picker, which fires
