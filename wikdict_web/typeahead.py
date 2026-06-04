@@ -5,16 +5,21 @@ from .base import db_query
 
 
 def get_typeahead_data(from_lang, to_lang, query, limit=None):
+    # SQLite's LIKE folds case for ASCII only, so a lowercase query like "über"
+    # would miss capitalised words such as the German noun "Übersetzung". We
+    # also match the query with its first letter's case flipped; LIKE then folds
+    # the ASCII letters in the rest of the prefix, covering both capitalisations.
+    query_alt = query[:1].swapcase() + query[1:]
     sql = """
         SELECT written_rep, replace(trans_list, ' | ', ', ') AS trans_list, lang, max_score, rel_importance
         FROM (
             SELECT written_rep, trans_list, max_score, rel_importance, :from_lang AS lang
             FROM simple_translation
-            WHERE written_rep LIKE :query || '%'
+            WHERE written_rep LIKE :query || '%' OR written_rep LIKE :query_alt || '%'
             UNION ALL
             SELECT written_rep, trans_list, max_score, rel_importance, :to_lang AS lang
             FROM other.simple_translation
-            WHERE written_rep LIKE :query || '%'
+            WHERE written_rep LIKE :query || '%' OR written_rep LIKE :query_alt || '%'
         )
         ORDER BY max_score * coalesce(rel_importance, 0.01) DESC
     """
@@ -23,7 +28,7 @@ def get_typeahead_data(from_lang, to_lang, query, limit=None):
     return db_query(
         from_lang + "-" + to_lang,
         sql,
-        dict(query=query, from_lang=from_lang, to_lang=to_lang),
+        dict(query=query, query_alt=query_alt, from_lang=from_lang, to_lang=to_lang),
         attach_dbs=dict(other=to_lang + "-" + from_lang),
     )
 
