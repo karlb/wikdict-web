@@ -147,7 +147,12 @@
 	border: 1px solid var(--bs-border-color);
 	border-top: 0;
 	border-radius: 0 0 .5rem .5rem;
-	box-shadow: 0 5px 10px rgba(0,0,0,.2);
+	/* Dark shadow gives the menu a clear floating-layer depth; the soft white
+	   halo bleeds over the picker just below, fading the tiles near the boundary
+	   so the dropdown stands apart without animating the picker itself. */
+	box-shadow:
+		0 10px 28px rgba(0, 0, 0, .26),
+		0 24px 44px 46px rgba(255, 255, 255, .5);
 }
 
 /* Square the field's bottom corners while the popover is open. */
@@ -336,16 +341,8 @@
 	color: var(--bs-secondary-color);
 	font-variant-numeric: tabular-nums;
 }
-.wd-tile-available {
-	border-color: var(--bs-primary);
-	background: rgba(13, 110, 253, .04);
-}
 .wd-tile-available .wd-tile-count {
-	color: var(--bs-primary);
 	font-weight: 600;
-}
-.wd-tile-available-alt {
-	background: rgba(13, 110, 253, .02);
 }
 .wd-tile-available-alt .wd-tile-count {
 	font-weight: 600;
@@ -356,18 +353,12 @@
 	background: var(--bs-tertiary-bg);
 }
 .wd-tile-confirmed {
-	background: var(--bs-primary);
-	color: #fff;
+	background: var(--bs-primary-bg-subtle);
 	border-color: var(--bs-primary);
-	box-shadow: 0 4px 14px rgba(13, 110, 253, .25);
 }
 /* Only the just-tapped tile pops, not every selected tile on re-render. */
 .wd-tile-pop {
-	animation: wd-pop .35s cubic-bezier(.2, .8, .2, 1);
-}
-.wd-tile-confirmed .wd-tile-pairs,
-.wd-tile-confirmed .wd-tile-count {
-	color: rgba(255, 255, 255, .85);
+	animation: wd-pop .2s ease-out;
 }
 .wd-tile-confirmed .wd-tile-check {
 	position: absolute;
@@ -376,15 +367,14 @@
 	width: 20px;
 	height: 20px;
 	border-radius: 50%;
-	background: rgba(255, 255, 255, .2);
+	background: var(--bs-primary);
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	color: #fff;
 }
 @keyframes wd-pop {
-	0%   { transform: scale(.96); }
-	60%  { transform: scale(1.04); }
+	0%   { transform: scale(.98); }
 	100% { transform: scale(1); }
 }
 
