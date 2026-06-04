@@ -203,9 +203,11 @@
             </p>
         {% endif %}
 
+        {# Two columns (results + Wiktionary sidebar) whenever Wiktionary links
+           exist; otherwise the results/“no translations” box spans full width. #}
         <div id="result-row" class="row">
 
-            <div id="results" class="col-md-9">
+            <div id="results" class="{{ 'col-md-9' if wiktionary_links else 'col-12' }}">
 
                 {% if compound_parts %}
                     <div class="alert alert-dark" role="alert">
@@ -221,8 +223,8 @@
                     {{ results_one_dir(lang_result) }}
                 {% endfor %}
                 {% if not results %}
-                    <div>
-                        <p>Sorry, no translations for "{{ query }}" have been found.</p>
+                    <div class="text-center text-muted bg-body-tertiary rounded-3 p-5">
+                        <p class="mb-0">Sorry, no translations for "{{ query }}" have been found.</p>
                     </div>
                 {% endif %}
 
@@ -230,8 +232,8 @@
                 {#{ definition(results[3], to_lang) }#}
             </div>
 
+            {% if wiktionary_links %}
             <div class="col-md-3">
-                {% if wiktionary_links %}
                 <div class="card">
                     <div class="card-header">Wiktionary Links</div>
                     <ul class="list-group list-group-flush">
@@ -246,8 +248,8 @@
                         {% endfor %}
                     </ul>
                 </div>
-                {% endif %}
             </div>
+            {% endif %}
 
         </div>
 
