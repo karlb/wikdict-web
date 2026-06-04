@@ -342,6 +342,13 @@
 .wd-tile-name {
 	font-weight: 500;
 	font-size: 14px;
+	/* Keep tiles a uniform single-line height; the flag still identifies the
+	   language and long native names (e.g. "lietuvių kalba") would otherwise
+	   wrap and drag the whole grid row taller. */
+	align-self: stretch;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 .wd-tile-pairs,
 .wd-tile-count {
@@ -399,6 +406,30 @@
 	0%   { transform: scale(.96); }
 	60%  { transform: scale(1.04); }
 	100% { transform: scale(1); }
+}
+
+@media (max-width: 480px) {
+	/* Keep the active-pair pills from overflowing: drop the label and let the
+	   two pills wrap if a long name pushes them past the viewport. */
+	.wd-pair-pills {
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 6px 8px;
+	}
+	.wd-pair-pills-label {
+		display: none;
+	}
+	/* Smaller, denser tiles so more languages fit per row on a phone. */
+	.wd-tape {
+		grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+		gap: 8px;
+	}
+	.wd-tile {
+		padding: 10px;
+	}
+	.wd-tile-flag {
+		font-size: 20px;
+	}
 }
 
 /* No-JS fallback: two native selects + submit */
