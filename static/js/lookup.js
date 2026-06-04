@@ -73,7 +73,7 @@ $(function() {
             if (loaded_key !== key) {
                 loaded_data = undefined;
                 loaded_key = key;
-                $.ajax('/typeahead/' + pair + '/' + encodeURI(encodeURI(prefix.toLowerCase())), {
+                $.ajax('/typeahead/' + pair + '/' + encodeURI(prefix.toLowerCase()), {
                     success: function (data) {
                         if (loaded_key !== key) {
                             return;  // pair or prefix changed while in flight
