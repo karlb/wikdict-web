@@ -202,9 +202,10 @@
 	font-weight: 700;
 }
 
-/* Active/hovered row — highlight the row, never the header band. */
-.ta-item.is-active .ta-row,
-.ta-item:hover .ta-row {
+/* The active row — the single Enter target — highlighted on the row, never
+   the header band. Hover deliberately gets no highlight: only the keyboard
+   selection is shown, so it is always unambiguous what Enter will do. */
+.ta-item.is-active .ta-row {
 	background: var(--bs-primary-bg-subtle);
 	border-left-color: var(--bs-primary);
 }

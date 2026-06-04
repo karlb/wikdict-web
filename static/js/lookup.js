@@ -206,16 +206,12 @@
             }
         });
 
-        // Delegated hover/click. mouseover (bubbles) stands in for jQuery's
-        // delegated mouseenter; the active-row guard keeps it from re-running
-        // setActive (and its scrollIntoView) on every intra-row move.
-        menu.addEventListener('mouseover', function (e) {
-            var item = e.target.closest('.ta-item');
-            if (item) {
-                var i = Number(item.dataset.i);
-                if (i !== active) setActive(i);
-            }
-        });
+        // The mouse can click a row to select it, but it deliberately does NOT
+        // set the active row: `active` (the Enter target) is driven solely by
+        // the keyboard. That keeps a single highlight on screen and makes Enter
+        // unambiguous — a stray hover or a suggestion rendering under a resting
+        // cursor can never change what Enter does. Clicking selects by the row's
+        // own index, independent of `active`.
         menu.addEventListener('mousedown', function (e) {
             var item = e.target.closest('.ta-item');
             if (item) {
