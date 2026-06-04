@@ -13,6 +13,44 @@ $(function() {
         return v.split('-').sort().join('-');  // canonical order (from < to)
     }
 
+    // Escape text coming from the dictionary data before inserting it as HTML.
+    function esc(s) {
+        return $('<div>').text(s == null ? '' : s).html();
+    }
+    function flagFor(lang) {
+        return (window.lang_flags || {})[lang] || '';
+    }
+
+    // Header band for a language section, mirroring the result-page cards:
+    // "<flag> <source>" on the left, "<target> <flag>" on the right.
+    function headBand(lang) {
+        var pair = currentPair().split('-');
+        var other = pair[0] === lang ? pair[1] : pair[0];
+        return '<div class="ta-head"><span>' + flagFor(lang) + ' ' + lang + '</span>'
+            + '<span>' + other + ' ' + flagFor(other) + '</span></div>';
+    }
+
+    // Group matches by source language (one section per language that has hits),
+    // capped per section, in canonical pair order. The first row of each section
+    // is tagged with `_head` so the suggestion template can draw its header band.
+    var PER_GROUP = 5;
+    function groupByLang(rows) {
+        var byLang = {};
+        rows.forEach(function (x) {
+            x._head = null;  // clear any tag from a previous grouping
+            (byLang[x[2]] = byLang[x[2]] || []).push(x);
+        });
+        var out = [];
+        currentPair().split('-').forEach(function (lang) {
+            var g = (byLang[lang] || []).slice(0, PER_GROUP);
+            if (g.length) {
+                g[0]._head = lang;
+                out = out.concat(g);
+            }
+        });
+        return out;
+    }
+
     // typeahead
     var substringMatcher = function() {
         var loaded_key;   // "<pair>:<prefix>"
@@ -22,9 +60,10 @@ $(function() {
             if (loaded_data === undefined) {
                 return;
             }
-            return $.grep(loaded_data, function(x) {
+            var hits = $.grep(loaded_data, function(x) {
                 return x[0].toLowerCase().startsWith(q.toLowerCase());
             });
+            return groupByLang(hits);
         }
 
         return function findMatches(q, cb, cb_async) {
@@ -56,15 +95,19 @@ $(function() {
         },
         {
             source: substringMatcher(),
-            limit: 5,
+            limit: 12,
             display: function (x) {
                 return x[0]
             },
             templates: {
                 suggestion: function (x) {
-                      return '<div class="suggestion clearfix"><span class="word">' + x[0]
-                                + ' <span class="text-muted">(' + x[2] + ')</span></span>'
-                                + '<span class="simple-trans">' + x[1] + '</span></div>';
+                    return (x._head ? headBand(x._head) : '')
+                        + '<div class="ta-row"><span class="ta-word">' + esc(x[0]) + '</span>'
+                        + '<span class="ta-trans">' + esc(x[1]) + '</span></div>';
+                },
+                footer: function (ctx) {
+                    return '<div class="ta-foot">↵ see all matches for <b>'
+                        + esc(ctx.query) + '</b></div>';
                 }
             }
         })
@@ -75,6 +118,15 @@ $(function() {
     // submit form when selecting a suggestion
     $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
         $('.search-form').submit();
+    });
+
+    // Weld the popover to the input: square the field's bottom corners while
+    // suggestions are showing (render fires only with content, so an empty
+    // result never leaves the corners squared with nothing below).
+    $('.typeahead').on('typeahead:render', function () {
+        $(this).closest('.input-group').addClass('ta-open');
+    }).on('typeahead:close', function () {
+        $(this).closest('.input-group').removeClass('ta-open');
     });
 
     // When the active pair changes (e.g. via the home-page picker, which fires a
