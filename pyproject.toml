@@ -3,7 +3,7 @@ name = "wikdict-web"
 version = "1.0"
 description = "Web frontend for WikDict's bilingual dictionaries"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
     "flask>=3.1.0",
     "flask-assets>=2.1.0",
