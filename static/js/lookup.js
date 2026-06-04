@@ -91,11 +91,27 @@ $(function() {
             active = -1;
         }
 
+        // Relevance of a row for query q: the backend's popularity score
+        // (max_score * coalesce(rel_importance, 0.01)) weighted by a length
+        // factor in (0, 1] that favours shorter words. So "fun" outranks the
+        // longer "function" unless the latter is far more popular.
+        function rank(x, q) {
+            var base = (x[3] || 0) * (x[4] != null ? x[4] : 0.01);
+            return base * (q.length / x[0].length);
+        }
+
         function matches(q) {
             if (loadedData === undefined) return [];
-            return $.grep(loadedData, function (x) {
-                return x[0].toLowerCase().startsWith(q.toLowerCase());
+            var ql = q.toLowerCase();
+            var hits = $.grep(loadedData, function (x) {
+                return x[0].toLowerCase().startsWith(ql);
             });
+            hits.sort(function (a, b) {
+                var ax = a[0].toLowerCase() === ql, bx = b[0].toLowerCase() === ql;
+                if (ax !== bx) return ax ? -1 : 1;   // exact match pinned first
+                return rank(b, q) - rank(a, q);      // then length-weighted score
+            });
+            return hits;
         }
 
         function render(q) {
