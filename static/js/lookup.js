@@ -30,14 +30,24 @@ $(function() {
             + '<span>' + other + ' ' + flagFor(other) + '</span></div>';
     }
 
+    // Highlight the matched substring (first occurrence, case-insensitive).
+    function highlight(text, q) {
+        text = text == null ? '' : String(text);
+        var i = q ? text.toLowerCase().indexOf(q.toLowerCase()) : -1;
+        if (i < 0) return esc(text);
+        return esc(text.slice(0, i))
+            + '<strong class="ta-hl">' + esc(text.slice(i, i + q.length)) + '</strong>'
+            + esc(text.slice(i + q.length));
+    }
+
     // Group matches by source language (one section per language that has hits),
     // capped per section, in canonical pair order. The first row of each section
-    // is tagged with `_head` so the suggestion template can draw its header band.
+    // is tagged with `_head` so a header band is drawn before it.
     var PER_GROUP = 5;
     function groupByLang(rows) {
         var byLang = {};
         rows.forEach(function (x) {
-            x._head = null;  // clear any tag from a previous grouping
+            x._head = null;
             (byLang[x[2]] = byLang[x[2]] || []).push(x);
         });
         var out = [];
@@ -51,95 +61,144 @@ $(function() {
         return out;
     }
 
-    // typeahead
-    var substringMatcher = function() {
-        var loaded_key;   // "<pair>:<prefix>"
-        var loaded_data;
+    /* ---------- typeahead ----------
 
-        function match(q) {
-            if (loaded_data === undefined) {
-                return;
-            }
-            var hits = $.grep(loaded_data, function(x) {
-                return x[0].toLowerCase().startsWith(q.toLowerCase());
-            });
-            return groupByLang(hits);
+       A small self-contained autocomplete. It fetches the matches for the first
+       MIN_LEN characters once per prefix+pair, caches them, then filters and
+       groups that data on the client as the user keeps typing. */
+    var MIN_LEN = 3;
+    var input = $('.typeahead');
+    if (input.length) {
+        var group = input.closest('.input-group');
+        var menu = $('<div class="ta-menu" id="ta-menu" role="listbox"></div>')
+            .appendTo(group).hide();
+        input.attr({
+            role: 'combobox', 'aria-autocomplete': 'list',
+            'aria-controls': 'ta-menu', 'aria-expanded': 'false'
+        });
+
+        var loadedKey, loadedData;   // cache: "<pair>:<prefix>" -> rows
+        var rows = [];               // selectable rows currently shown
+        var active = -1;
+
+        function visible() { return menu.is(':visible'); }
+
+        function close() {
+            menu.hide().empty();
+            group.removeClass('ta-open');
+            input.attr('aria-expanded', 'false').removeAttr('aria-activedescendant');
+            rows = [];
+            active = -1;
         }
 
-        return function findMatches(q, cb, cb_async) {
-            var pair = currentPair();
-            var prefix = q.slice(0, 3);
-            var key = pair + ':' + prefix;
-            if (loaded_key !== key) {
-                loaded_data = undefined;
-                loaded_key = key;
-                $.ajax('/typeahead/' + pair + '/' + encodeURI(prefix.toLowerCase()), {
+        function matches(q) {
+            if (loadedData === undefined) return [];
+            return $.grep(loadedData, function (x) {
+                return x[0].toLowerCase().startsWith(q.toLowerCase());
+            });
+        }
+
+        function render(q) {
+            rows = groupByLang(matches(q));
+            if (!rows.length) { close(); return; }
+            var html = '';
+            rows.forEach(function (row, i) {
+                if (row._head) html += headBand(row._head);
+                html += '<div class="ta-item" role="option" id="ta-opt-' + i + '" data-i="' + i + '">'
+                    + '<div class="ta-row"><span class="ta-word">' + highlight(row[0], q) + '</span>'
+                    + '<span class="ta-trans">' + highlight(row[1], q) + '</span></div></div>';
+            });
+            html += '<div class="ta-foot">↵ see all matches for <b>' + esc(q) + '</b></div>';
+            menu.html(html).show();
+            group.addClass('ta-open');
+            input.attr('aria-expanded', 'true');
+            setActive(-1);
+        }
+
+        function load(q) {
+            var prefix = q.slice(0, MIN_LEN);
+            var key = currentPair() + ':' + prefix;
+            if (loadedKey !== key) {
+                loadedKey = key;
+                loadedData = undefined;
+                $.ajax('/typeahead/' + currentPair() + '/' + encodeURI(prefix.toLowerCase()), {
                     success: function (data) {
-                        if (loaded_key !== key) {
-                            return;  // pair or prefix changed while in flight
-                        }
-                        loaded_data = data;
-                        cb_async(match(q));
+                        if (loadedKey !== key) return;  // pair/prefix changed in flight
+                        loadedData = data;
+                        if (input.val().length >= MIN_LEN) render(input.val());
                     }
                 });
             }
-
-            cb(match(q));
-        };
-    };
-
-    input = $('.typeahead').typeahead({
-            hint: true,
-            highlight: true,
-            minLength: 3
-        },
-        {
-            source: substringMatcher(),
-            limit: 12,
-            display: function (x) {
-                return x[0]
-            },
-            templates: {
-                suggestion: function (x) {
-                    return (x._head ? headBand(x._head) : '')
-                        + '<div class="ta-row"><span class="ta-word">' + esc(x[0]) + '</span>'
-                        + '<span class="ta-trans">' + esc(x[1]) + '</span></div>';
-                },
-                footer: function (ctx) {
-                    return '<div class="ta-foot">↵ see all matches for <b>'
-                        + esc(ctx.query) + '</b></div>';
-                }
-            }
-        })
-    input.focus();
-    setTimeout(function () { input.select(); }, 50);
-    // hide suggestions until user types
-    setTimeout(function () {$('.typeahead').typeahead('close')}, 0);
-    // submit form when selecting a suggestion
-    $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
-        $('.search-form').submit();
-    });
-
-    // Weld the popover to the input: square the field's bottom corners while
-    // suggestions are showing (render fires only with content, so an empty
-    // result never leaves the corners squared with nothing below).
-    $('.typeahead').on('typeahead:render', function () {
-        $(this).closest('.input-group').addClass('ta-open');
-    }).on('typeahead:close', function () {
-        $(this).closest('.input-group').removeClass('ta-open');
-    });
-
-    // When the active pair changes (e.g. via the home-page picker, which fires a
-    // change event on index_name), discard the suggestions rendered for the old
-    // dictionary so they can't reappear when the input is refocused. Any typed
-    // word is kept and re-queried against the new pair.
-    $('input[name="index_name"]').on('change', function () {
-        var el = input.get(0);
-        var word = input.typeahead('val');
-        input.typeahead('val', '');
-        if (el && word) {
-            el.value = word;
-            el.dispatchEvent(new Event('input', { bubbles: true }));
+            render(q);
         }
-    });
+
+        function setActive(i) {
+            var opts = menu.find('.ta-item');
+            opts.removeClass('is-active');
+            active = i;
+            if (i >= 0 && opts[i]) {
+                opts.eq(i).addClass('is-active');
+                input.attr('aria-activedescendant', 'ta-opt-' + i);
+                opts[i].scrollIntoView({ block: 'nearest' });
+            } else {
+                input.removeAttr('aria-activedescendant');
+            }
+        }
+
+        function select(i) {
+            if (rows[i]) input.val(rows[i][0]);
+            $('.search-form').submit();
+        }
+
+        input.on('input', function () {
+            var q = input.val();
+            if (q.length < MIN_LEN) { close(); return; }
+            load(q);
+        });
+
+        input.on('keydown', function (e) {
+            if (e.key === 'ArrowDown') {
+                if (!visible()) {
+                    if (input.val().length >= MIN_LEN) load(input.val());
+                } else {
+                    setActive(active + 1 >= rows.length ? 0 : active + 1);
+                }
+                e.preventDefault();
+            } else if (e.key === 'ArrowUp') {
+                if (visible()) {
+                    setActive(active <= 0 ? rows.length - 1 : active - 1);
+                    e.preventDefault();
+                }
+            } else if (e.key === 'Enter') {
+                // With a row highlighted, open it; otherwise let the form submit
+                // the typed query (the "see all matches" path).
+                if (visible() && active >= 0) { select(active); e.preventDefault(); }
+            } else if (e.key === 'Escape') {
+                if (visible()) { close(); e.preventDefault(); }
+            }
+        });
+
+        menu.on('mouseenter', '.ta-item', function () {
+            setActive($(this).data('i'));
+        }).on('mousedown', '.ta-item', function (e) {
+            e.preventDefault();   // keep input focus so the submit fires cleanly
+            select($(this).data('i'));
+        });
+
+        input.on('blur', function () { window.setTimeout(close, 120); });
+
+        input.focus();
+        setTimeout(function () { input.select(); }, 50);
+
+        // When the active pair changes (e.g. via the home-page picker, which fires
+        // a change event on index_name) the cached suggestions are for the old
+        // dictionary, so drop them and re-query the typed word against the new pair.
+        $('input[name="index_name"]').on('change', function () {
+            loadedKey = undefined;
+            loadedData = undefined;
+            var q = input.val();
+            if (input.is(':focus') && q.length >= MIN_LEN) load(q);
+            else close();
+        });
+    }
 })
