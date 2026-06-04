@@ -43,12 +43,12 @@
   // selected: codes in FIFO order (oldest first). Starts as the current pair.
   var selected = data.current.slice();
 
-  function commit(next) {
+  function commit(next, popCode) {
     selected = next;
     if (next.length === 2 && pairExists(next[0], next[1])) {
       updateCommittedPair(next[0], next[1]);
     }
-    render();
+    render(popCode);
   }
 
   function handleTile(code) {
@@ -60,17 +60,17 @@
       return;
     }
     if (selected.length === 0) {
-      commit([code]);
+      commit([code], code);
       return;
     }
     if (selected.length === 1) {
-      if (pairExists(selected[0], code)) commit([selected[0], code]);
+      if (pairExists(selected[0], code)) commit([selected[0], code], code);
       return;
     }
     var oldest = selected[0];
     var newest = selected[1];
-    if (pairExists(newest, code)) commit([newest, code]);
-    else if (pairExists(oldest, code)) commit([oldest, code]);
+    if (pairExists(newest, code)) commit([newest, code], code);
+    else if (pairExists(oldest, code)) commit([oldest, code], code);
   }
 
   function tileState(code) {
@@ -107,12 +107,12 @@
   var CHECK_SVG =
     '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg>';
 
-  function render() {
-    renderTape();
+  function render(popCode) {
+    renderTape(popCode);
     renderPills();
   }
 
-  function renderTape() {
+  function renderTape(popCode) {
     var html = "";
     LANGUAGES.forEach(function (l) {
       var state = tileState(l.code);
@@ -132,7 +132,8 @@
           : "";
 
       html +=
-        '<button type="button" class="wd-tile wd-tile-' + state + '"' +
+        '<button type="button" class="wd-tile wd-tile-' + state +
+        (l.code === popCode ? " wd-tile-pop" : "") + '"' +
         ' data-code="' + l.code + '"' +
         (state === "unavailable" ? " disabled" : "") +
         ' aria-pressed="' + (state === "confirmed") + '">' +

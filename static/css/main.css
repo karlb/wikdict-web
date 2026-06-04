@@ -340,7 +340,7 @@
 .wd-tile:hover.wd-tile-default,
 .wd-tile:hover.wd-tile-available {
 	border-color: var(--bs-body-color);
-	transform: translateY(-1px);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, .12);
 }
 .wd-tile-flag {
 	font-size: 22px;
@@ -380,6 +380,9 @@
 	color: #fff;
 	border-color: var(--bs-primary);
 	box-shadow: 0 4px 14px rgba(13, 110, 253, .25);
+}
+/* Only the just-tapped tile pops, not every selected tile on re-render. */
+.wd-tile-pop {
 	animation: wd-pop .35s cubic-bezier(.2, .8, .2, 1);
 }
 .wd-tile-confirmed .wd-tile-pairs,
