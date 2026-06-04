@@ -100,6 +100,10 @@
       indexName.value = a + "-" + b;
       indexName.dispatchEvent(new Event("change", { bubbles: true }));
     }
+    // Keep the address bar in sync so reload/bookmark/share reflect the active
+    // pair, without a navigation. Canonical order (a<b) matches the URL the
+    // server would redirect to, so a later reload won't bounce.
+    history.replaceState(null, "", "/" + pairKey(a, b) + "/");
   }
 
   // --- Rendering -------------------------------------------------------------
@@ -187,4 +191,11 @@
   }
 
   render();
+
+  // On arrival the page may render at "/" (last-used pair from the session)
+  // while the URL doesn't name the pair. Sync it once so reload/bookmark/share
+  // reflect what's shown — idempotent when already at /from-to/.
+  if (selected.length === 2 && pairExists(selected[0], selected[1])) {
+    history.replaceState(null, "", "/" + pairKey(selected[0], selected[1]) + "/");
+  }
 })();
