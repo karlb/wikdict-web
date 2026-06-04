@@ -100,30 +100,9 @@
 .search-form .input-group {
     flex-wrap: nowrap;
 }
-.translation a {
-	color: black;
-}
 
 .main-page > .row {
 	margin-top: 15px;
-}
-.lang-pair {
-	color: black;
-	text-decoration: none;
-	text-align: center;
-	padding: 20px 5px;
-	white-space: nowrap;
-	overflow: none;
-}
-.lang-pair:hover {
-	cursor: pointer;
-	border-color: black;
-}
-.lang-pair .name {
-	font-weight: bold;
-}
-.lang-select {
-	margin: 6px 0;
 }
 .did-you-mean {
 	margin: 20px 5px;

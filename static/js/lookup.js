@@ -1,9 +1,4 @@
 $(function() {
-    // language selection
-    $('.lang-select').change(function () {
-        window.location = '/' + this.value + '/';
-    })
-
     // The active pair is read from the search form's hidden index_name input —
     // the exact value the form submits — so the typeahead can never query a
     // different dictionary than the search itself will use. Loaded suggestions
