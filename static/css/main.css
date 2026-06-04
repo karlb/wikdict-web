@@ -206,3 +206,180 @@
 .tt-suggestion p {
 	margin: 0 !important;
 }
+
+
+/***************** language-pair picker ********************/
+
+/* Hero pair pills — replace the "Enter a word in X or Y" tagline */
+.wd-pair-pills {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	margin-top: 14px;
+	padding: 6px 14px 6px 16px;
+	background: var(--bs-tertiary-bg);
+	border-radius: 999px;
+}
+.wd-pair-pills-label {
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: .12em;
+	color: var(--bs-secondary-color);
+	font-weight: 600;
+}
+.wd-pair-pills-arrow {
+	color: var(--bs-secondary-color);
+	font-size: 14px;
+}
+
+.wd-pair-pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 4px 4px 4px 10px;
+	background: #fff;
+	border: 2px solid var(--bs-primary);
+	border-radius: 999px;
+	font-size: 13px;
+	font-weight: 500;
+	line-height: 1.2;
+}
+.wd-pair-pill-older {
+	border-color: var(--bs-border-color);
+}
+.wd-pair-pill-empty {
+	border-style: dashed;
+	border-color: var(--bs-border-color);
+	color: var(--bs-secondary-color);
+	font-style: italic;
+	padding: 4px 12px;
+}
+.wd-pair-pill-flag {
+	font-size: 16px;
+}
+.wd-pair-pill-x {
+	width: 18px;
+	height: 18px;
+	border: 0;
+	border-radius: 50%;
+	background: var(--bs-tertiary-bg);
+	color: var(--bs-secondary-color);
+	cursor: pointer;
+	font-size: 14px;
+	line-height: 1;
+	padding: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+.wd-pair-pill-x:hover {
+	background: var(--bs-body-color);
+	color: #fff;
+}
+
+/* Tile grid */
+.wd-tape {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+	gap: 10px;
+}
+.wd-tile {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 4px;
+	background: #fff;
+	border: 1px solid var(--bs-border-color);
+	border-radius: 10px;
+	padding: 12px 14px;
+	text-align: left;
+	cursor: pointer;
+	transition: all .15s;
+	font: inherit;
+	color: var(--bs-body-color);
+	position: relative;
+}
+.wd-tile:hover.wd-tile-default,
+.wd-tile:hover.wd-tile-available {
+	border-color: var(--bs-body-color);
+	transform: translateY(-1px);
+}
+.wd-tile-flag {
+	font-size: 22px;
+	line-height: 1;
+}
+.wd-tile-name {
+	font-weight: 500;
+	font-size: 14px;
+}
+.wd-tile-pairs,
+.wd-tile-count {
+	font-size: 11px;
+	color: var(--bs-secondary-color);
+	font-variant-numeric: tabular-nums;
+}
+.wd-tile-available {
+	border-color: var(--bs-primary);
+	background: rgba(13, 110, 253, .04);
+}
+.wd-tile-available .wd-tile-count {
+	color: var(--bs-primary);
+	font-weight: 600;
+}
+.wd-tile-available-alt {
+	background: rgba(13, 110, 253, .02);
+}
+.wd-tile-available-alt .wd-tile-count {
+	font-weight: 600;
+}
+.wd-tile-unavailable {
+	opacity: .35;
+	cursor: not-allowed;
+	background: var(--bs-tertiary-bg);
+}
+.wd-tile-confirmed {
+	background: var(--bs-primary);
+	color: #fff;
+	border-color: var(--bs-primary);
+	box-shadow: 0 4px 14px rgba(13, 110, 253, .25);
+	animation: wd-pop .35s cubic-bezier(.2, .8, .2, 1);
+}
+.wd-tile-confirmed .wd-tile-pairs,
+.wd-tile-confirmed .wd-tile-count {
+	color: rgba(255, 255, 255, .85);
+}
+.wd-tile-confirmed .wd-tile-check {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, .2);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #fff;
+}
+@keyframes wd-pop {
+	0%   { transform: scale(.96); }
+	60%  { transform: scale(1.04); }
+	100% { transform: scale(1); }
+}
+
+/* No-JS fallback: two native selects + submit */
+.wd-pair-fallback {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+	max-width: 32rem;
+}
+.wd-pair-fallback .form-control {
+	width: auto;
+	flex: 1;
+	min-width: 8rem;
+}
+.wd-pair-fallback-arrow {
+	color: var(--bs-secondary-color);
+}

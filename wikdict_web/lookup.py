@@ -150,6 +150,7 @@ def lookup(from_lang, to_lang, query: str = None):
         templ_vals["rough_translations"] = "%.1f" % (
             sum(lp.total_trans for lp in base.get_lang_pairs()) // 100000 / 10
         )
+        templ_vals["picker_data"] = base.get_picker_data(from_lang, to_lang)
         description = "Free bilingual dictionaries for many languages"
     return base.render_template(
         "lookup.html",
@@ -168,6 +169,15 @@ def lookup(from_lang, to_lang, query: str = None):
 def lookup_redirect():
     url = "{}/{}".format(request.args["index_name"], request.args["query"])
     return redirect(url)
+
+
+@app.route("/change-pair")
+def change_pair():
+    """No-JS fallback for the home-page picker: two selects + submit.
+
+    `lookup()` validates the codes (404) and normalizes their order.
+    """
+    return redirect("/{}-{}/".format(request.args["from_lang"], request.args["to_lang"]))
 
 
 @lru_cache

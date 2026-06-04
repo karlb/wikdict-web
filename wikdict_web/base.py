@@ -68,6 +68,36 @@ def get_lang_pairs():
     )
 
 
+def get_picker_data(from_lang, to_lang):
+    """Data for the home-page language-pair picker.
+
+    Only "large enough" pairs are offered, matching the navbar dropdowns.
+    """
+    available_langs = get_available_langs()
+    valid_pairs = [lp for lp in get_lang_pairs() if lp.large_enough]
+
+    pairs = {f"{lp.lang1}-{lp.lang2}": lp.total_trans for lp in valid_pairs}
+    partner_count: dict[str, int] = {}
+    for lp in valid_pairs:
+        partner_count[lp.lang1] = partner_count.get(lp.lang1, 0) + 1
+        partner_count[lp.lang2] = partner_count.get(lp.lang2, 0) + 1
+
+    return {
+        "current": [from_lang, to_lang],
+        "languages": [
+            {
+                "code": code,
+                "name": language_names[code].capitalize(),
+                "flag": languages[code].flag,
+                "partners": partner_count[code],
+            }
+            for code in available_langs
+            if code in partner_count
+        ],
+        "pairs": pairs,
+    }
+
+
 @functools.lru_cache()
 @timing
 def get_available_langs():

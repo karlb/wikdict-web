@@ -70,13 +70,24 @@
         <input type="hidden" name="index_name" value="{{from_lang}}-{{to_lang}}">
         <div class="input-group">
             <input type="search" name="query" class="typeahead form-control" value="{{ query or '' }}"
-                id="search-input"
+                id="search-input" placeholder="Enter a word…"
             >
             <button class="btn btn-primary">Translate</button>
         </div>
 		{% if not query %}
-			<div class="use-notice">
-				Enter a word in {{ languages[from_lang].label_en }} or {{ languages[to_lang].label_en }}
+			{% macro pair_pill(lang, role) %}
+				<span class="wd-pair-pill wd-pair-pill-{{ role }}" data-pill="{{ role }}">
+					<span class="wd-pair-pill-flag">{{ languages[lang].flag }}</span>
+					<span class="wd-pair-pill-name">{{ language_names[lang] | capitalize }}</span>
+					<button type="button" class="wd-pair-pill-x" data-lang="{{ lang }}"
+						aria-label="Remove {{ language_names[lang] | capitalize }}">×</button>
+				</span>
+			{% endmacro %}
+			<div class="wd-pair-pills" id="wd-pair-pills">
+				<span class="wd-pair-pills-label">Translating</span>
+				{{ pair_pill(from_lang, "older") }}
+				<span class="wd-pair-pills-arrow">↔</span>
+				{{ pair_pill(to_lang, "newer") }}
 			</div>
 		{% endif %}
 	</form>
@@ -251,20 +262,29 @@
 			</div>
 
             <div>
-                <h3>Other available Language Pairs</h3>
-                <div class="row">
-                    {% for lang in available_langs %}
-                        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
-                            <select class="form-control lang-select">
-                                <option> &nbsp; {{ language_names[lang] | capitalize }} ↔ &hellip;</option>
-                                {% for lp in lang_pairs if lang in (lp.lang1, lp.lang2) and lp.large_enough %}
-                                    {% set to_lang = lp.lang1 if lp.lang1 != lang else lp.lang2 %}
-                                    <option value="{{ lang }}-{{ to_lang }}">{{ language_names[lang] | capitalize }} ↔ {{ language_names[to_lang] | capitalize }}</option>
+                <h3>Change language pair</h3>
+                <p class="text-muted">Tap a tile to change the pair. Tap a selected language again to drop it.</p>
+
+                {# JS-enhanced tile picker; filled by picker.js #}
+                <div id="wd-tape" class="wd-tape"></div>
+                <script type="application/json" id="wd-picker-data">{{ picker_data | tojson }}</script>
+
+                {# No-JS fallback: pick both languages with native selects #}
+                <noscript>
+                    <form action="/change-pair" method="get" class="wd-pair-fallback">
+                        {% macro lang_select(name) %}
+                            <select class="form-control" name="{{ name }}" required>
+                                {% for lang in available_langs %}
+                                    <option value="{{ lang }}">{{ language_names[lang] | capitalize }}</option>
                                 {% endfor %}
                             </select>
-                        </div>
-                    {% endfor %}
-                </div>
+                        {% endmacro %}
+                        {{ lang_select("from_lang") }}
+                        <span class="wd-pair-fallback-arrow">↔</span>
+                        {{ lang_select("to_lang") }}
+                        <button class="btn btn-primary" type="submit">Go</button>
+                    </form>
+                </noscript>
             </div>
 
             <div class="row">
