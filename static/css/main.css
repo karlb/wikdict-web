@@ -233,7 +233,7 @@
 /* Active/hovered row — highlight the row, never the header band. */
 .ta-item.is-active .ta-row,
 .ta-item:hover .ta-row {
-	background: var(--bs-tertiary-bg);
+	background: var(--bs-primary-bg-subtle);
 	border-left-color: var(--bs-primary);
 }
 
