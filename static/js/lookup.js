@@ -1,16 +1,26 @@
-$(function() {
+// Leading ";" guards against the preceding bundled file lacking a trailing
+// semicolon (the files are concatenated into one packed.js).
+//
+// Deferred to DOMContentLoaded because this reads the from_lang/to_lang/
+// lang_flags globals, which an inline <script> defines *after* this bundle.
+;document.addEventListener("DOMContentLoaded", function () {
+    "use strict";
+
     // The active pair is read from the search form's hidden index_name input —
     // the exact value the form submits — so the typeahead can never query a
     // different dictionary than the search itself will use. Loaded suggestions
     // are keyed on the pair, so changing the language pair invalidates the cache.
     function currentPair() {
-        var v = $('input[name="index_name"]').val() || (from_lang + '-' + to_lang);
+        var el = document.querySelector('input[name="index_name"]');
+        var v = (el && el.value) || (from_lang + '-' + to_lang);
         return v.split('-').sort().join('-');  // canonical order (from < to)
     }
 
     // Escape text coming from the dictionary data before inserting it as HTML.
     function esc(s) {
-        return $('<div>').text(s == null ? '' : s).html();
+        var d = document.createElement('div');
+        d.textContent = s == null ? '' : s;
+        return d.innerHTML;
     }
     function flagFor(lang) {
         return (window.lang_flags || {})[lang] || '';
@@ -62,26 +72,32 @@ $(function() {
        MIN_LEN characters once per prefix+pair, caches them, then filters and
        groups that data on the client as the user keeps typing. */
     var MIN_LEN = 3;
-    var input = $('.typeahead');
-    if (input.length) {
+    var input = document.querySelector('.typeahead');
+    if (input) {
         var group = input.closest('.input-group');
-        var menu = $('<div class="ta-menu" id="ta-menu" role="listbox"></div>')
-            .appendTo(group).hide();
-        input.attr({
-            role: 'combobox', 'aria-autocomplete': 'list',
-            'aria-controls': 'ta-menu', 'aria-expanded': 'false'
-        });
+        var menu = document.createElement('div');
+        menu.className = 'ta-menu';
+        menu.id = 'ta-menu';
+        menu.setAttribute('role', 'listbox');
+        menu.style.display = 'none';
+        group.appendChild(menu);
+        input.setAttribute('role', 'combobox');
+        input.setAttribute('aria-autocomplete', 'list');
+        input.setAttribute('aria-controls', 'ta-menu');
+        input.setAttribute('aria-expanded', 'false');
 
         var loadedKey, loadedData;   // cache: "<pair>:<prefix>" -> rows
         var rows = [];               // selectable rows currently shown
         var active = -1;
 
-        function visible() { return menu.is(':visible'); }
+        function visible() { return menu.style.display !== 'none'; }
 
         function close() {
-            menu.hide().empty();
-            group.removeClass('ta-open');
-            input.attr('aria-expanded', 'false').removeAttr('aria-activedescendant');
+            menu.style.display = 'none';
+            menu.innerHTML = '';
+            group.classList.remove('ta-open');
+            input.setAttribute('aria-expanded', 'false');
+            input.removeAttribute('aria-activedescendant');
             rows = [];
             active = -1;
         }
@@ -98,7 +114,7 @@ $(function() {
         function matches(q) {
             if (loadedData === undefined) return [];
             var ql = q.toLowerCase();
-            var hits = $.grep(loadedData, function (x) {
+            var hits = loadedData.filter(function (x) {
                 return x[0].toLowerCase().startsWith(ql);
             });
             hits.sort(function (a, b) {
@@ -120,9 +136,10 @@ $(function() {
                     + '<span class="ta-trans">' + highlight(row[1], q) + '</span></div></div>';
             });
             html += '<div class="ta-foot">↵ see all matches for <b>' + esc(q) + '</b></div>';
-            menu.html(html).show();
-            group.addClass('ta-open');
-            input.attr('aria-expanded', 'true');
+            menu.innerHTML = html;
+            menu.style.display = '';
+            group.classList.add('ta-open');
+            input.setAttribute('aria-expanded', 'true');
             setActive(-1);
         }
 
@@ -132,45 +149,45 @@ $(function() {
             if (loadedKey !== key) {
                 loadedKey = key;
                 loadedData = undefined;
-                $.ajax('/typeahead/' + currentPair() + '/' + encodeURI(prefix.toLowerCase()), {
-                    success: function (data) {
+                fetch('/typeahead/' + currentPair() + '/' + encodeURI(prefix.toLowerCase()))
+                    .then(function (resp) { return resp.json(); })
+                    .then(function (data) {
                         if (loadedKey !== key) return;  // pair/prefix changed in flight
                         loadedData = data;
-                        if (input.val().length >= MIN_LEN) render(input.val());
-                    }
-                });
+                        if (input.value.length >= MIN_LEN) render(input.value);
+                    });
             }
             render(q);
         }
 
         function setActive(i) {
-            var opts = menu.find('.ta-item');
-            opts.removeClass('is-active');
+            var opts = menu.querySelectorAll('.ta-item');
+            opts.forEach(function (o) { o.classList.remove('is-active'); });
             active = i;
             if (i >= 0 && opts[i]) {
-                opts.eq(i).addClass('is-active');
-                input.attr('aria-activedescendant', 'ta-opt-' + i);
+                opts[i].classList.add('is-active');
+                input.setAttribute('aria-activedescendant', 'ta-opt-' + i);
                 opts[i].scrollIntoView({ block: 'nearest' });
             } else {
-                input.removeAttr('aria-activedescendant');
+                input.removeAttribute('aria-activedescendant');
             }
         }
 
         function select(i) {
-            if (rows[i]) input.val(rows[i][0]);
-            $('.search-form').submit();
+            if (rows[i]) input.value = rows[i][0];
+            document.querySelector('.search-form').requestSubmit();
         }
 
-        input.on('input', function () {
-            var q = input.val();
+        input.addEventListener('input', function () {
+            var q = input.value;
             if (q.length < MIN_LEN) { close(); return; }
             load(q);
         });
 
-        input.on('keydown', function (e) {
+        input.addEventListener('keydown', function (e) {
             if (e.key === 'ArrowDown') {
                 if (!visible()) {
-                    if (input.val().length >= MIN_LEN) load(input.val());
+                    if (input.value.length >= MIN_LEN) load(input.value);
                 } else {
                     setActive(active + 1 >= rows.length ? 0 : active + 1);
                 }
@@ -189,14 +206,25 @@ $(function() {
             }
         });
 
-        menu.on('mouseenter', '.ta-item', function () {
-            setActive($(this).data('i'));
-        }).on('mousedown', '.ta-item', function (e) {
-            e.preventDefault();   // keep input focus so the submit fires cleanly
-            select($(this).data('i'));
+        // Delegated hover/click. mouseover (bubbles) stands in for jQuery's
+        // delegated mouseenter; the active-row guard keeps it from re-running
+        // setActive (and its scrollIntoView) on every intra-row move.
+        menu.addEventListener('mouseover', function (e) {
+            var item = e.target.closest('.ta-item');
+            if (item) {
+                var i = Number(item.dataset.i);
+                if (i !== active) setActive(i);
+            }
+        });
+        menu.addEventListener('mousedown', function (e) {
+            var item = e.target.closest('.ta-item');
+            if (item) {
+                e.preventDefault();   // keep input focus so the submit fires cleanly
+                select(Number(item.dataset.i));
+            }
         });
 
-        input.on('blur', function () { window.setTimeout(close, 120); });
+        input.addEventListener('blur', function () { window.setTimeout(close, 120); });
 
         // Focus is handled declaratively by the input's `autofocus` attribute,
         // which fires at parse time (before this bundle loads). We still select
@@ -206,12 +234,15 @@ $(function() {
         // When the active pair changes (e.g. via the home-page picker, which fires
         // a change event on index_name) the cached suggestions are for the old
         // dictionary, so drop them and re-query the typed word against the new pair.
-        $('input[name="index_name"]').on('change', function () {
-            loadedKey = undefined;
-            loadedData = undefined;
-            var q = input.val();
-            if (input.is(':focus') && q.length >= MIN_LEN) load(q);
-            else close();
-        });
+        var indexName = document.querySelector('input[name="index_name"]');
+        if (indexName) {
+            indexName.addEventListener('change', function () {
+                loadedKey = undefined;
+                loadedData = undefined;
+                var q = input.value;
+                if (document.activeElement === input && q.length >= MIN_LEN) load(q);
+                else close();
+            });
+        }
     }
-})
+});
