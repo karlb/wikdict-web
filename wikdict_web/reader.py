@@ -1,5 +1,5 @@
 from io import StringIO
-from typing import Iterable
+from typing import Any, Iterable
 
 import wikdict_compound
 from flask import request
