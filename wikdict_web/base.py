@@ -87,7 +87,16 @@ def get_picker_data(from_lang, to_lang):
             partner_count[code] += 1
             weight[code] += w
 
-    ordered_langs = sorted(partner_count, key=lambda code: (-weight[code], code))
+    weight_order = sorted(partner_count, key=lambda code: (-weight[code], code))
+
+    # Float the languages of recently searched pairs (newest first) to the
+    # front, falling back to the weight order for everything else.
+    recent = []
+    for pair in session.get("last_dicts", []):
+        for code in pair.split("-"):
+            if code in partner_count and code not in recent:
+                recent.append(code)
+    ordered_langs = recent + [c for c in weight_order if c not in recent]
 
     return {
         "current": [from_lang, to_lang],
