@@ -73,8 +73,8 @@
             <button class="btn btn-primary">Translate</button>
         </div>
 		{% if not query %}
-			{% macro pair_pill(lang, role) %}
-				<span class="wd-pair-pill wd-pair-pill-{{ role }}" data-pill="{{ role }}">
+			{% macro pair_pill(lang) %}
+				<span class="wd-pair-pill">
 					<span class="wd-pair-pill-flag">{{ languages[lang].flag }}</span>
 					<span class="wd-pair-pill-name">{{ language_names[lang] | capitalize }}</span>
 					<button type="button" class="wd-pair-pill-x" data-lang="{{ lang }}"
@@ -83,9 +83,9 @@
 			{% endmacro %}
 			<div class="wd-pair-pills" id="wd-pair-pills">
 				<span class="wd-pair-pills-label">Translating</span>
-				{{ pair_pill(from_lang, "older") }}
+				{{ pair_pill(from_lang) }}
 				<span class="wd-pair-pills-arrow">↔</span>
-				{{ pair_pill(to_lang, "newer") }}
+				{{ pair_pill(to_lang) }}
 			</div>
 		{% endif %}
 	</form>

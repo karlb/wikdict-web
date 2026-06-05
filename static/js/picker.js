@@ -150,13 +150,13 @@
     tape.innerHTML = html;
   }
 
-  function pillHtml(code, role) {
+  function pillHtml(code) {
     if (!code) {
       return '<span class="wd-pair-pill wd-pair-pill-empty">Pick a language</span>';
     }
     var l = byCode[code];
     return (
-      '<span class="wd-pair-pill wd-pair-pill-' + role + '">' +
+      '<span class="wd-pair-pill">' +
       '<span class="wd-pair-pill-flag">' + l.flag + "</span>" +
       '<span class="wd-pair-pill-name">' + l.name + "</span>" +
       '<button type="button" class="wd-pair-pill-x" data-lang="' + code +
@@ -170,9 +170,9 @@
     if (!pills) return;
     pills.innerHTML =
       '<span class="wd-pair-pills-label">Translating</span>' +
-      pillHtml(selected[0], "older") +
+      pillHtml(selected[0]) +
       '<span class="wd-pair-pills-arrow">↔</span>' +
-      pillHtml(selected[1], "newer");
+      pillHtml(selected[1]);
   }
 
   // --- Events (delegated) ----------------------------------------------------

@@ -254,14 +254,11 @@
 	gap: 8px;
 	padding: 4px 4px 4px 10px;
 	background: #fff;
-	border: 2px solid var(--bs-primary);
+	border: 2px solid var(--bs-border-color);
 	border-radius: 999px;
 	font-size: 13px;
 	font-weight: 500;
 	line-height: 1.2;
-}
-.wd-pair-pill-older {
-	border-color: var(--bs-border-color);
 }
 .wd-pair-pill-empty {
 	border-style: dashed;
