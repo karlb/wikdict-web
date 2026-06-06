@@ -99,6 +99,7 @@
 }
 .search-form .input-group {
     flex-wrap: nowrap;
+    max-width: 25rem;
 }
 
 .main-page > .row {
