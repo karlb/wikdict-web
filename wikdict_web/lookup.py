@@ -12,7 +12,11 @@ from markupsafe import Markup
 
 from . import app, base
 from .base import db_query, get_conn, timing
-from .languages import language_names
+from .languages import language_codes3, language_names
+
+# Map a Wiktionary edition's iso3 code (the `entry.lexentry` prefix, e.g. "fra")
+# back to its wiktionary.org subdomain (the iso2 code, e.g. "fr").
+edition_to_lang = {iso3: iso2 for iso2, iso3 in language_codes3.items()}
 
 latest_requests = deque(maxlen=30)
 
@@ -139,8 +143,8 @@ def lookup(from_lang, to_lang, query: str = None):
         wiktionary_links = OrderedDict(
             (key, val)
             for key, val in (
-                (lang, get_wiktionary_links(lang, query))
-                for lang in (from_lang, to_lang)
+                (lang, get_wiktionary_links(lang, query, partner))
+                for lang, partner in ((from_lang, to_lang), (to_lang, from_lang))
             )
             if val  # skip langs without results
         )
@@ -258,17 +262,51 @@ def get_compounds(from_lang, to_lang, query):
 
 
 @timing
-def get_wiktionary_links(lang, word):
-    url = "https://%s.wiktionary.org/wiki/%s#%s"
-    lang_name = urllib.parse.quote_plus(language_names[lang]).replace("%", ".")
+def get_wiktionary_links(lang, word, partner=None):
+    """Wiktionary links for `word`, one per matching headword.
+
+    WikDict extracts entries from many Wiktionary editions, recorded in the
+    `entry.lexentry` prefix (an iso3 code). A word is only guaranteed to have a
+    page on an edition it was actually extracted from, so we link to the word's
+    own-language edition when it has a native entry and otherwise fall back to a
+    source edition that we know contains it (preferring the lookup partner's
+    edition, then English). E.g. the Catalan "casa en sèrie" exists only in the
+    French and German editions, not ca.wiktionary.org.
+    """
+    native_anchor = urllib.parse.quote_plus(language_names[lang]).replace("%", ".")
+    native_edition = language_codes3.get(lang)
+    partner_edition = language_codes3.get(partner)
     sql = """
-        SELECT written_rep FROM vocable
-        WHERE written_lower = lower(?)
+        SELECT v.written_rep,
+               group_concat(DISTINCT substr(e.lexentry, 1, instr(e.lexentry, '/') - 1)) AS sources
+        FROM vocable v JOIN entry e ON e.written_rep = v.written_rep
+        WHERE v.written_lower = lower(?)
+        GROUP BY v.written_rep
     """
     results = []
-    for (w,) in db_query(lang, sql, [word]):
-        wiki_name = w.replace(" ", "_")
-        results.append((w, url % (lang, wiki_name, lang_name)))
+    for w, sources in db_query(lang, sql, [word]):
+        editions = set(sources.split(","))
+        wiki_name = urllib.parse.quote(w.replace(" ", "_"))
+        if native_edition in editions:
+            # The word is in its own-language edition: link there with the
+            # language-section anchor, as before.
+            link_lang, anchor = lang, native_anchor
+        else:
+            # Fall back to an edition that actually documents the word,
+            # preferring the lookup partner's edition then English. The section
+            # anchor is the language name *in that edition's language*, which we
+            # don't have, so omit it and let the page load at the top.
+            link_lang, anchor = None, None
+            for candidate in (partner_edition, "eng", *sorted(editions)):
+                if candidate in editions and candidate in edition_to_lang:
+                    link_lang = edition_to_lang[candidate]
+                    break
+            if not link_lang:
+                continue  # no edition we can map to a subdomain
+        url = "https://%s.wiktionary.org/wiki/%s" % (link_lang, wiki_name)
+        if anchor:
+            url += "#" + anchor
+        results.append((w, url))
     return results
 
 
