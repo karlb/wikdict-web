@@ -140,14 +140,14 @@ def lookup(from_lang, to_lang, query: str = None):
             ip = request.remote_addr
         block_too_many_requests(ip)
         log_query(from_lang, to_lang, query, ip, results)
-        wiktionary_links = OrderedDict(
-            (key, val)
-            for key, val in (
-                (lang, get_wiktionary_links(lang, query, partner))
-                for lang, partner in ((from_lang, to_lang), (to_lang, from_lang))
-            )
-            if val  # skip langs without results
-        )
+        # Group links by the Wiktionary edition they point to (not the work
+        # language), so the label matches the site the link actually opens.
+        wiktionary_links = OrderedDict()
+        for lang, partner in ((from_lang, to_lang), (to_lang, from_lang)):
+            for word, link, edition in get_wiktionary_links(lang, query, partner):
+                group = wiktionary_links.setdefault(edition, [])
+                if (word, link) not in group:
+                    group.append((word, link))
         description = make_description(results[0]) if results else ""
     else:
         wiktionary_links = None
@@ -263,7 +263,7 @@ def get_compounds(from_lang, to_lang, query):
 
 @timing
 def get_wiktionary_links(lang, word, partner=None):
-    """Wiktionary links for `word`, one per matching headword.
+    """Wiktionary links for `word` as (headword, url, edition_lang) tuples.
 
     WikDict extracts entries from many Wiktionary editions, recorded in the
     `entry.lexentry` prefix (an iso3 code). A word is only guaranteed to have a
@@ -271,7 +271,8 @@ def get_wiktionary_links(lang, word, partner=None):
     own-language edition when it has a native entry and otherwise fall back to a
     source edition that we know contains it (preferring the lookup partner's
     edition, then English). E.g. the Catalan "casa en sèrie" exists only in the
-    French and German editions, not ca.wiktionary.org.
+    French and German editions, not ca.wiktionary.org. `edition_lang` is the
+    iso2 code of the edition linked to, so callers can label links by it.
     """
     native_anchor = urllib.parse.quote_plus(language_names[lang]).replace("%", ".")
     native_edition = language_codes3.get(lang)
@@ -306,7 +307,7 @@ def get_wiktionary_links(lang, word, partner=None):
         url = "https://%s.wiktionary.org/wiki/%s" % (link_lang, wiki_name)
         if anchor:
             url += "#" + anchor
-        results.append((w, url))
+        results.append((w, url, link_lang))
     return results
 
 
