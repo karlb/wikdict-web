@@ -153,6 +153,13 @@ LANGUAGE_TO_COUNTRY = {
 }
 
 
+# Languages whose flag has no portable emoji, served as an inline SVG image
+# instead. Catalan uses the Senyera rather than the Andorran flag emoji.
+SUBDIVISION_FLAGS = {
+    "ca": '<img class="wd-flag-img" src="/static/img/senyera.svg" alt="">',
+}
+
+
 @dataclass
 class Language:
     label_en: str
@@ -161,10 +168,15 @@ class Language:
 
     @property
     def flag(self):
-        """Unicode flag icon for country
+        """Flag icon HTML/text for the language.
 
-        E.g. German flag for de
+        Normally a Unicode regional-indicator flag for the associated country
+        (e.g. the German flag for de). A few languages have no portable flag
+        emoji and instead get an inline SVG image — these consumers must treat
+        the value as trusted HTML.
         """
+        if self.iso2 in SUBDIVISION_FLAGS:
+            return SUBDIVISION_FLAGS[self.iso2]
         country_code = LANGUAGE_TO_COUNTRY[self.iso2]
         return "".join(chr(127365 + ord(c)) for c in country_code)
 

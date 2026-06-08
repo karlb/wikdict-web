@@ -271,6 +271,14 @@
 .wd-pair-pill-flag {
 	font-size: 16px;
 }
+/* Image flags (e.g. the Catalan Senyera) sit alongside emoji flags, so size
+   them off the surrounding font-size to match the emoji glyphs. */
+.wd-flag-img {
+	height: 1em;
+	width: auto;
+	vertical-align: -0.1em;
+	border-radius: 2px;
+}
 .wd-pair-pill-x {
 	width: 18px;
 	height: 18px;
