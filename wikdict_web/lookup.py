@@ -119,9 +119,11 @@ def log_query(from_lang, to_lang, query, ip, results):
             path="",
             write=True,
         )
-    except sqlite3.OperationalError:
-        # It's ok to skip logging the query while the log db is locked
-        pass
+    except sqlite3.OperationalError as e:
+        # Skipping a log write under lock contention is fine, but warn rather
+        # than swallow silently so a real problem (e.g. a schema mismatch)
+        # isn't hidden.
+        app.logger.warning("Could not write search log: %s", e)
 
 
 if SEARCH_LOG_ENABLED:
