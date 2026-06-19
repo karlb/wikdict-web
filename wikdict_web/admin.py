@@ -1,4 +1,5 @@
 import os
+import secrets
 from functools import wraps
 
 from flask import Response, request
@@ -7,7 +8,10 @@ from . import app, base
 
 
 def check_auth(username, password):
-    return username == "admin" and password == os.environ["WIKDICT_ADMIN_PASSWORD"]
+    expected = os.environ.get("WIKDICT_ADMIN_PASSWORD")
+    if not expected:
+        return False
+    return username == "admin" and secrets.compare_digest(password, expected)
 
 
 def authenticate():
