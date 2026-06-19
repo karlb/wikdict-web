@@ -3,6 +3,7 @@ import unittest
 from flask_testing import TestCase
 
 import wikdict_web
+from wikdict_web import base
 
 
 class MyTestCase(TestCase):
@@ -29,6 +30,68 @@ class MyTestCase(TestCase):
         rv = self.client.get("/de-en/Xqzwktph")
         assert rv.status_code == 200
         assert "Sorry".encode("utf-8") in rv.data
+
+    def test_invalid_pair_is_404(self):
+        assert self.client.get("/xx-yy/").status_code == 404
+
+    def test_swapped_pair_redirects(self):
+        rv = self.client.get("/en-de/Haus")
+        assert rv.status_code in (301, 302)
+        assert "/de-en/Haus" in rv.headers["Location"]
+
+    def test_typeahead(self):
+        rv = self.client.get("/typeahead/de-en/hau")
+        assert rv.status_code == 200
+        assert isinstance(rv.get_json(), list)
+        assert "max-age" in rv.headers.get("Cache-Control", "")
+
+    def test_typeahead_opensearch(self):
+        rv = self.client.get("/opensearch/typeahead/de-en/haus")
+        assert rv.status_code == 200
+        payload = rv.get_json()
+        assert payload[0] == "haus"
+        assert isinstance(payload[1], list)
+
+    def test_lookup_redirect(self):
+        rv = self.client.get("/lookup?index_name=de-en&query=Haus")
+        assert rv.status_code in (301, 302)
+        assert "/de-en/Haus" in rv.headers["Location"]
+
+    def test_lookup_redirect_rejects_open_redirect(self):
+        rv = self.client.get("/lookup?index_name=https://evil.com&query=x")
+        assert rv.status_code == 404
+
+    def test_opensearch_xml(self):
+        rv = self.client.get("/opensearch/de-en")
+        assert rv.status_code == 200
+        assert b"OpenSearchDescription" in rv.data
+
+    def test_page(self):
+        assert self.client.get("/page/about").status_code == 200
+        assert self.client.get("/page/does-not-exist").status_code == 404
+
+    def test_reader_get(self):
+        assert self.client.get("/reader/de-en/").status_code == 200
+
+    def test_reader_post(self):
+        rv = self.client.post("/reader/de-en/", data={"text": "Haus"})
+        assert rv.status_code == 200
+
+    def test_reader_invalid_pair_is_404(self):
+        assert self.client.get("/reader/xx-yy/").status_code == 404
+
+    def test_admin_requires_auth(self):
+        assert self.client.get("/admin/").status_code == 401
+
+    @unittest.skipUnless(
+        (base.COMPOUND_DB_PATH / "de-compound.sqlite3").exists(),
+        "compound db not available",
+    )
+    def test_compound_split(self):
+        rv = self.client.get("/de-en/Haustür")
+        assert rv.status_code == 200
+        # The compound is shown split into its parts.
+        assert "Tür".encode("utf-8") in rv.data
 
 
 if __name__ == "__main__":
