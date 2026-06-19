@@ -26,7 +26,7 @@ jobs:
 
       - name: Lint and type-check
         run: |-
-          uv run ruff check wikdict_web wikdict-query/wikdict_query
+          uvx ruff check wikdict_web wikdict-query/wikdict_query
           uv run mypy wikdict_web
 
       - name: Download necessary databases

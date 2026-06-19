@@ -30,7 +30,6 @@ members = ["wikdict-query", "wikdict-reader"]
 dev = [
     "flask-testing>=0.8.1",
     "mypy>=1.0",
-    "ruff>=0.6",
 ]
 
 [tool.ruff.lint]
