@@ -590,7 +590,6 @@ source = { virtual = "." }
 dependencies = [
     { name = "flask" },
     { name = "flask-assets" },
-    { name = "flask-testing" },
     { name = "jinja2" },
     { name = "markdown" },
     { name = "sqlite-spellfix" },
@@ -601,6 +600,7 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "flask-testing" },
     { name = "mypy" },
 ]
 
@@ -608,7 +608,6 @@ dev = [
 requires-dist = [
     { name = "flask", specifier = ">=3.1.0" },
     { name = "flask-assets", specifier = ">=2.1.0" },
-    { name = "flask-testing", specifier = ">=0.8.1" },
     { name = "jinja2", specifier = ">=3.1.5" },
     { name = "markdown", specifier = ">=3.7" },
     { name = "sqlite-spellfix", specifier = ">=1.1" },
@@ -618,7 +617,10 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
-dev = [{ name = "mypy", specifier = ">=1.0" }]
+dev = [
+    { name = "flask-testing", specifier = ">=0.8.1" },
+    { name = "mypy", specifier = ">=1.0" },
+]
 
 [[package]]
 name = "zope-dottedname"

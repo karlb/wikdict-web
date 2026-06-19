@@ -7,7 +7,6 @@ requires-python = ">=3.10"
 dependencies = [
     "flask>=3.1.0",
     "flask-assets>=2.1.0",
-    "flask-testing>=0.8.1",
     "jinja2>=3.1.5",
     "markdown>=3.7",
     "sqlite-spellfix>=1.1",
@@ -29,6 +28,7 @@ members = ["wikdict-query", "wikdict-reader"]
 
 [dependency-groups]
 dev = [
+    "flask-testing>=0.8.1",
     "mypy>=1.0",
 ]
 
