@@ -36,8 +36,12 @@ __all__ = [
 ]
 
 ADMINS = ["karl@karl.berlin"]
-ASSET_REVISION = check_output(
-    "git describe --abbrev=12 --always --dirty=+".split(" "), cwd=base.APP_ROOT
+ASSET_REVISION = (
+    check_output(
+        "git describe --abbrev=12 --always --dirty=+".split(" "), cwd=base.APP_ROOT
+    )
+    .decode()
+    .strip()
 )
 
 
