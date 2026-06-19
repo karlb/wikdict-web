@@ -171,8 +171,16 @@ def lookup(from_lang, to_lang, query: str | None = None):
 
 @app.route("/lookup")
 def lookup_redirect():
-    url = "{}/{}".format(request.args["index_name"], request.args["query"])
-    return redirect(url)
+    index_name = request.args["index_name"]
+    try:
+        from_lang, to_lang = index_name.split("-")
+    except ValueError:
+        abort(404)
+    if from_lang not in language_names or to_lang not in language_names:
+        abort(404)
+    return redirect(
+        url_for("lookup", from_lang=from_lang, to_lang=to_lang, query=request.args["query"])
+    )
 
 
 @app.route("/change-pair")
