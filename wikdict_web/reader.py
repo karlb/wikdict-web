@@ -2,12 +2,13 @@ from io import StringIO
 from typing import Any, Iterable
 
 import wikdict_compound
-from flask import request
+from flask import abort, request
 from markupsafe import Markup, escape
 from wikdict_reader import LookupFunction, make_lookup
 from wikdict_reader.html import create_partial_html
 
 from . import app, base
+from .languages import language_names
 
 MAX_INPUT_BYTES = 4000
 
@@ -38,17 +39,21 @@ def lookup(phrase: str, from_lang: str, simple_lookup: LookupFunction) -> Iterab
 
 @app.route("/reader/<from_lang>-<to_lang>/", methods=["GET", "POST"])
 def reader(from_lang, to_lang):
+    if (
+        from_lang not in language_names
+        or to_lang not in language_names
+        or from_lang == to_lang
+    ):
+        abort(404)
+
     templ_vals: dict[str, Any] = dict(
         from_lang=from_lang,
         to_lang=to_lang,
     )
 
-    conn = base.get_conn(from_lang + "-" + to_lang)
-    annotated_text = None
-    if request.method in ["GET", "HEAD"]:
-        return base.render_template("reader-input.html", **templ_vals)
     if request.method == "POST":
         # annotate text with translations
+        conn = base.get_conn(from_lang + "-" + to_lang)
         input_text = escape(request.form["text"].strip())
         f = StringIO()
         simple_lookup = make_lookup(conn, base.COMPOUND_DB_PATH, from_lang)
@@ -66,4 +71,5 @@ def reader(from_lang, to_lang):
             is_truncated=len(input_text) > MAX_INPUT_BYTES,
             **templ_vals,
         )
-    raise Exception(f"Bad HTTP method {request.method!r}")
+
+    return base.render_template("reader-input.html", **templ_vals)
