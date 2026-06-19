@@ -47,6 +47,7 @@ def admin_index():
         AND user_agent NOT LIKE '%bot%' AND user_agent NOT LIKE '%Yahoo! Slurp%';
     """,
         path="",
+        write=True,
     )
     return base.render_template(
         "admin/index.html",
