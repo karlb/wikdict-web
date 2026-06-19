@@ -149,7 +149,7 @@
             if (loadedKey !== key) {
                 loadedKey = key;
                 loadedData = undefined;
-                fetch('/typeahead/' + currentPair() + '/' + encodeURI(prefix.toLowerCase()))
+                fetch('/typeahead/' + currentPair() + '/' + encodeURIComponent(prefix.toLowerCase()))
                     .then(function (resp) { return resp.json(); })
                     .then(function (data) {
                         if (loadedKey !== key) return;  // pair/prefix changed in flight
