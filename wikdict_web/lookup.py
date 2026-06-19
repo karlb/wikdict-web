@@ -17,7 +17,7 @@ from .languages import language_codes3, language_names
 # back to its wiktionary.org subdomain (the iso2 code, e.g. "fr").
 edition_to_lang = {iso3: iso2 for iso2, iso3 in language_codes3.items()}
 
-latest_requests = deque(maxlen=30)
+latest_requests: deque[tuple[datetime, str | None]] = deque(maxlen=30)
 
 
 def lru_cache(*args, **kwargs):
@@ -116,6 +116,7 @@ def lookup(from_lang, to_lang, query: str | None = None):
 
     templ_vals: dict[str, Any] = dict(compound_parts=None)
     results = []
+    wiktionary_links: OrderedDict[str, list[tuple[str, str]]] | None = None
 
     if query:
         for lang, other_lang in [(from_lang, to_lang), (to_lang, from_lang)]:
@@ -134,7 +135,7 @@ def lookup(from_lang, to_lang, query: str | None = None):
             templ_vals["did_you_mean"] = []
 
         if request.headers.getlist("X-Forwarded-For"):
-            ip = request.headers.getlist("X-Forwarded-For")[0]
+            ip: str | None = request.headers.getlist("X-Forwarded-For")[0]
         else:
             ip = request.remote_addr
         block_too_many_requests(ip)
