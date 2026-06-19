@@ -27,5 +27,13 @@ wikdict-compound = { git = "https://github.com/karlb/wikdict-compound/" }
 [tool.uv.workspace]
 members = ["wikdict-query", "wikdict-reader"]
 
+[dependency-groups]
+dev = [
+    "mypy>=1.0",
+]
+
 [tool.ruff.lint]
 select = ["I"]
+
+[tool.mypy]
+ignore_missing_imports = true
