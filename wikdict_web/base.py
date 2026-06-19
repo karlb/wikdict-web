@@ -141,7 +141,7 @@ def path_for_db(db, path="dict"):
     return DATA_DIR / path / f"{db}.sqlite3"
 
 
-def get_conn(db_name, path="dict", write=False):
+def _open_conn(db_name, path, write):
     db_path = path_for_db(db_name, path)
 
     if not os.path.exists(db_path):
@@ -150,13 +150,31 @@ def get_conn(db_name, path="dict", write=False):
         )
 
     conn = sqlite3.connect(
-        f"file:{db_path}" + ("" if write else "?immutable=1"), uri=True
+        f"file:{db_path}" + ("" if write else "?immutable=1"),
+        uri=True,
+        # Read-only connections are cached and shared across worker threads;
+        # immutable SQLite dbs are safe to read concurrently.
+        check_same_thread=False,
     )
     conn.isolation_level = None  # autocommit
     conn.row_factory = namedtuple_factory
     conn.enable_load_extension(True)
     conn.load_extension(sqlite_spellfix.extension_path())
     return conn
+
+
+@functools.lru_cache(maxsize=None)
+def _cached_conn(db_name, path):
+    return _open_conn(db_name, path, write=False)
+
+
+def get_conn(db_name, path="dict", write=False, cached=False):
+    # The dicts are immutable, so a read-only connection can be reused instead
+    # of paying for a fresh connect + spellfix load on every query. Connections
+    # that ATTACH other dbs can't be shared, so those stay uncached.
+    if cached and not write:
+        return _cached_conn(db_name, path)
+    return _open_conn(db_name, path, write)
 
 
 def db_query(
@@ -168,7 +186,7 @@ def db_query(
     explain=False,
     write=False,
 ):
-    conn = get_conn(db_name, path, write)
+    conn = get_conn(db_name, path, write, cached=not attach_dbs)
     cur = conn.cursor()
     for name, db in (attach_dbs or {}).items():
         cur.execute(
