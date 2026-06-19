@@ -137,13 +137,6 @@ def match(conn, query, limit=10, min_match_score=0) -> Iterable[dict]:
 
 def define(conn, query) -> Iterable[dict]:
     return match(conn, query, min_match_score=1)
-    # cur = conn.cursor()
-    # cur.row_factory = sqlite3.Row
-    # for result in cur.execute(
-    #     "SELECT *, 2 AS match_score FROM translation_block WHERE lower(written_rep) = (?)",
-    #     [query],
-    # ):
-    #     yield _process_fetched_lexentry(result)
 
 
 @dataclass
