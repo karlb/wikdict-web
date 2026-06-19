@@ -13,8 +13,12 @@ from flask import (
     session,
 )
 from markupsafe import Markup
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 app = Flask(__name__.split(".")[0], static_folder="../static")
+# nginx appends the real client IP to X-Forwarded-For, so trust exactly one
+# (rightmost) hop. request.remote_addr is then the real, non-spoofable client.
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1)  # type: ignore[method-assign]
 app.config.update(SECRET_KEY=os.environ["FLASK_SECRET"])
 app.jinja_env.undefined = jinja2.StrictUndefined
 assets = flask_assets.Environment(app)

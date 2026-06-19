@@ -145,10 +145,7 @@ def lookup(from_lang, to_lang, query: str | None = None):
         else:
             templ_vals["did_you_mean"] = []
 
-        if request.headers.getlist("X-Forwarded-For"):
-            ip: str | None = request.headers.getlist("X-Forwarded-For")[0]
-        else:
-            ip = request.remote_addr
+        ip = request.remote_addr
         block_too_many_requests(ip)
         log_query(from_lang, to_lang, query, ip, results)
         # Group links by the Wiktionary edition they point to (not the work
