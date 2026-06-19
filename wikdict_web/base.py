@@ -2,6 +2,7 @@ import functools
 import math
 import os
 import sqlite3
+import threading
 import time
 from collections import OrderedDict, defaultdict, namedtuple
 from pathlib import Path
@@ -141,7 +142,7 @@ def path_for_db(db, path="dict"):
     return DATA_DIR / path / f"{db}.sqlite3"
 
 
-def get_conn(db_name, path="dict", write=False):
+def _open_conn(db_name, path, write):
     db_path = path_for_db(db_name, path)
 
     if not os.path.exists(db_path):
@@ -159,6 +160,26 @@ def get_conn(db_name, path="dict", write=False):
     return conn
 
 
+# Per-thread cache of read-only connections. The dbs are immutable, so reusing a
+# connection avoids re-connecting and reloading the spellfix extension on every
+# query. It is deliberately thread-local: a sqlite connection can't be used from
+# several threads at once (and uwsgi runs with threads enabled), so each thread
+# keeps its own — never shared.
+_conn_cache = threading.local()
+
+
+def get_conn(db_name, path="dict", write=False, cached=False):
+    if cached and not write:
+        conns = _conn_cache.__dict__.setdefault("conns", {})
+        key = (db_name, path)
+        conn = conns.get(key)
+        if conn is None:
+            conn = _open_conn(db_name, path, write=False)
+            conns[key] = conn
+        return conn
+    return _open_conn(db_name, path, write)
+
+
 def db_query(
     db_name,
     stmt,
@@ -168,7 +189,9 @@ def db_query(
     explain=False,
     write=False,
 ):
-    conn = get_conn(db_name, path, write)
+    # Connections that ATTACH other dbs can't be reused (the alias would already
+    # exist on a cached connection), so only cache the plain read-only ones.
+    conn = get_conn(db_name, path, write, cached=not attach_dbs)
     cur = conn.cursor()
     for name, db in (attach_dbs or {}).items():
         cur.execute(

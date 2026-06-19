@@ -1,3 +1,4 @@
+import threading
 import unittest
 
 from flask_testing import TestCase
@@ -37,6 +38,29 @@ class MyTestCase(TestCase):
         assert rv.status_code == 200
         assert b"Did you mean" in rv.data
         assert "Haus".encode("utf-8") in rv.data
+
+    def test_concurrent_lookups(self):
+        # Regression test: cached db connections must be per-thread. A shared
+        # connection broke under concurrency with "Error creating function"
+        # (score_match registered while another thread used the connection).
+        words = ["Haus", "Wasser", "Sprache", "Tisch", "Buch", "Katze"]
+        bad = []
+
+        def worker(n):
+            for i in range(12):
+                # distinct IP per request so the rate limiter doesn't interfere
+                headers = {"X-Forwarded-For": f"198.51.{n}.{i}"}
+                rv = self.client.get("/de-en/" + words[(n + i) % len(words)],
+                                     headers=headers)
+                if rv.status_code != 200:
+                    bad.append(rv.status_code)
+
+        threads = [threading.Thread(target=worker, args=(n,)) for n in range(6)]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+        assert not bad, f"non-200 responses under concurrency: {bad}"
 
     def test_invalid_pair_is_404(self):
         assert self.client.get("/xx-yy/").status_code == 404
