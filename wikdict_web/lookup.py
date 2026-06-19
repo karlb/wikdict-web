@@ -1,6 +1,7 @@
 import functools
 import os
 import sqlite3
+import threading
 import urllib.parse
 from collections import OrderedDict
 from datetime import datetime, timedelta
@@ -22,7 +23,10 @@ RATE_LIMIT = 20  # requests per minute per IP
 # Request timestamps from the last minute, keyed by client IP. Per-process
 # (so the effective limit scales with UWSGI_PROCESSES), but no longer shares a
 # single bounded deque across all IPs, so the window is actually honoured.
+# Guarded by a lock because uwsgi runs with threads enabled and the dict is
+# mutated (including key deletion) on every request.
 recent_requests: dict[str | None, list[datetime]] = {}
+recent_requests_lock = threading.Lock()
 
 
 def lru_cache(*args, **kwargs):
@@ -35,20 +39,25 @@ def lru_cache(*args, **kwargs):
 def block_too_many_requests(current_ip):
     now = datetime.now()
     cutoff = now - timedelta(minutes=1)
-    # Drop aged-out timestamps and forget IPs with no recent activity, so the
-    # dict stays bounded by the callers seen in the last minute.
-    for ip in list(recent_requests):
-        recent_requests[ip] = [t for t in recent_requests[ip] if t > cutoff]
-        if not recent_requests[ip]:
-            del recent_requests[ip]
-    if len(recent_requests.get(current_ip, [])) >= RATE_LIMIT:
+    with recent_requests_lock:
+        # Drop aged-out timestamps and forget IPs with no recent activity, so
+        # the dict stays bounded by the callers seen in the last minute.
+        for ip in list(recent_requests):
+            recent_requests[ip] = [t for t in recent_requests[ip] if t > cutoff]
+            if not recent_requests[ip]:
+                del recent_requests[ip]
+        if len(recent_requests.get(current_ip, [])) >= RATE_LIMIT:
+            over_limit = True
+        else:
+            recent_requests.setdefault(current_ip, []).append(now)
+            over_limit = False
+    if over_limit:
         abort(
             429,
             "You made too many requests. Please contact karl@karl.berlin to resolve this. "
             "I will provide translation data in an easy to use format. "
             "If you see this error when normally using the web site, please let me know, too.",
         )
-    recent_requests.setdefault(current_ip, []).append(now)
 
 
 # Anonymized search logging is opt-in: set WIKDICT_SEARCH_LOG=true to record
