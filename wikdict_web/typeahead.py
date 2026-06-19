@@ -33,15 +33,23 @@ def get_typeahead_data(from_lang, to_lang, query, limit=None):
     )
 
 
+def _cached_json(payload):
+    # Dictionary data only changes on release, so let clients and any CDN cache
+    # typeahead responses instead of hitting the db on every keystroke prefix.
+    resp = jsonify(payload)
+    resp.headers["Cache-Control"] = "public, max-age=86400"
+    return resp
+
+
 @app.route("/typeahead/<from_lang>-<to_lang>/<path:query>")
 def typeahead(from_lang, to_lang, query):
     rows = get_typeahead_data(from_lang, to_lang, query)
-    return jsonify(rows)
+    return _cached_json(rows)
 
 
 @app.route("/opensearch/typeahead/<from_lang>-<to_lang>/<path:query>")
 def typeahead_opensearch(from_lang, to_lang, query):
     if len(query) < 2:
-        return jsonify([])
+        return _cached_json([])
     rows = get_typeahead_data(from_lang, to_lang, query, limit=20)
-    return jsonify([query, [r[0] for r in rows], [r[1] for r in rows]])
+    return _cached_json([query, [r[0] for r in rows], [r[1] for r in rows]])
