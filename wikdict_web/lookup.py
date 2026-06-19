@@ -68,6 +68,17 @@ def init_logging_db():
         pass
 
 
+def anonymize_ip(ip):
+    """Drop the host part of an IP so the stored value can't identify a user."""
+    if not ip:
+        return ip
+    if "." in ip:  # IPv4: zero the last octet
+        return ip.rsplit(".", 1)[0] + ".0"
+    if ":" in ip:  # IPv6: keep only the routing prefix
+        return ":".join(ip.split(":")[:3]) + "::"
+    return ip
+
+
 def log_query(from_lang, to_lang, query, ip, results):
     try:
         db_query(
@@ -84,7 +95,7 @@ def log_query(from_lang, to_lang, query, ip, results):
                 query,
                 sum(len(r) for r in results if r.from_lang == from_lang),
                 sum(len(r) for r in results if r.from_lang == to_lang),
-                ip,
+                anonymize_ip(ip),
                 request.referrer,
                 request.user_agent.string,
             ],
