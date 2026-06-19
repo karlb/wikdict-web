@@ -79,25 +79,21 @@ def _score_match(matchinfo: bytes, form, query) -> float:
     """
     # I don't know why the query comes in quoted, but let's remove the quotes
     query = query.strip('"')
-    try:
-        if form == query:
-            return 20
-        if form.lower() == query.lower():
-            return 10
+    if form == query:
+        return 20
+    if form.lower() == query.lower():
+        return 10
 
-        # Decode matchinfo blob according to https://www.sqlite.org/fts3.html#matchinfo
-        offset = 0
-        num_cols = int.from_bytes(matchinfo[offset : offset + 4], sys.byteorder)
-        offset += 4
-        tokens = int.from_bytes(matchinfo[offset : offset + 4], sys.byteorder)
-        offset += num_cols * 4
-        matched_tokens = int.from_bytes(matchinfo[offset : offset + 4], sys.byteorder)
+    # Decode matchinfo blob according to https://www.sqlite.org/fts3.html#matchinfo
+    offset = 0
+    num_cols = int.from_bytes(matchinfo[offset : offset + 4], sys.byteorder)
+    offset += 4
+    tokens = int.from_bytes(matchinfo[offset : offset + 4], sys.byteorder)
+    offset += num_cols * 4
+    matched_tokens = int.from_bytes(matchinfo[offset : offset + 4], sys.byteorder)
 
-        # print(matchinfo, form, query, matched_tokens, tokens)
-        return matched_tokens / tokens
-    except Exception as e:
-        print(e)
-        raise
+    # print(matchinfo, form, query, matched_tokens, tokens)
+    return matched_tokens / tokens
 
 
 def add_score_match(conn):
