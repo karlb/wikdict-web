@@ -39,21 +39,6 @@
 
 		{% block head %}
 		{% endblock %}
-		<!-- Translunary -->
-		<script>
-			try{
-				(function(){
-					var p=/^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)/;
-					if (document.referrer && (p.exec(document.referrer)[6] !== document.location.hostname))
-					{
-						var x = new XMLHttpRequest();
-						x.open('POST',"https://www.translunary.com/api/v1.0/refer/karl/www.wikdict.com",true);
-						x.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-						x.send("ref="+encodeURIComponent(document.referrer));
-					}
-				})();
-			}catch(e){}
-		</script>
 	</head>
 	<body class="d-flex flex-column h-100">
 		<!-- Static navbar -->
