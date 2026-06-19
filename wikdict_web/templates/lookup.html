@@ -156,10 +156,6 @@
 					</td>
 					<td>
 						{% for trans in sg['translations'] %}
-							{#-
-								TODO: should we check for the existance of the link target?
-								If we don't want that, we can use a plain <a> instead of optional_link.
-							#}
 							{% call optional_link(trans) %}{{ trans }}{% endcall -%}
 							{{- ',' if not loop.last -}}
 						{% endfor %}
