@@ -8,7 +8,6 @@ from typing import Any
 import wikdict_compound
 import wikdict_query
 from flask import abort, redirect, request, url_for
-from markupsafe import Markup
 
 from . import app, base
 from .base import db_query, get_conn, timing
@@ -330,9 +329,11 @@ def make_description(results: wikdict_query.CombinedResult):
                 ", ".join(sg["translations"]) for sg in lexentry["sense_groups"]
             )
         )
-    description = Markup(" &mdash; ").join(lexentry_strs)
+    # Build a plain string (real unicode chars, no HTML entities) so truncation
+    # can't slice an entity in half; Jinja escapes it when rendering the tag.
+    description = " — ".join(lexentry_strs)
     if len(description) > 160:
-        description = description[:159] + Markup("&hellip;")
+        description = description[:159] + "…"
     return description
 
 
