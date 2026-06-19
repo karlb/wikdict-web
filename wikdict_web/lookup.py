@@ -1,7 +1,7 @@
 import functools
 import sqlite3
 import urllib.parse
-from collections import OrderedDict, deque
+from collections import OrderedDict
 from datetime import datetime, timedelta
 from typing import Any
 
@@ -17,7 +17,11 @@ from .languages import language_codes3, language_names
 # back to its wiktionary.org subdomain (the iso2 code, e.g. "fr").
 edition_to_lang = {iso3: iso2 for iso2, iso3 in language_codes3.items()}
 
-latest_requests: deque[tuple[datetime, str | None]] = deque(maxlen=30)
+RATE_LIMIT = 20  # requests per minute per IP
+# Request timestamps from the last minute, keyed by client IP. Per-process
+# (so the effective limit scales with UWSGI_PROCESSES), but no longer shares a
+# single bounded deque across all IPs, so the window is actually honoured.
+recent_requests: dict[str | None, list[datetime]] = {}
 
 
 def lru_cache(*args, **kwargs):
@@ -28,28 +32,22 @@ def lru_cache(*args, **kwargs):
 
 
 def block_too_many_requests(current_ip):
-    try:
-        lr_list = list(latest_requests)
-    except RuntimeError:
-        # The latest_requests deque was modified during iteration. Let's just
-        # allow this request instead of retrying the check.
-        lr_list = []
-    recent_requests_from_ip = len(
-        [
-            None
-            for dt, ip in lr_list
-            if dt > datetime.now() - timedelta(minutes=1) and ip == current_ip
-        ]
-    )
-    if recent_requests_from_ip > 20:
+    now = datetime.now()
+    cutoff = now - timedelta(minutes=1)
+    # Drop aged-out timestamps and forget IPs with no recent activity, so the
+    # dict stays bounded by the callers seen in the last minute.
+    for ip in list(recent_requests):
+        recent_requests[ip] = [t for t in recent_requests[ip] if t > cutoff]
+        if not recent_requests[ip]:
+            del recent_requests[ip]
+    if len(recent_requests.get(current_ip, [])) >= RATE_LIMIT:
         abort(
             429,
             "You made too many requests. Please contact karl@karl.berlin to resolve this. "
             "I will provide translation data in an easy to use format. "
             "If you see this error when normally using the web site, please let me know, too.",
         )
-    else:
-        latest_requests.append((datetime.now(), current_ip))
+    recent_requests.setdefault(current_ip, []).append(now)
 
 
 def init_logging_db():
