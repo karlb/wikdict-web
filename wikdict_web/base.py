@@ -236,6 +236,7 @@ def render_template(filename, **kwargs):
         language_names=language_names,
         languages=languages,
         available_langs=available_langs,
+        lang_flags={code: languages[code].flag for code in available_langs},
         lang_pairs=lang_pairs,
         last_dicts=[
             d

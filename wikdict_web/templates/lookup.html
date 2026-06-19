@@ -22,7 +22,7 @@
     <script>
         var from_lang = '{{ from_lang }}';
         var to_lang = '{{ to_lang }}';
-        var lang_flags = { {% for code in available_langs %}"{{ code }}": {{ languages[code].flag | tojson }}{{ "," if not loop.last }}{% endfor %} };
+        var lang_flags = {{ lang_flags | tojson }};
 	</script>
 
     <script type="application/ld+json">
