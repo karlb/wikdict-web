@@ -24,7 +24,9 @@ class MyTestCase(TestCase):
         assert "house".encode("utf-8") in rv.data
 
     def test_miss(self):
-        rv = self.client.get("/de-en/Problemsuchwort")
+        # A nonsense word that has no entry and doesn't split into a compound,
+        # so it stays a genuine miss even with compound lookup enabled.
+        rv = self.client.get("/de-en/Xqzwktph")
         assert rv.status_code == 200
         assert "Sorry".encode("utf-8") in rv.data
 

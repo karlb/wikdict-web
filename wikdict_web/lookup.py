@@ -247,17 +247,17 @@ def spellfix(from_lang, to_lang, search_term):
 @lru_cache
 @timing
 def get_compounds(from_lang, to_lang, query):
-    if app.config["TESTING"]:
-        # Compound dbs are not available in testing setup, yet
-        return [], None
-
     # Collect solutions for both languages
     solutions = []
     for lang, other_lang in [(from_lang, to_lang), (to_lang, from_lang)]:
         if lang not in wikdict_compound.supported_langs:
             continue
+        # The compound db for this language may not be deployed (e.g. in CI);
+        # skip it rather than failing the whole lookup.
+        if not (base.COMPOUND_DB_PATH / f"{lang}-compound.sqlite3").exists():
+            continue
         lang_solution = wikdict_compound.split_compound(
-            db_path=base.DATA_DIR / "compound_dbs",
+            db_path=base.COMPOUND_DB_PATH,
             lang=lang,
             compound=query,
             ignore_word=query,
