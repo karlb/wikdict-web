@@ -34,7 +34,7 @@ def block_too_many_requests(current_ip):
     except RuntimeError:
         # The latest_requests deque was modified during iteration. Let's just
         # allow this request instead of retrying the check.
-        pass
+        lr_list = []
     recent_requests_from_ip = len(
         [
             None
