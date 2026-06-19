@@ -1,4 +1,5 @@
 import functools
+import os
 import sqlite3
 import urllib.parse
 from collections import OrderedDict
@@ -50,6 +51,11 @@ def block_too_many_requests(current_ip):
     recent_requests.setdefault(current_ip, []).append(now)
 
 
+# Anonymized search logging is opt-in: set WIKDICT_SEARCH_LOG=true to record
+# queries in the logging db (used by the /admin stats pages).
+SEARCH_LOG_ENABLED = os.environ.get("WIKDICT_SEARCH_LOG", "false").lower() == "true"
+
+
 def init_logging_db():
     try:
         db_query(
@@ -80,6 +86,8 @@ def anonymize_ip(ip):
 
 
 def log_query(from_lang, to_lang, query, ip, results):
+    if not SEARCH_LOG_ENABLED:
+        return
     try:
         db_query(
             "logging",
@@ -107,7 +115,8 @@ def log_query(from_lang, to_lang, query, ip, results):
         pass
 
 
-init_logging_db()
+if SEARCH_LOG_ENABLED:
+    init_logging_db()
 
 
 def get_combined_result(lang, other_lang, query, **kwargs):
