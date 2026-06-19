@@ -27,12 +27,12 @@ import wikdict_web.typeahead
 from wikdict_web.languages import language_names
 
 __all__ = [
-    app,
-    base,
-    wikdict_web.lookup,
-    wikdict_web.reader,
-    wikdict_web.admin,
-    wikdict_web.typeahead,
+    "app",
+    "base",
+    "lookup",
+    "reader",
+    "admin",
+    "typeahead",
 ]
 
 ADMINS = ["karl@karl.berlin"]
