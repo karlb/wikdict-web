@@ -191,6 +191,9 @@
 {% block main %}
 
 	{% if query %}
+		<h1 class="visually-hidden">
+			{{ query }} – {{ language_names[from_lang] | capitalize }}–{{ language_names[to_lang] | capitalize }} translations
+		</h1>
 		{{ search_form() }}
 
         {% if did_you_mean %}
