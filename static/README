@@ -1,12 +1,7 @@
-Public, static content goes here.  Users can create rewrite rules to link to
-content in the static dir.  For example, django commonly uses /media/
-directories for static content.  For example in a .htaccess file in a
-wsgi/.htaccess location, developers could put:
+Static assets (CSS, JS, images) served under /static.
 
-RewriteEngine On
-RewriteRule ^application/media/(.+)$ /static/media/$1 [L]
-
-Then copy the media/* content to yourapp/wsgi/static/media/ and it should
-just work.
-
-Note: The ^application/ part of the URI match is required.
+The JS files listed in base.html (js/lookup.js, js/picker.js, …) are
+concatenated by Flask-Assets into a single gen/packed.js. Because they are
+joined without separators, every bundled JS file MUST start with a leading
+semicolon (;) — otherwise the last expression of the previous file and the
+first of the next merge into one broken statement (ASI does not save you).
