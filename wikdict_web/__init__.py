@@ -15,7 +15,7 @@ from flask import (
 from markupsafe import Markup
 
 app = Flask(__name__.split(".")[0], static_folder="../static")
-app.config.update(SECRET_KEY=os.environ.get("FLASK_SECRET"))
+app.config.update(SECRET_KEY=os.environ["FLASK_SECRET"])
 app.jinja_env.undefined = jinja2.StrictUndefined
 assets = flask_assets.Environment(app)
 
