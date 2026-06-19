@@ -120,7 +120,7 @@ if SEARCH_LOG_ENABLED:
 
 
 def get_combined_result(lang, other_lang, query, **kwargs):
-    conn = get_conn(lang + "-" + other_lang, cached=True)
+    conn = get_conn(lang + "-" + other_lang)
     r = wikdict_query.combined_result(conn, query, **kwargs)
     r.from_lang = lang  # type: ignore
     r.to_lang = other_lang  # type: ignore
