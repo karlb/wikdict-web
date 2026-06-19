@@ -4,8 +4,10 @@
 name: Run tests
 
 on:
-- pull_request
-- push
+  pull_request:
+  push:
+    branches:
+      - master
 
 jobs:
   run-tests:
