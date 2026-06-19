@@ -141,7 +141,7 @@ def path_for_db(db, path="dict"):
     return DATA_DIR / path / f"{db}.sqlite3"
 
 
-def get_conn(db_name, path="dict", attach_dbs=None, write=False):
+def get_conn(db_name, path="dict", write=False):
     db_path = path_for_db(db_name, path)
 
     if not os.path.exists(db_path):
@@ -168,7 +168,7 @@ def db_query(
     explain=False,
     write=False,
 ):
-    conn = get_conn(db_name, path, attach_dbs, write)
+    conn = get_conn(db_name, path, write)
     cur = conn.cursor()
     for name, db in (attach_dbs or {}).items():
         cur.execute(
