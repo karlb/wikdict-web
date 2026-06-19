@@ -97,6 +97,9 @@ def _score_match(matchinfo: bytes, form, query) -> float:
 
 
 def add_score_match(conn):
+    # Surface the real traceback when score_match raises; otherwise SQLite
+    # reports only a generic "user-defined function raised exception".
+    sqlite3.enable_callback_tracebacks(True)
     conn.create_function("score_match", 3, _score_match, deterministic=True)
 
 
