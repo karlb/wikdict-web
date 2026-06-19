@@ -212,12 +212,16 @@ def sorted_timing():
 
 def render_template(filename, **kwargs):
     if "from_lang" in kwargs:
-        session.setdefault("last_dicts", []).insert(
-            0, kwargs["from_lang"] + "-" + kwargs["to_lang"]
-        )
-        # remove duplicates and cap the history (only the most recent few are
-        # ever shown in the navbar / used by the picker)
-        session["last_dicts"] = list(OrderedDict.fromkeys(session["last_dicts"]))[:10]
+        pair = kwargs["from_lang"] + "-" + kwargs["to_lang"]
+        last_dicts = session.get("last_dicts", [])
+        # Move the current pair to the front, deduplicate and cap the history
+        # (only the most recent few are shown in the navbar / used by the
+        # picker).
+        new_last_dicts = list(OrderedDict.fromkeys([pair, *last_dicts]))[:10]
+        # Only touch the session when it actually changed, so unchanged
+        # responses don't carry a Set-Cookie header that defeats HTTP caching.
+        if new_last_dicts != last_dicts:
+            session["last_dicts"] = new_last_dicts
     else:
         last_dict = session.get("last_dicts", ["de-en"])[0]
         kwargs["from_lang"], kwargs["to_lang"] = last_dict.split("-")
