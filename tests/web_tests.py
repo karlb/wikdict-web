@@ -31,6 +31,13 @@ class MyTestCase(TestCase):
         assert rv.status_code == 200
         assert "Sorry".encode("utf-8") in rv.data
 
+    def test_did_you_mean(self):
+        # A misspelling with no direct hit surfaces spellfix suggestions.
+        rv = self.client.get("/de-en/Hauss")
+        assert rv.status_code == 200
+        assert b"Did you mean" in rv.data
+        assert "Haus".encode("utf-8") in rv.data
+
     def test_invalid_pair_is_404(self):
         assert self.client.get("/xx-yy/").status_code == 404
 
