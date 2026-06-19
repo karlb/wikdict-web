@@ -79,6 +79,16 @@
     margin-right: 0.2em;
     margin-top: 0.1em;
 }
+.navbar > .container {
+    align-items: flex-start;
+}
+#collapsible-links {
+    justify-content: flex-end;
+}
+main.container {
+    display: flex;
+    flex-direction: column;
+}
 
 
 .main-page .search-form {
