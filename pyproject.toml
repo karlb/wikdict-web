@@ -33,7 +33,13 @@ dev = [
 ]
 
 [tool.ruff.lint]
-select = ["I"]
+# Default pyflakes (F) + error (E) rules, minus E501 line-length (long SQL
+# strings), plus isort (I).
+select = ["E4", "E7", "E9", "F", "I"]
+
+[tool.ruff.lint.per-file-ignores]
+# Routes/submodules are imported after `app` is created, on purpose.
+"wikdict_web/__init__.py" = ["E402"]
 
 [tool.mypy]
 ignore_missing_imports = true
