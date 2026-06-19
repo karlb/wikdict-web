@@ -52,7 +52,7 @@ def block_too_many_requests(current_ip):
         latest_requests.append((datetime.now(), current_ip))
 
 
-def log_query(from_lang, to_lang, query, ip, results):
+def init_logging_db():
     try:
         db_query(
             "logging",
@@ -64,6 +64,14 @@ def log_query(from_lang, to_lang, query, ip, results):
             path="",
             write=True,
         )
+    except sqlite3.OperationalError:
+        # No logging db available (e.g. fresh deploy); queries just won't be
+        # logged until it exists.
+        pass
+
+
+def log_query(from_lang, to_lang, query, ip, results):
+    try:
         db_query(
             "logging",
             """
@@ -88,6 +96,9 @@ def log_query(from_lang, to_lang, query, ip, results):
     except sqlite3.OperationalError:
         # It's ok to skip logging the query while the log db is locked
         pass
+
+
+init_logging_db()
 
 
 def get_combined_result(lang, other_lang, query, **kwargs):
