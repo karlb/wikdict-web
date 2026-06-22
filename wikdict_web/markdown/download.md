@@ -1,6 +1,6 @@
 ## Downloads
 
-WikDict's mission is to bring you dictionaries that can be freely used, copied and modified without limiting you to using this web site. Therefore, you can download the dictionaries in different formats and use them according to the [Creative Commons BY-SA](https://creativecommons.org/licenses/by-sa/3.0/) license.
+WikDict's mission is to bring you dictionaries that can be freely used, copied and modified without limiting you to using this web site. Therefore, you can download the dictionaries in different formats and use them according to the [Creative Commons BY-SA](https://creativecommons.org/licenses/by-sa/4.0/) license.
 
 Please request new formats by creating a [GitHub issue](https://github.com/karlb/wikdict-gen/issues), or just [ask by e-mail](mailto:karl@karl.berlin).
 
