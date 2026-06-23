@@ -53,7 +53,7 @@ def reader(from_lang, to_lang):
 
     if request.method == "POST":
         # annotate text with translations
-        conn = base.get_conn(from_lang + "-" + to_lang)
+        conn = base.get_conn(from_lang + "-" + to_lang, cached=True)
         input_text = escape(request.form["text"].strip())
         f = StringIO()
         simple_lookup = make_lookup(conn, base.COMPOUND_DB_PATH, from_lang)

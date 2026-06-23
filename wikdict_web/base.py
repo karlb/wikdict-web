@@ -191,22 +191,30 @@ def db_query(
 ):
     # Connections that ATTACH other dbs can't be reused (the alias would already
     # exist on a cached connection), so only cache the plain read-only ones.
-    conn = get_conn(db_name, path, write, cached=not attach_dbs)
-    cur = conn.cursor()
-    for name, db in (attach_dbs or {}).items():
-        cur.execute(
-            "ATTACH DATABASE 'file:{}?immutable=1' AS {}".format(
-                path_for_db(db, path), name
+    cached = not attach_dbs and not write
+    conn = get_conn(db_name, path, write, cached=cached)
+    try:
+        cur = conn.cursor()
+        for name, db in (attach_dbs or {}).items():
+            cur.execute(
+                "ATTACH DATABASE 'file:{}?immutable=1' AS {}".format(
+                    path_for_db(db, path), name
+                )
             )
-        )
-    if explain:
-        condensed_stmt = " ".join(stmt.split())
-        print("\nPlan for {}".format(repr(condensed_stmt[:160])))
-        cur.execute("EXPLAIN QUERY PLAN " + stmt, bind_params)
-        for r in cur:
-            print("\t" * r[1], r[3])
-    cur.execute(stmt, bind_params)
-    return list(cur)
+        if explain:
+            condensed_stmt = " ".join(stmt.split())
+            print("\nPlan for {}".format(repr(condensed_stmt[:160])))
+            cur.execute("EXPLAIN QUERY PLAN " + stmt, bind_params)
+            for r in cur:
+                print("\t" * r[1], r[3])
+        cur.execute(stmt, bind_params)
+        return list(cur)
+    finally:
+        # Cached connections are reused by later queries on this thread; the
+        # uncached ones (ATTACH or write) must be closed or their file
+        # descriptors leak until the process hits its open-file limit.
+        if not cached:
+            conn.close()
 
 
 def sorted_timing():
