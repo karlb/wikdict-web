@@ -62,6 +62,33 @@ class MyTestCase(TestCase):
             t.join()
         assert not bad, f"non-200 responses under concurrency: {bad}"
 
+    def test_conn_cache_is_bounded(self):
+        # The per-thread connection cache must evict (and close) old entries so a
+        # long-lived worker serving many language pairs doesn't leak a file
+        # descriptor per pair.
+        class FakeConn:
+            closed = False
+
+            def close(self):
+                self.closed = True
+
+        opened = []
+        orig_open = base._open_conn
+        base._conn_cache.__dict__.pop("conns", None)
+        base._open_conn = lambda *a, **k: opened[-1]
+        try:
+            for n in range(base._CONN_CACHE_SIZE + 5):
+                opened.append(FakeConn())
+                base.get_conn(f"pair-{n}", cached=True)
+            conns = base._conn_cache.conns
+            assert len(conns) == base._CONN_CACHE_SIZE
+            # The first 5 inserted should have been evicted and closed.
+            assert all(c.closed for c in opened[:5])
+            assert not any(c.closed for c in opened[5:])
+        finally:
+            base._open_conn = orig_open
+            base._conn_cache.__dict__.pop("conns", None)
+
     def test_invalid_pair_is_404(self):
         assert self.client.get("/xx-yy/").status_code == 404
 

@@ -164,18 +164,27 @@ def _open_conn(db_name, path, write):
 # connection avoids re-connecting and reloading the spellfix extension on every
 # query. It is deliberately thread-local: a sqlite connection can't be used from
 # several threads at once (and uwsgi runs with threads enabled), so each thread
-# keeps its own — never shared.
+# keeps its own — never shared. The cache is a bounded LRU: with hundreds of
+# language pairs, an unbounded cache would leave one connection (and its file
+# descriptor) open per pair a long-lived worker ever served, eventually hitting
+# the process open-file limit.
 _conn_cache = threading.local()
+_CONN_CACHE_SIZE = 32
 
 
 def get_conn(db_name, path="dict", write=False, cached=False):
     if cached and not write:
-        conns = _conn_cache.__dict__.setdefault("conns", {})
+        conns = _conn_cache.__dict__.setdefault("conns", OrderedDict())
         key = (db_name, path)
         conn = conns.get(key)
         if conn is None:
             conn = _open_conn(db_name, path, write=False)
             conns[key] = conn
+            while len(conns) > _CONN_CACHE_SIZE:
+                _, evicted = conns.popitem(last=False)
+                evicted.close()
+        else:
+            conns.move_to_end(key)
         return conn
     return _open_conn(db_name, path, write)
 
