@@ -9,7 +9,7 @@ authors = [
 ]
 requires-python = ">=3.11"
 dependencies = [
-    "lxml==5.3.1",
+    "lxml>=6.1.0",
     "more-itertools>=10.5.0",
     #"wikdict-query"  #no release yet, installed locally with `uv pip install -e ~/code/github/wikdict-web/wikdict-query/`
     "wikdict-compound>=0.2",
