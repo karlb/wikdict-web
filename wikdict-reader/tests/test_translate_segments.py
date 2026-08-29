@@ -12,7 +12,14 @@ def same_lookup(known_phrases):
         if phrase.lower() not in known_phrases:
             return None
         sense_groups = [dict(translations=[phrase])]
-        return [dict(sense_groups=json.dumps(sense_groups), form=phrase, match_score=1)]
+        return [
+            dict(
+                sense_groups=json.dumps(sense_groups),
+                form=phrase,
+                written_rep=phrase,
+                match_score=1,
+            )
+        ]
 
     return lookup
 
@@ -25,7 +32,14 @@ def dict_lookup(known_phrases: dict):
         if not trans:
             return None
         sense_groups = [dict(translations=t) for t in trans]
-        return [dict(sense_groups=json.dumps(sense_groups), form=phrase, match_score=1)]
+        return [
+            dict(
+                sense_groups=json.dumps(sense_groups),
+                form=phrase,
+                written_rep=phrase,
+                match_score=1,
+            )
+        ]
 
     return lookup
 
