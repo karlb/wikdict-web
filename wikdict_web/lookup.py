@@ -143,12 +143,19 @@ def get_combined_result(lang, other_lang, query, **kwargs):
     "/<from_lang>-<to_lang>/<path:query>"
 )  # without path, slashes would not be escaped
 def lookup(from_lang, to_lang, query: str | None = None):
+    # Most ISO languages have no dictionary. Such pairs used to fail later,
+    # on a missing flag or a missing database file.
+    available_langs = base.get_available_langs()
     if (
-        from_lang not in language_names
-        or to_lang not in language_names
+        from_lang not in available_langs
+        or to_lang not in available_langs
         or from_lang == to_lang
     ):
-        abort(404)
+        abort(
+            404,
+            f"Hey, I don't know the language pair {from_lang}-{to_lang}. "
+            "If you think this is my fault, please write me a mail at karl@karl.berlin.",
+        )
     if [from_lang, to_lang] != sorted((from_lang, to_lang)):
         return redirect(
             url_for("lookup", from_lang=to_lang, to_lang=from_lang, query=query)

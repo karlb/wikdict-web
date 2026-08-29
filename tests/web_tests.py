@@ -92,6 +92,12 @@ class MyTestCase(TestCase):
     def test_invalid_pair_is_404(self):
         assert self.client.get("/xx-yy/").status_code == 404
 
+    def test_known_language_without_dictionary_is_404(self):
+        # Real ISO code, no dictionary. Used to raise.
+        rv = self.client.get("/en-sh/")
+        assert rv.status_code == 404
+        assert "language pair en-sh" in rv.get_data(as_text=True)
+
     def test_swapped_pair_redirects(self):
         rv = self.client.get("/en-de/Haus")
         assert rv.status_code in (301, 302)
